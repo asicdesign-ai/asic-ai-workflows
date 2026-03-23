@@ -36,13 +36,15 @@ This repository targets real-world semiconductor workflows, including:
 
 ## Repository Structure
 
-skills/ # Reusable AI engineering skills
-rules/ # Static domain knowledge and constraints
-flows/ # Multi-step engineering workflows
-schemas/ # Standardized definitions for all artifacts
-datasets/ # Example inputs for testing and validation
+## Repository Structure
 
+- `skills/` — Reusable AI engineering skills  
+- `rules/` — Static domain knowledge and constraints  
+- `flows/` — Multi-step engineering workflows  
+- `schemas/` — Standardized definitions for all artifacts  
+- `datasets/` — Example inputs for testing and validation  
 
+Each component has a clear responsibility and is designed to be composable.
 Each component has a clear responsibility and is designed to be composable.
 
 ---
