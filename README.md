@@ -118,37 +118,8 @@ The project follows a strict build order:
 1. Create real, working skills  
 2. Validate with datasets  
 3. Add supporting rules  
-4. Compose flows  
-5. Build website later  
+4. Compose flows   
 
-UI and presentation are intentionally delayed.
-
----
-
-## Getting Started
-
-This repository is in **early stage (foundation phase)**.
-
-Recommended first steps:
-
-1. Explore the `skills/` directory  
-2. Review examples and outputs  
-3. Use datasets to test behavior  
-4. Contribute improvements or new skills  
-
----
-
-## First Target Skill
-
-The initial focus is:
-
-> **STA Summary Analyzer**
-
-Why:
-
-- High value across all projects  
-- Easy to validate  
-- Strong demonstration of capability  
 
 ---
 
@@ -198,15 +169,5 @@ Planned extensions:
 - Dataset benchmarking  
 - Prompt optimization  
 - Model comparison  
-
----
-
-## Website (Planned)
-
-A companion website will be launched later:
-
-https://asicdesign.ai
-
-The website will act as a **presentation and discovery layer**, not the core system.
 
 ---
