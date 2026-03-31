@@ -22,6 +22,14 @@ Scope: module-level first, cross-module when submodules are provided. Not a
 replacement for PrimeTime or Tempus — think of it as a fast lint that flags
 structurally deep paths before synthesis.
 
+## Rules
+
+Apply these repo rules before analysis and output generation:
+
+- `../../rules/common/evidence-grounding.md`
+- `../../rules/common/output-discipline.md`
+- `../../rules/timing/register-evidence.md`
+
 ## Configuration
 
 The user may provide an optional config YAML to override defaults. If none is
@@ -62,16 +70,7 @@ Read `default_config.yaml` for the full schema with all defaults.
 
 Read the module and perform these steps:
 
-1. **Identify all registers** — registers can appear in multiple forms. Check all of these:
-
-   - **`always_ff` / `always @(posedge ...)`** blocks — LHS signals are registers.
-   - **Macro instantiations** — macros whose names contain `FF`, `DFF`, `MSFF`, `FLOP`, `REG`, or `LATCH` likely create registers. If the `` `define`` is in scope (same file or `` `include``d file), expand it to confirm. If not found, infer from the name: first argument is typically Q (output), second is D (input).
-   - **Library cell instantiations** — cells named `*DFF*`, `*SDFF*`, `*MSFF*`, `*FD*`, `*SDFFRX*`, etc. Port `.Q` is output, `.D` is input, `.CK`/`.CLK` is clock.
-   - **Module instantiations with FF-like names** — module names containing `flop`, `ff`, `reg`, `dff` — treat as register wrappers.
-
-   For each register, record: signal name, width, clock, and the line where it's assigned.
-
-   If a macro or cell can't be resolved and the name doesn't match known patterns, flag it as `unresolved` in the report rather than silently ignoring it.
+1. **Identify all registers** — use `../../rules/timing/register-evidence.md` to decide what counts as sequential logic and what must stay `unresolved`. For each register, record signal name, width, clock, and the line where it's assigned.
 
 2. **Trace combinational fanin for each register** — starting from the D-input of each destination register, walk backwards through combinational logic until hitting:
    - Another register's Q-output (→ this is the start of a reg-to-reg path)
@@ -89,7 +88,6 @@ Read the module and perform these steps:
    - Restructure mux trees (e.g., move a wide mux before narrow logic)
    - Pre-compute comparisons in a prior cycle
    - Use a different encoding (one-hot vs binary for case statements)
-   Keep suggestions to 1-2 sentences.
 
 ## Output Format
 
@@ -120,7 +118,7 @@ paths:
         line: <line_number>
     crosses_module: <true | false>
     module_path: ["top", "sub1"]   # only if crosses_module
-    description: <one-line path summary>
+    description: <brief path summary>
     suggestion: <optimization hint, only for critical/hard>
 
 unresolved:
@@ -148,14 +146,11 @@ summary:
 - Sort paths by depth descending (deepest first).
 - Only list paths with difficulty above `easy` unless config says `include_easy: true`.
 - `registers` section lists all identified registers with their detection method.
-- `unresolved` section lists any macros or cells that couldn't be confirmed as registers or combinational.
-- Keep `description` to one sentence. Keep `suggestion` to 1-2 sentences.
 
 ## Scope Limitations
 
 - **Can do**: Single-module path tracing, cross-module tracing when all files are provided, macro expansion, library cell inference, configurable depth model.
 - **Cannot do**: Actual gate-level netlist analysis, account for synthesis optimizations (retiming, logic restructuring), analyze clock tree depth, replace PrimeTime/Tempus.
-- **When unsure**: Report the path with a note explaining the uncertainty (e.g., "depth estimate assumes ripple carry; synthesis may use CLA").
 
 ## Not Covered
 

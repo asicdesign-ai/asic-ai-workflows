@@ -43,7 +43,15 @@ This repository targets real-world semiconductor workflows, including:
 - `datasets/` — Example inputs for testing and validation  
 
 Each component has a clear responsibility and is designed to be composable.
-Each component has a clear responsibility and is designed to be composable.
+
+Current repository contents:
+
+- `skills/rtl-cdc-linter/` — Pre-EDA RTL CDC lint skill  
+- `skills/rtl-timing-path-analyzer/` — Pre-synthesis RTL timing path analysis skill  
+- `rules/common/evidence-grounding.md` — Shared anti-hallucination grounding rule  
+- `rules/common/output-discipline.md` — Shared structured-output rule  
+- `rules/cdc/classification.md` — CDC synchronizer proof and severity mapping  
+- `rules/timing/register-evidence.md` — Timing register proof and unresolved-object handling  
 
 ---
 
@@ -65,10 +73,13 @@ These principles guide the development of skills, rules, and flows.
 
 A **skill** is a reusable AI capability that solves a specific engineering task.
 
-Examples:
+Current skills:
 
 - RTL Timing Path Analyzer  
 - RTL CDC Linter  
+
+Planned examples:
+
 - Lint Warning Explainer  
 - Simulation Failure Analyzer  
 - UVM Test Generator  
@@ -86,9 +97,15 @@ Each skill is:
 
 A **rule** encodes domain knowledge or engineering best practices.
 
-Example:
+Rules in this repository are used to reduce hallucination and improve determinism by
+separating reusable constraints from task-specific skill instructions.
 
-> Always analyze Worst Negative Slack (WNS) before Total Negative Slack (TNS)
+Current examples:
+
+- `rules/common/evidence-grounding.md` — require explicit RTL evidence for every claim
+- `rules/common/output-discipline.md` — enforce stable YAML shape and field usage
+- `rules/cdc/classification.md` — define what counts as a proven CDC synchronizer
+- `rules/timing/register-evidence.md` — define when a timing object is trusted vs unresolved
 
 Rules are used by:
 - Skills
