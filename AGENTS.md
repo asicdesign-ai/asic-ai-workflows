@@ -120,7 +120,8 @@ When adding or changing a rule:
 
 1. Put shared cross-domain rules in `rules/common/`.
 2. Put domain-specific rules in a domain folder such as `rules/cdc/` or `rules/timing/`.
-3. Avoid mixing CDC-specific and timing-specific constraints into common rules.
+3. Avoid putting domain-specific constraints into `rules/common/`; keep common rules
+   genuinely reusable across multiple domains.
 4. Write rules as concrete, testable constraints, not abstract advice.
 
 When adding new repo areas:
