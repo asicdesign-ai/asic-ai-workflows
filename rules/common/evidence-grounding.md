@@ -22,8 +22,9 @@ Use this rule whenever a skill analyzes RTL and emits findings.
 
 ## Prohibited behavior
 
-- Do not claim a crossing is synchronized unless the synchronizer structure is visible.
-- Do not claim a path is safe because "synthesis will optimize it away" unless the
-  skill config explicitly models that structure.
-- Do not infer false paths, multicycle paths, or generated clocks without user-provided
-  constraints.
+- Do not invent missing protocol, timing, or hierarchy information to complete an
+  analysis.
+- Do not upgrade an uncertain result to a safe result without explicit evidence in
+  the provided inputs.
+- Do not rely on naming conventions alone as proof of function, safety, or timing
+  intent.

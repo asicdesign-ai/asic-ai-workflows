@@ -31,3 +31,12 @@ not sufficient proof by themselves when ports or definitions are missing.
   formulas.
 - Prefer conservative path construction over optimistic guessing when structure is
   incomplete.
+
+## Prohibited behavior
+
+- Do not claim a path is safe because "synthesis will optimize it away" unless the
+  skill config explicitly models that structure.
+- Do not infer false paths, multicycle paths, generated clocks, or other timing
+  exceptions without user-provided constraints.
+- Do not trace through unresolved macros, cells, wrappers, or missing submodule logic
+  as though their timing behavior were known.

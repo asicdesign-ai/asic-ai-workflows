@@ -39,3 +39,12 @@ proven synchronized.
    `low` instead of `info`.
 3. For multi-bit crossings, do not bless a plain bitwise 2-FF scheme as safe data
    transfer unless the structure is explicitly Gray-coded and used accordingly.
+
+## Prohibited behavior
+
+- Do not claim a crossing is synchronized unless the synchronizer structure is visible.
+- Do not classify a CDC path as `info` from naming conventions alone, including
+  names like `_sync`, `gray`, `req`, or `ack`.
+- Do not treat a plain bitwise 2-FF scheme on a multi-bit bus as safe transfer unless
+  the RTL explicitly proves a valid protocol such as Gray-code, handshake, toggle
+  snapshot, or async FIFO semantics.
