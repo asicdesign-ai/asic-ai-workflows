@@ -25,6 +25,23 @@ jobs:
       - name: Run repo lint
         run: python3 scripts/repo_lint.py
 
+  structured-files:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install YAML parser
+        run: python3 -m pip install PyYAML
+
+      - name: Check JSON and YAML files
+        run: python3 scripts/check_structured_files.py
+
   skill-contracts:
     runs-on: ubuntu-latest
     steps:
@@ -38,6 +55,20 @@ jobs:
 
       - name: Check skill contracts
         run: python3 scripts/check_skill_contracts.py
+
+  flow-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Check flow contracts
+        run: python3 scripts/check_flow_contracts.py
 
   eval-smoke:
     runs-on: ubuntu-latest

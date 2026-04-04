@@ -1,0 +1,15 @@
+{
+  "eval_name": "missing-intent-plan",
+  "skill": "dv-plan-assembler",
+  "input_files": [
+    "datasets/fixtures/dv/missing_intent_block.sv",
+    "datasets/fixtures/dv/missing_intent_notes.md"
+  ],
+  "expected_output": "evals/smoke/dv-plan-assembler/missing-intent-plan/expected.yaml",
+  "schema": "schemas/dv-plan.schema.json",
+  "assertions": [
+    "creates a conservative block-level DV plan from sparse intent",
+    "records unresolved latency and completion semantics instead of inventing them",
+    "keeps the environment minimal because the block interface is small"
+  ]
+}

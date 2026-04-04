@@ -1,0 +1,291 @@
+{
+  "design": {
+    "top_module": "timer_counter",
+    "rtl_files": [
+      "datasets/fixtures/dv/csr_timer_counter.sv"
+    ],
+    "intent_summary": "CSR-programmable timer with sticky interrupt behavior."
+  },
+  "objectives": [
+    {
+      "id": "OBJ-001",
+      "title": "reset establishes idle timer state",
+      "priority": "must",
+      "source": "both",
+      "category": "reset",
+      "description": "Reset drives the timer count and interrupt outputs to their idle values.",
+      "success_condition": "After reset, count_value is zero, irq is low, and the block stays disabled until cfg_enable is asserted."
+    },
+    {
+      "id": "OBJ-002",
+      "title": "software load updates the counter state",
+      "priority": "must",
+      "source": "both",
+      "category": "configuration",
+      "description": "A cfg_load operation places cfg_data into the counter state.",
+      "success_condition": "When cfg_load is asserted, the next stored count reflects cfg_data."
+    },
+    {
+      "id": "OBJ-003",
+      "title": "enabled timer increments toward the programmed terminal count",
+      "priority": "must",
+      "source": "both",
+      "category": "data_path",
+      "description": "An enabled timer increments its stored count each cycle until software changes the state.",
+      "success_condition": "With cfg_enable active and no cfg_load, count_value advances monotonically by one per cycle."
+    },
+    {
+      "id": "OBJ-004",
+      "title": "terminal count raises a sticky interrupt until cleared",
+      "priority": "must",
+      "source": "both",
+      "category": "interrupt",
+      "description": "The timer asserts irq on terminal-count match and software clears it with clear_irq.",
+      "success_condition": "When the enabled count reaches terminal_count, irq asserts and remains high until clear_irq is applied."
+    }
+  ],
+  "interfaces": [
+    {
+      "name": "clk",
+      "direction": "input",
+      "role": "clock",
+      "width": 1
+    },
+    {
+      "name": "rst_n",
+      "direction": "input",
+      "role": "reset",
+      "width": 1
+    },
+    {
+      "name": "cfg_enable",
+      "direction": "input",
+      "role": "config",
+      "width": 1
+    },
+    {
+      "name": "cfg_load",
+      "direction": "input",
+      "role": "config",
+      "width": 1
+    },
+    {
+      "name": "cfg_data",
+      "direction": "input",
+      "role": "data",
+      "width": 8
+    },
+    {
+      "name": "clear_irq",
+      "direction": "input",
+      "role": "config",
+      "width": 1
+    },
+    {
+      "name": "terminal_count",
+      "direction": "input",
+      "role": "config",
+      "width": 8
+    },
+    {
+      "name": "count_value",
+      "direction": "output",
+      "role": "status",
+      "width": 8
+    },
+    {
+      "name": "irq",
+      "direction": "output",
+      "role": "interrupt",
+      "width": 1
+    }
+  ],
+  "env": {
+    "bench_style": "greenfield_uvm",
+    "agents": [
+      {
+        "name": "csr_agent",
+        "interface": "timer_controls",
+        "mode": "active",
+        "justification": "The bench must drive enable, load, clear, and terminal-count controls."
+      }
+    ],
+    "monitors": [
+      {
+        "name": "timer_status_monitor",
+        "interface": "timer_outputs",
+        "justification": "count_value and irq are the visible correctness signals."
+      }
+    ],
+    "scoreboards": [
+      {
+        "name": "timer_count_scoreboard",
+        "compares": "Expected counter evolution and interrupt timing against observed outputs.",
+        "justification": "The timer output sequence depends on the programmed controls and count progression."
+      }
+    ],
+    "reference_models": [
+      {
+        "name": "timer_reference_model",
+        "scope": "Golden counter and sticky interrupt model for load, run, and clear behavior."
+      }
+    ],
+    "virtual_sequences": [
+      {
+        "name": "reset_load_run_irq_vseq",
+        "objective_ids": [
+          "OBJ-001",
+          "OBJ-002",
+          "OBJ-003",
+          "OBJ-004"
+        ],
+        "description": "Coordinates reset, configuration, free-running count, and interrupt clear behavior."
+      }
+    ]
+  },
+  "tests": [
+    {
+      "id": "TEST-001",
+      "title": "timer reset behavior",
+      "objective_ids": [
+        "OBJ-001"
+      ],
+      "stimulus": "directed",
+      "checkers": [
+        "timer_status_monitor"
+      ],
+      "priority": "must",
+      "description": "Apply reset and verify the block returns to zero count, low irq, and disabled operation."
+    },
+    {
+      "id": "TEST-002",
+      "title": "software load updates the visible counter",
+      "objective_ids": [
+        "OBJ-002"
+      ],
+      "stimulus": "directed",
+      "checkers": [
+        "timer_count_scoreboard"
+      ],
+      "priority": "must",
+      "description": "Program cfg_data with cfg_load and verify count_value reflects the loaded state."
+    },
+    {
+      "id": "TEST-003",
+      "title": "enabled timer increments toward terminal count",
+      "objective_ids": [
+        "OBJ-003"
+      ],
+      "stimulus": "constrained_random",
+      "checkers": [
+        "timer_count_scoreboard"
+      ],
+      "priority": "must",
+      "description": "Run the timer under varying terminal-count values and verify monotonic count progress."
+    },
+    {
+      "id": "TEST-004",
+      "title": "interrupt remains sticky until software clears it",
+      "objective_ids": [
+        "OBJ-004"
+      ],
+      "stimulus": "virtual_sequence",
+      "checkers": [
+        "timer_count_scoreboard"
+      ],
+      "priority": "must",
+      "description": "Drive the timer to terminal count, observe irq assertion, and verify clear_irq deasserts it."
+    }
+  ],
+  "assertions": [
+    {
+      "id": "SVA-001",
+      "title": "reset clears the timer outputs",
+      "objective_ids": [
+        "OBJ-001"
+      ],
+      "class": "reset",
+      "source": "both",
+      "bind_target": "timer_counter",
+      "description": "Reset clears count_value and irq to their idle values."
+    },
+    {
+      "id": "SVA-002",
+      "title": "terminal-count match raises the interrupt",
+      "objective_ids": [
+        "OBJ-004"
+      ],
+      "class": "data_integrity",
+      "source": "both",
+      "bind_target": "timer_counter",
+      "description": "When the enabled count matches terminal_count, the block raises irq and keeps it asserted until clear_irq."
+    }
+  ],
+  "coverage": {
+    "coverpoints": [
+      {
+        "id": "COV-001",
+        "objective_ids": [
+          "OBJ-001"
+        ],
+        "target": "rst_n",
+        "kind": "state",
+        "description": "Cover reset assertion and release."
+      },
+      {
+        "id": "COV-002",
+        "objective_ids": [
+          "OBJ-002"
+        ],
+        "target": "cfg_load",
+        "kind": "configuration",
+        "description": "Cover load operations across representative cfg_data values."
+      },
+      {
+        "id": "COV-003",
+        "objective_ids": [
+          "OBJ-004"
+        ],
+        "target": "irq",
+        "kind": "interrupt",
+        "description": "Cover interrupt assertion and clear behavior."
+      }
+    ],
+    "crosses": [
+      {
+        "id": "COV-004",
+        "objective_ids": [
+          "OBJ-003",
+          "OBJ-004"
+        ],
+        "targets": [
+          "cfg_enable",
+          "terminal_count"
+        ],
+        "description": "Cross enable programming with representative terminal-count values."
+      }
+    ],
+    "exclusions": []
+  },
+  "risks": [
+    {
+      "id": "RISK-001",
+      "source": "timing_report",
+      "severity": "medium",
+      "objective_ids": [
+        "OBJ-003",
+        "OBJ-004"
+      ],
+      "description": "The hard timer compare path should receive early stress and assertion attention in DV planning."
+    }
+  ],
+  "unresolved": [],
+  "summary": {
+    "total_objectives": 4,
+    "total_tests": 4,
+    "total_assertions": 2,
+    "total_coverage_items": 4,
+    "total_risks": 1,
+    "total_unresolved": 0
+  }
+}

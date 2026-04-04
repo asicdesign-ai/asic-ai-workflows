@@ -15,6 +15,7 @@ EXPECTED_TOP_LEVEL = [
     "AGENTS.md",
     "skills",
     "rules",
+    "flows",
 ]
 
 

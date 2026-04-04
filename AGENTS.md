@@ -48,6 +48,12 @@ Current implemented skills:
 
 - `skills/rtl-cdc-linter/`
 - `skills/rtl-timing-path-analyzer/`
+- `skills/design-intent-to-dv-objectives/`
+- `skills/rtl-verification-surface-extractor/`
+- `skills/uvm-test-matrix-planner/`
+- `skills/sva-candidate-planner/`
+- `skills/functional-coverage-planner/`
+- `skills/dv-plan-assembler/`
 
 Current implemented rules:
 
@@ -55,18 +61,40 @@ Current implemented rules:
 - `rules/common/output-discipline.md`
 - `rules/cdc/classification.md`
 - `rules/timing/register-evidence.md`
+- `rules/dv/objective-traceability.md`
+- `rules/dv/uvm-component-selection.md`
+- `rules/dv/assertion-classification.md`
+- `rules/dv/coverage-taxonomy.md`
+- `rules/dv/stimulus-prioritization.md`
+
+Current implemented flows:
+
+- `flows/block-dv-plan/`
 
 Current implemented schemas:
 
 - `schemas/cdc-report.schema.json`
 - `schemas/timing-report.schema.json`
+- `schemas/dv-objectives.schema.json`
+- `schemas/rtl-verification-surface.schema.json`
+- `schemas/uvm-test-plan.schema.json`
+- `schemas/sva-plan.schema.json`
+- `schemas/dv-coverage-plan.schema.json`
+- `schemas/dv-plan.schema.json`
 
 Current implemented smoke assets:
 
 - `datasets/fixtures/cdc/`
 - `datasets/fixtures/timing/`
+- `datasets/fixtures/dv/`
 - `evals/smoke/rtl-cdc-linter/`
 - `evals/smoke/rtl-timing-path-analyzer/`
+- `evals/smoke/design-intent-to-dv-objectives/`
+- `evals/smoke/rtl-verification-surface-extractor/`
+- `evals/smoke/uvm-test-matrix-planner/`
+- `evals/smoke/sva-candidate-planner/`
+- `evals/smoke/functional-coverage-planner/`
+- `evals/smoke/dv-plan-assembler/`
 
 Current supporting files:
 
@@ -74,14 +102,17 @@ Current supporting files:
 - `.github/workflows/ci.yml`
 - `.github/pull_request_template.md`
 - `scripts/repo_lint.py`
+- `scripts/check_structured_files.py`
 - `scripts/check_skill_contracts.py`
+- `scripts/check_flow_contracts.py`
 - `scripts/check_eval_smoke.py`
 
 Important current limitation:
 
-- `flows/` are still part of the project vision but are not yet present in this clone.
 - The smoke-eval layer currently validates fixtures, schemas, metadata, and golden
   outputs; it does not yet execute live model runs.
+- The DV flow is a planning workflow that emits structured verification plans. It
+  does not generate runnable UVM infrastructure.
 
 ## Source Of Truth
 
@@ -181,12 +212,16 @@ Avoid:
 Start here for most tasks:
 
 - `README.md`
+- `flows/block-dv-plan/FLOW.md`
 - `skills/rtl-cdc-linter/SKILL.md`
 - `skills/rtl-timing-path-analyzer/SKILL.md`
+- `skills/design-intent-to-dv-objectives/SKILL.md`
+- `skills/dv-plan-assembler/SKILL.md`
 - `rules/common/evidence-grounding.md`
 - `rules/common/output-discipline.md`
 - `rules/cdc/classification.md`
 - `rules/timing/register-evidence.md`
+- `rules/dv/objective-traceability.md`
 
 ## Contribution Standard
 

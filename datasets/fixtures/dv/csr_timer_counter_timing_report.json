@@ -1,0 +1,70 @@
+{
+  "module": "timer_counter",
+  "file": "datasets/fixtures/dv/csr_timer_counter.sv",
+  "config": "default",
+  "registers": [
+    {
+      "name": "enable_q",
+      "width": 1,
+      "clock": "clk",
+      "source": "always_ff",
+      "line": 16
+    },
+    {
+      "name": "count_q",
+      "width": 8,
+      "clock": "clk",
+      "source": "always_ff",
+      "line": 17
+    }
+  ],
+  "paths": [
+    {
+      "id": "PATH-001",
+      "from": "count_q",
+      "to": "irq",
+      "depth": 11,
+      "difficulty": "hard",
+      "stages": [
+        {
+          "op": "compare",
+          "width": 8,
+          "depth": 7,
+          "line": 29
+        },
+        {
+          "op": "and",
+          "width": 1,
+          "depth": 1,
+          "line": 29
+        },
+        {
+          "op": "mux",
+          "width": 1,
+          "depth": 3,
+          "line": 27
+        }
+      ],
+      "crosses_module": false,
+      "description": "Timer compare path into sticky interrupt update.",
+      "suggestion": "Stress terminal-count and clear interactions early in DV planning."
+    }
+  ],
+  "unresolved": [],
+  "summary": {
+    "total_registers": 2,
+    "total_paths": 1,
+    "by_difficulty": {
+      "critical": 0,
+      "hard": 1,
+      "moderate": 0,
+      "easy": 0
+    },
+    "deepest_path": {
+      "id": "PATH-001",
+      "depth": 11,
+      "from": "count_q",
+      "to": "irq"
+    }
+  }
+}

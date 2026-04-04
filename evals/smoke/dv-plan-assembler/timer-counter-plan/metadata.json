@@ -1,0 +1,17 @@
+{
+  "eval_name": "timer-counter-plan",
+  "skill": "dv-plan-assembler",
+  "input_files": [
+    "datasets/fixtures/dv/csr_timer_counter.sv",
+    "datasets/fixtures/dv/csr_timer_counter_intent.md",
+    "datasets/fixtures/dv/csr_timer_counter_cdc_report.json",
+    "datasets/fixtures/dv/csr_timer_counter_timing_report.json"
+  ],
+  "expected_output": "evals/smoke/dv-plan-assembler/timer-counter-plan/expected.yaml",
+  "schema": "schemas/dv-plan.schema.json",
+  "assertions": [
+    "assembles objectives, interfaces, env, tests, assertions, and coverage into one plan",
+    "imports timing risk without inventing CDC issues",
+    "keeps all tests, assertions, and coverage items mapped to objective IDs"
+  ]
+}

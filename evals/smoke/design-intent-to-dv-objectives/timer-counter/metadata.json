@@ -1,0 +1,15 @@
+{
+  "eval_name": "timer-counter",
+  "skill": "design-intent-to-dv-objectives",
+  "input_files": [
+    "datasets/fixtures/dv/csr_timer_counter.sv",
+    "datasets/fixtures/dv/csr_timer_counter_intent.md"
+  ],
+  "expected_output": "evals/smoke/design-intent-to-dv-objectives/timer-counter/expected.yaml",
+  "schema": "schemas/dv-objectives.schema.json",
+  "assertions": [
+    "extracts reset, configuration, count, and interrupt objectives",
+    "assigns objective IDs in OBJ-NNN format",
+    "marks sticky interrupt behavior as a must objective"
+  ]
+}

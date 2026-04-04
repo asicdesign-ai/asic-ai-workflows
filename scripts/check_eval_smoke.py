@@ -8,6 +8,12 @@ from pathlib import Path
 
 from report_validators import (
     ValidationError,
+    validate_dv_coverage_plan,
+    validate_dv_objectives,
+    validate_dv_plan,
+    validate_rtl_verification_surface,
+    validate_sva_plan,
+    validate_uvm_test_plan,
     load_json_like_yaml,
     validate_cdc_report,
     validate_timing_report,
@@ -89,6 +95,18 @@ def validate_case(metadata_path: Path, errors: list[str]) -> None:
             validate_cdc_report(expected)
         elif schema_name == "timing-report.schema.json":
             validate_timing_report(expected)
+        elif schema_name == "dv-objectives.schema.json":
+            validate_dv_objectives(expected)
+        elif schema_name == "rtl-verification-surface.schema.json":
+            validate_rtl_verification_surface(expected)
+        elif schema_name == "uvm-test-plan.schema.json":
+            validate_uvm_test_plan(expected)
+        elif schema_name == "sva-plan.schema.json":
+            validate_sva_plan(expected)
+        elif schema_name == "dv-coverage-plan.schema.json":
+            validate_dv_coverage_plan(expected)
+        elif schema_name == "dv-plan.schema.json":
+            validate_dv_plan(expected)
         else:
             errors.append(f"{rel} references unsupported schema for local validation: {schema_name}")
     except ValidationError as exc:

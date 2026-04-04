@@ -1,0 +1,15 @@
+{
+  "eval_name": "streaming-buffer",
+  "skill": "rtl-verification-surface-extractor",
+  "input_files": [
+    "datasets/fixtures/dv/streaming_buffer.sv",
+    "datasets/fixtures/dv/streaming_buffer_intent.md"
+  ],
+  "expected_output": "evals/smoke/rtl-verification-surface-extractor/streaming-buffer/expected.yaml",
+  "schema": "schemas/rtl-verification-surface.schema.json",
+  "assertions": [
+    "identifies one clock and one reset",
+    "classifies the ready and valid signals as handshake interfaces",
+    "records pass-through latency as unresolved because intent does not define it"
+  ]
+}

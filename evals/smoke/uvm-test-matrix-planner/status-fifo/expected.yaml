@@ -1,0 +1,122 @@
+{
+  "design": {
+    "top_module": "status_fifo"
+  },
+  "env": {
+    "bench_style": "greenfield_uvm",
+    "agents": [
+      {
+        "name": "write_agent",
+        "interface": "write_side",
+        "mode": "active",
+        "justification": "The bench must drive writes to exercise fill, overflow, and level behavior."
+      },
+      {
+        "name": "read_agent",
+        "interface": "read_side",
+        "mode": "active",
+        "justification": "The bench must drive reads to exercise drain, ordering, and underflow behavior."
+      }
+    ],
+    "monitors": [
+      {
+        "name": "status_monitor",
+        "interface": "status_outputs",
+        "justification": "full, empty, overflow, underflow, and level are part of the visible contract."
+      }
+    ],
+    "scoreboards": [
+      {
+        "name": "fifo_order_scoreboard",
+        "compares": "Expected FIFO order and occupancy against read data and status outputs.",
+        "justification": "Data ordering and level updates require a predictive checker."
+      }
+    ],
+    "reference_models": [
+      {
+        "name": "fifo_reference_model",
+        "scope": "Golden queue model for write, read, overflow, and underflow behavior."
+      }
+    ],
+    "virtual_sequences": [
+      {
+        "name": "reset_fill_drain_vseq",
+        "objective_ids": [
+          "OBJ-001",
+          "OBJ-002"
+        ],
+        "description": "Coordinates reset, burst writes, and burst reads."
+      },
+      {
+        "name": "status_error_vseq",
+        "objective_ids": [
+          "OBJ-003",
+          "OBJ-004"
+        ],
+        "description": "Coordinates overflow and underflow stress scenarios."
+      }
+    ]
+  },
+  "tests": [
+    {
+      "id": "TEST-001",
+      "title": "fifo reset and empty behavior",
+      "objective_ids": [
+        "OBJ-001"
+      ],
+      "stimulus": "directed",
+      "checkers": [
+        "status_monitor"
+      ],
+      "priority": "must",
+      "description": "Reset the FIFO and verify empty, level, and read gating behavior."
+    },
+    {
+      "id": "TEST-002",
+      "title": "fifo fill and drain ordering",
+      "objective_ids": [
+        "OBJ-002"
+      ],
+      "stimulus": "virtual_sequence",
+      "checkers": [
+        "fifo_order_scoreboard"
+      ],
+      "priority": "must",
+      "description": "Fill and drain the FIFO to verify data order and occupancy transitions."
+    },
+    {
+      "id": "TEST-003",
+      "title": "overflow pulses when writing while full",
+      "objective_ids": [
+        "OBJ-003"
+      ],
+      "stimulus": "directed",
+      "checkers": [
+        "status_monitor"
+      ],
+      "priority": "must",
+      "description": "Drive writes into a full FIFO and verify overflow behavior without corrupting stored data."
+    },
+    {
+      "id": "TEST-004",
+      "title": "underflow pulses when reading while empty",
+      "objective_ids": [
+        "OBJ-004"
+      ],
+      "stimulus": "directed",
+      "checkers": [
+        "status_monitor"
+      ],
+      "priority": "must",
+      "description": "Drive reads from an empty FIFO and verify underflow behavior without changing occupancy."
+    }
+  ],
+  "summary": {
+    "total_tests": 4,
+    "by_priority": {
+      "must": 4,
+      "should": 0,
+      "could": 0
+    }
+  }
+}

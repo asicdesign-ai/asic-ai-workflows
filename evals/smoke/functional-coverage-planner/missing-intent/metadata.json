@@ -1,0 +1,15 @@
+{
+  "eval_name": "missing-intent",
+  "skill": "functional-coverage-planner",
+  "input_files": [
+    "datasets/fixtures/dv/missing_intent_block.sv",
+    "datasets/fixtures/dv/missing_intent_notes.md"
+  ],
+  "expected_output": "evals/smoke/functional-coverage-planner/missing-intent/expected.yaml",
+  "schema": "schemas/dv-coverage-plan.schema.json",
+  "assertions": [
+    "covers reset, start, busy, and done behavior without inventing latency bins",
+    "adds a cross for enable and start interaction",
+    "records a latency-specific exclusion because intent is incomplete"
+  ]
+}

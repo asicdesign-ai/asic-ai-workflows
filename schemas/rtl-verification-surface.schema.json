@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RTL Verification Surface Report",
+  "type": "object",
+  "required": [
+    "design",
+    "clocks",
+    "resets",
+    "interfaces",
+    "state_elements",
+    "behaviors",
+    "observability",
+    "unresolved",
+    "summary"
+  ],
+  "properties": {
+    "design": {
+      "type": "object"
+    },
+    "clocks": {
+      "type": "array"
+    },
+    "resets": {
+      "type": "array"
+    },
+    "interfaces": {
+      "type": "array"
+    },
+    "state_elements": {
+      "type": "array"
+    },
+    "behaviors": {
+      "type": "array"
+    },
+    "observability": {
+      "type": "array"
+    },
+    "unresolved": {
+      "type": "array"
+    },
+    "summary": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

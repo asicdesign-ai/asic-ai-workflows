@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DV Coverage Plan Report",
+  "type": "object",
+  "required": [
+    "design",
+    "coverpoints",
+    "crosses",
+    "exclusions",
+    "summary"
+  ],
+  "properties": {
+    "design": {
+      "type": "object"
+    },
+    "coverpoints": {
+      "type": "array"
+    },
+    "crosses": {
+      "type": "array"
+    },
+    "exclusions": {
+      "type": "array"
+    },
+    "summary": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

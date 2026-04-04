@@ -1,0 +1,157 @@
+{
+  "design": {
+    "top_module": "streaming_buffer",
+    "rtl_files": [
+      "datasets/fixtures/dv/streaming_buffer.sv"
+    ]
+  },
+  "clocks": [
+    {
+      "name": "clk",
+      "line": 19
+    }
+  ],
+  "resets": [
+    {
+      "name": "rst_n",
+      "active": "active_low",
+      "style": "async",
+      "line": 19
+    }
+  ],
+  "interfaces": [
+    {
+      "name": "clk",
+      "direction": "input",
+      "role": "clock",
+      "width": 1,
+      "line": 2
+    },
+    {
+      "name": "rst_n",
+      "direction": "input",
+      "role": "reset",
+      "width": 1,
+      "line": 3
+    },
+    {
+      "name": "in_valid",
+      "direction": "input",
+      "role": "handshake",
+      "width": 1,
+      "line": 4
+    },
+    {
+      "name": "in_data",
+      "direction": "input",
+      "role": "data",
+      "width": 8,
+      "line": 5
+    },
+    {
+      "name": "in_ready",
+      "direction": "output",
+      "role": "handshake",
+      "width": 1,
+      "line": 6
+    },
+    {
+      "name": "out_valid",
+      "direction": "output",
+      "role": "handshake",
+      "width": 1,
+      "line": 7
+    },
+    {
+      "name": "out_data",
+      "direction": "output",
+      "role": "data",
+      "width": 8,
+      "line": 8
+    },
+    {
+      "name": "out_ready",
+      "direction": "input",
+      "role": "handshake",
+      "width": 1,
+      "line": 9
+    }
+  ],
+  "state_elements": [
+    {
+      "name": "full_q",
+      "kind": "flag",
+      "clock": "clk",
+      "line": 12
+    },
+    {
+      "name": "data_q",
+      "kind": "buffer",
+      "clock": "clk",
+      "line": 13
+    }
+  ],
+  "behaviors": [
+    {
+      "id": "BEH-001",
+      "kind": "reset",
+      "description": "Reset clears the stored valid flag and buffered data.",
+      "evidence": [
+        {
+          "file": "datasets/fixtures/dv/streaming_buffer.sv",
+          "line": 20,
+          "signal": "rst_n"
+        }
+      ]
+    },
+    {
+      "id": "BEH-002",
+      "kind": "transaction",
+      "description": "Accepted input transfers store data in the single-entry buffer.",
+      "evidence": [
+        {
+          "file": "datasets/fixtures/dv/streaming_buffer.sv",
+          "line": 24,
+          "signal": "in_valid"
+        }
+      ]
+    },
+    {
+      "id": "BEH-003",
+      "kind": "backpressure",
+      "description": "The block deasserts in_ready when the buffer is full and the consumer is not ready.",
+      "evidence": [
+        {
+          "file": "datasets/fixtures/dv/streaming_buffer.sv",
+          "line": 15,
+          "signal": "in_ready"
+        }
+      ]
+    }
+  ],
+  "observability": [
+    {
+      "signal": "out_valid",
+      "role": "status",
+      "line": 16
+    },
+    {
+      "signal": "out_data",
+      "role": "status",
+      "line": 17
+    }
+  ],
+  "unresolved": [
+    {
+      "name": "pass-through latency",
+      "reason": "The design intent does not define whether same-cycle forwarding is required.",
+      "line": 15
+    }
+  ],
+  "summary": {
+    "total_interfaces": 8,
+    "total_state_elements": 2,
+    "total_behaviors": 3,
+    "total_unresolved": 1
+  }
+}

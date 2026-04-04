@@ -48,15 +48,23 @@ Current repository contents:
 
 - `skills/rtl-cdc-linter/` — Pre-EDA RTL CDC lint skill  
 - `skills/rtl-timing-path-analyzer/` — Pre-synthesis RTL timing path analysis skill  
+- `skills/design-intent-to-dv-objectives/` — Block-level DV objective planning skill
+- `skills/rtl-verification-surface-extractor/` — Block-level verification surface extraction skill
+- `skills/uvm-test-matrix-planner/` — UVM-centric DV test planning skill
+- `skills/sva-candidate-planner/` — Block-level assertion candidate planning skill
+- `skills/functional-coverage-planner/` — Block-level coverage planning skill
+- `skills/dv-plan-assembler/` — Final DV plan assembly skill
 - `rules/common/evidence-grounding.md` — Shared anti-hallucination grounding rule  
 - `rules/common/output-discipline.md` — Shared structured-output rule  
 - `rules/cdc/classification.md` — CDC synchronizer proof and severity mapping  
 - `rules/timing/register-evidence.md` — Timing register proof and unresolved-object handling  
-- `schemas/` — Report schemas for the currently implemented skills  
-- `datasets/fixtures/` — RTL smoke fixtures for CDC and timing analysis  
-- `evals/smoke/` — Smoke-eval metadata and golden outputs for current skills  
+- `rules/dv/` — Block-level DV planning and traceability rules
+- `flows/block-dv-plan/` — Block-level, UVM-centric DV planning flow
+- `schemas/` — Report schemas for the currently implemented skills and DV flow artifacts  
+- `datasets/fixtures/` — RTL smoke fixtures for CDC, timing, and DV planning  
+- `evals/smoke/` — Smoke-eval metadata and golden outputs for current skills and DV plan artifacts  
 - `scripts/` — Local and CI validation scripts for repo structure and smoke assets  
-- `.github/workflows/ci.yml` — Bootstrap CI checks for repo lint, skill contracts, and smoke assets  
+- `.github/workflows/ci.yml` — Bootstrap CI checks for repo lint, skill contracts, flow contracts, and smoke assets  
 
 ---
 
@@ -82,6 +90,12 @@ Current skills:
 
 - RTL Timing Path Analyzer  
 - RTL CDC Linter  
+- Design Intent To DV Objectives
+- RTL Verification Surface Extractor
+- UVM Test Matrix Planner
+- SVA Candidate Planner
+- Functional Coverage Planner
+- DV Plan Assembler
 
 Planned examples:
 
@@ -120,7 +134,9 @@ Rules are used by:
 Current validation approach:
 
 - repo-structure linting
+- JSON and YAML syntax checks
 - skill contract checks
+- flow contract checks
 - schema-backed smoke-eval asset validation
 
 The current smoke layer validates fixtures, metadata, and golden outputs. It does
@@ -139,6 +155,12 @@ Example: Timing Closure Flow
 3. Classify violations  
 4. Suggest fixes  
 5. Re-run timing  
+
+Current implemented flow:
+
+- `block-dv-plan` — derive DV objectives, extract the verification surface, plan
+  UVM tests/assertions/coverage, and assemble one final structured DV plan with
+  optional CDC and timing risks
 
 ---
 

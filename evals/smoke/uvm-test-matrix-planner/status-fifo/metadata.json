@@ -1,0 +1,15 @@
+{
+  "eval_name": "status-fifo",
+  "skill": "uvm-test-matrix-planner",
+  "input_files": [
+    "datasets/fixtures/dv/status_fifo.sv",
+    "datasets/fixtures/dv/status_fifo_intent.md"
+  ],
+  "expected_output": "evals/smoke/uvm-test-matrix-planner/status-fifo/expected.yaml",
+  "schema": "schemas/uvm-test-plan.schema.json",
+  "assertions": [
+    "uses a greenfield UVM bench",
+    "adds active write and read agents for the FIFO interfaces",
+    "plans overflow and underflow tests as must scenarios"
+  ]
+}

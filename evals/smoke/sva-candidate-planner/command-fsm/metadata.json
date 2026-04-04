@@ -1,0 +1,15 @@
+{
+  "eval_name": "command-fsm",
+  "skill": "sva-candidate-planner",
+  "input_files": [
+    "datasets/fixtures/dv/command_fsm.sv",
+    "datasets/fixtures/dv/command_fsm_intent.md"
+  ],
+  "expected_output": "evals/smoke/sva-candidate-planner/command-fsm/expected.yaml",
+  "schema": "schemas/sva-plan.schema.json",
+  "assertions": [
+    "produces reset, protocol, and error assertion candidates",
+    "ties every assertion back to objective IDs",
+    "uses command_fsm as the bind target"
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "design": {
+    "top_module": "timer_counter",
+    "rtl_files": [
+      "datasets/fixtures/dv/csr_timer_counter.sv"
+    ],
+    "intent_summary": "CSR-programmable timer with sticky interrupt behavior."
+  },
+  "objectives": [
+    {
+      "id": "OBJ-001",
+      "title": "reset establishes idle timer state",
+      "priority": "must",
+      "source": "both",
+      "category": "reset",
+      "description": "Reset drives the timer count and interrupt outputs to their idle values.",
+      "success_condition": "After reset, count_value is zero, irq is low, and the block stays disabled until cfg_enable is asserted."
+    },
+    {
+      "id": "OBJ-002",
+      "title": "software load updates the counter state",
+      "priority": "must",
+      "source": "both",
+      "category": "configuration",
+      "description": "A cfg_load operation places cfg_data into the counter state.",
+      "success_condition": "When cfg_load is asserted, the next stored count reflects cfg_data."
+    },
+    {
+      "id": "OBJ-003",
+      "title": "enabled timer increments toward the programmed terminal count",
+      "priority": "must",
+      "source": "both",
+      "category": "data_path",
+      "description": "An enabled timer increments its stored count each cycle until software changes the state.",
+      "success_condition": "With cfg_enable active and no cfg_load, count_value advances monotonically by one per cycle."
+    },
+    {
+      "id": "OBJ-004",
+      "title": "terminal count raises a sticky interrupt until cleared",
+      "priority": "must",
+      "source": "both",
+      "category": "interrupt",
+      "description": "The timer asserts irq on terminal-count match and software clears it with clear_irq.",
+      "success_condition": "When the enabled count reaches terminal_count, irq asserts and remains high until clear_irq is applied."
+    }
+  ],
+  "summary": {
+    "total_objectives": 4,
+    "by_priority": {
+      "must": 4,
+      "should": 0,
+      "could": 0
+    }
+  }
+}

@@ -1,0 +1,256 @@
+{
+  "design": {
+    "top_module": "missing_intent_block",
+    "rtl_files": [
+      "datasets/fixtures/dv/missing_intent_block.sv"
+    ],
+    "intent_summary": "Small start/busy/done block with incomplete intent for latency and completion signaling."
+  },
+  "objectives": [
+    {
+      "id": "OBJ-001",
+      "title": "reset returns the block to an idle state",
+      "priority": "must",
+      "source": "rtl",
+      "category": "reset",
+      "description": "Reset clears busy, done, and the internal work counter.",
+      "success_condition": "After reset, busy and done are low and the block can accept a new start."
+    },
+    {
+      "id": "OBJ-002",
+      "title": "enable and start launch one unit of work",
+      "priority": "must",
+      "source": "both",
+      "category": "control",
+      "description": "The block starts work only when enable and start are asserted while the block is idle.",
+      "success_condition": "An enabled start request drives busy high and begins visible work progression."
+    },
+    {
+      "id": "OBJ-003",
+      "title": "completion is visible at the done output",
+      "priority": "should",
+      "source": "rtl",
+      "category": "status",
+      "description": "The block eventually deasserts busy and raises done after work completes.",
+      "success_condition": "After a launched operation, busy eventually deasserts and done is observed at least once."
+    }
+  ],
+  "interfaces": [
+    {
+      "name": "clk",
+      "direction": "input",
+      "role": "clock",
+      "width": 1
+    },
+    {
+      "name": "rst_n",
+      "direction": "input",
+      "role": "reset",
+      "width": 1
+    },
+    {
+      "name": "enable",
+      "direction": "input",
+      "role": "config",
+      "width": 1
+    },
+    {
+      "name": "start",
+      "direction": "input",
+      "role": "command",
+      "width": 1
+    },
+    {
+      "name": "busy",
+      "direction": "output",
+      "role": "status",
+      "width": 1
+    },
+    {
+      "name": "done",
+      "direction": "output",
+      "role": "status",
+      "width": 1
+    }
+  ],
+  "env": {
+    "bench_style": "greenfield_uvm",
+    "agents": [
+      {
+        "name": "control_agent",
+        "interface": "control_inputs",
+        "mode": "active",
+        "justification": "The bench must drive enable and start to launch work."
+      }
+    ],
+    "monitors": [
+      {
+        "name": "status_monitor",
+        "interface": "status_outputs",
+        "justification": "busy and done are the visible completion contract."
+      }
+    ],
+    "scoreboards": [],
+    "reference_models": [],
+    "virtual_sequences": [
+      {
+        "name": "reset_start_complete_vseq",
+        "objective_ids": [
+          "OBJ-001",
+          "OBJ-002",
+          "OBJ-003"
+        ],
+        "description": "Coordinates reset, start attempts, and observation of completion behavior."
+      }
+    ]
+  },
+  "tests": [
+    {
+      "id": "TEST-001",
+      "title": "reset returns the block to idle",
+      "objective_ids": [
+        "OBJ-001"
+      ],
+      "stimulus": "directed",
+      "checkers": [
+        "status_monitor"
+      ],
+      "priority": "must",
+      "description": "Apply reset and verify the block exposes idle outputs."
+    },
+    {
+      "id": "TEST-002",
+      "title": "enabled start launches work",
+      "objective_ids": [
+        "OBJ-002"
+      ],
+      "stimulus": "directed",
+      "checkers": [
+        "status_monitor"
+      ],
+      "priority": "must",
+      "description": "Drive enable and start while idle and verify busy asserts."
+    },
+    {
+      "id": "TEST-003",
+      "title": "completion is observable without assuming exact latency",
+      "objective_ids": [
+        "OBJ-003"
+      ],
+      "stimulus": "constrained_random",
+      "checkers": [
+        "status_monitor"
+      ],
+      "priority": "should",
+      "description": "Observe completion behavior over repeated starts without assuming a fixed cycle count."
+    }
+  ],
+  "assertions": [
+    {
+      "id": "SVA-001",
+      "title": "reset clears busy and done",
+      "objective_ids": [
+        "OBJ-001"
+      ],
+      "class": "reset",
+      "source": "rtl",
+      "bind_target": "missing_intent_block",
+      "description": "Reset clears the visible status outputs."
+    },
+    {
+      "id": "SVA-002",
+      "title": "start requests are accepted only when idle",
+      "objective_ids": [
+        "OBJ-002"
+      ],
+      "class": "protocol",
+      "source": "rtl",
+      "bind_target": "missing_intent_block",
+      "description": "A new start request is only meaningful when the block is not already busy."
+    }
+  ],
+  "coverage": {
+    "coverpoints": [
+      {
+        "id": "COV-001",
+        "objective_ids": [
+          "OBJ-001"
+        ],
+        "target": "rst_n",
+        "kind": "state",
+        "description": "Cover reset assertion and release."
+      },
+      {
+        "id": "COV-002",
+        "objective_ids": [
+          "OBJ-002"
+        ],
+        "target": "start",
+        "kind": "configuration",
+        "description": "Cover start requests while enable is asserted."
+      },
+      {
+        "id": "COV-003",
+        "objective_ids": [
+          "OBJ-003"
+        ],
+        "target": "done",
+        "kind": "status",
+        "description": "Cover the visible completion indication."
+      }
+    ],
+    "crosses": [
+      {
+        "id": "COV-004",
+        "objective_ids": [
+          "OBJ-002"
+        ],
+        "targets": [
+          "enable",
+          "start"
+        ],
+        "description": "Cross enable with start requests."
+      }
+    ],
+    "exclusions": [
+      {
+        "id": "COV-005",
+        "objective_ids": [
+          "OBJ-003"
+        ],
+        "related_targets": [
+          "busy",
+          "done"
+        ],
+        "rationale": "Do not require latency-specific coverage bins because the intent does not define completion timing."
+      }
+    ]
+  },
+  "risks": [],
+  "unresolved": [
+    {
+      "id": "UNR-001",
+      "item": "completion latency contract",
+      "reason": "The design intent does not define an exact cycle budget from start to done.",
+      "objective_ids": [
+        "OBJ-003"
+      ]
+    },
+    {
+      "id": "UNR-002",
+      "item": "done pulse persistence",
+      "reason": "The design intent does not define whether done must pulse for one cycle or remain asserted until observed.",
+      "objective_ids": [
+        "OBJ-003"
+      ]
+    }
+  ],
+  "summary": {
+    "total_objectives": 3,
+    "total_tests": 3,
+    "total_assertions": 2,
+    "total_coverage_items": 5,
+    "total_risks": 0,
+    "total_unresolved": 2
+  }
+}

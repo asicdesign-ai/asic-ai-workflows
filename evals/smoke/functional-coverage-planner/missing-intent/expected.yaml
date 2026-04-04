@@ -1,0 +1,65 @@
+{
+  "design": {
+    "top_module": "missing_intent_block"
+  },
+  "coverpoints": [
+    {
+      "id": "COV-001",
+      "objective_ids": [
+        "OBJ-001"
+      ],
+      "target": "enable",
+      "kind": "configuration",
+      "description": "Cover enable assertion before a start request."
+    },
+    {
+      "id": "COV-002",
+      "objective_ids": [
+        "OBJ-002"
+      ],
+      "target": "busy",
+      "kind": "state",
+      "description": "Cover the block entering and leaving busy behavior."
+    },
+    {
+      "id": "COV-003",
+      "objective_ids": [
+        "OBJ-003"
+      ],
+      "target": "done",
+      "kind": "status",
+      "description": "Cover the observed completion indication at the block output."
+    }
+  ],
+  "crosses": [
+    {
+      "id": "COV-004",
+      "objective_ids": [
+        "OBJ-002"
+      ],
+      "targets": [
+        "enable",
+        "start"
+      ],
+      "description": "Cross configuration enable with start requests."
+    }
+  ],
+  "exclusions": [
+    {
+      "id": "COV-005",
+      "objective_ids": [
+        "OBJ-003"
+      ],
+      "related_targets": [
+        "busy",
+        "done"
+      ],
+      "rationale": "Do not require latency-specific bins because the design intent does not define a completion-cycle contract."
+    }
+  ],
+  "summary": {
+    "total_coverpoints": 3,
+    "total_crosses": 1,
+    "total_exclusions": 1
+  }
+}

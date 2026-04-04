@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Block DV Plan Report",
+  "type": "object",
+  "required": [
+    "design",
+    "objectives",
+    "interfaces",
+    "env",
+    "tests",
+    "assertions",
+    "coverage",
+    "risks",
+    "unresolved",
+    "summary"
+  ],
+  "properties": {
+    "design": {
+      "type": "object"
+    },
+    "objectives": {
+      "type": "array"
+    },
+    "interfaces": {
+      "type": "array"
+    },
+    "env": {
+      "type": "object"
+    },
+    "tests": {
+      "type": "array"
+    },
+    "assertions": {
+      "type": "array"
+    },
+    "coverage": {
+      "type": "object"
+    },
+    "risks": {
+      "type": "array"
+    },
+    "unresolved": {
+      "type": "array"
+    },
+    "summary": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,50 @@
+{
+  "design": {
+    "top_module": "command_fsm"
+  },
+  "assertions": [
+    {
+      "id": "SVA-001",
+      "title": "reset returns the FSM to idle",
+      "objective_ids": [
+        "OBJ-001"
+      ],
+      "class": "reset",
+      "source": "both",
+      "bind_target": "command_fsm",
+      "description": "Reset drives busy, done, and error_flag low and returns the state machine to idle."
+    },
+    {
+      "id": "SVA-002",
+      "title": "start command is accepted only from idle",
+      "objective_ids": [
+        "OBJ-002"
+      ],
+      "class": "protocol",
+      "source": "both",
+      "bind_target": "command_fsm",
+      "description": "A valid start command moves the block from idle into busy behavior."
+    },
+    {
+      "id": "SVA-003",
+      "title": "unsupported commands raise the error flag",
+      "objective_ids": [
+        "OBJ-003"
+      ],
+      "class": "error",
+      "source": "both",
+      "bind_target": "command_fsm",
+      "description": "Commands that are not supported in the current state raise error_flag without inventing hidden protocol timing."
+    }
+  ],
+  "summary": {
+    "total_assertions": 3,
+    "by_class": {
+      "reset": 1,
+      "protocol": 1,
+      "state": 0,
+      "data_integrity": 0,
+      "error": 1
+    }
+  }
+}
