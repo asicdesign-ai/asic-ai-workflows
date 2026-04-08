@@ -1,0 +1,51 @@
+{
+  "design": {
+    "top_module": "single_clock_controller",
+    "brief_summary": "Single-clock threshold controller with busy and done status."
+  },
+  "source_files": [
+    {
+      "path": "rtl/single_clock_controller.sv",
+      "module": "single_clock_controller",
+      "language": "systemverilog",
+      "content": "module single_clock_controller (\n    input  logic       clk_i,\n    input  logic       rst_n,\n    input  logic       start_i,\n    input  logic       stop_i,\n    input  logic       tick_i,\n    input  logic [7:0] threshold_i,\n    output logic       busy_o,\n    output logic       done_o\n);\n  logic [7:0] count_q;\n\n  always_ff @(posedge clk_i or negedge rst_n) begin\n    if (!rst_n) begin\n      busy_o  <= 1'b0;\n      done_o  <= 1'b0;\n      count_q <= '0;\n    end else begin\n      done_o <= 1'b0;\n      if (start_i) begin\n        busy_o  <= 1'b1;\n        count_q <= '0;\n      end else if (stop_i) begin\n        busy_o <= 1'b0;\n      end else if (busy_o && tick_i) begin\n        if (count_q == threshold_i) begin\n          busy_o <= 1'b0;\n          done_o <= 1'b1;\n        end else begin\n          count_q <= count_q + 8'd1;\n        end\n      end\n    end\n  end\nendmodule"
+    }
+  ],
+  "rtl_modules": [
+    {
+      "name": "single_clock_controller",
+      "role": "top",
+      "clocks": [
+        "clk_i"
+      ],
+      "resets": [
+        "rst_n"
+      ],
+      "description": "Implements threshold-based single-clock control sequencing."
+    }
+  ],
+  "traceability": [
+    {
+      "requirement_id": "REQ-001",
+      "spec_sections": [
+        "overview",
+        "behavior"
+      ],
+      "rtl_files": [
+        "rtl/single_clock_controller.sv"
+      ],
+      "rtl_signals": [
+        "start_i",
+        "tick_i",
+        "done_o"
+      ]
+    }
+  ],
+  "unresolved": [],
+  "summary": {
+    "total_source_files": 1,
+    "total_modules": 1,
+    "total_trace_links": 1,
+    "total_unresolved": 0
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Microarchitecture Specification Report",
+  "type": "object",
+  "required": [
+    "design",
+    "requirements_trace",
+    "artifact",
+    "spec_markdown",
+    "diagrams",
+    "unresolved",
+    "summary"
+  ],
+  "properties": {
+    "design": {
+      "type": "object"
+    },
+    "requirements_trace": {
+      "type": "array"
+    },
+    "artifact": {
+      "type": "object"
+    },
+    "spec_markdown": {
+      "type": "string"
+    },
+    "diagrams": {
+      "type": "array"
+    },
+    "unresolved": {
+      "type": "array"
+    },
+    "summary": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

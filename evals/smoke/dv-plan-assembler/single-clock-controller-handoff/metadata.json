@@ -1,0 +1,18 @@
+{
+  "eval_name": "single-clock-controller-handoff",
+  "skill": "dv-plan-assembler",
+  "input_files": [
+    "datasets/fixtures/rtl-plan/single_clock_controller_block_rtl_package.json",
+    "datasets/fixtures/rtl-plan/single_clock_controller_spec.md",
+    "datasets/fixtures/rtl-plan/single_clock_controller.sv",
+    "datasets/fixtures/rtl-plan/single_clock_controller_cdc_report.json",
+    "datasets/fixtures/rtl-plan/single_clock_controller_timing_report.json"
+  ],
+  "expected_output": "evals/smoke/dv-plan-assembler/single-clock-controller-handoff/expected.yaml",
+  "schema": "schemas/dv-plan.schema.json",
+  "assertions": [
+    "uses the block-level RTL package as downstream handoff context",
+    "converts the package-backed microarchitecture spec into objective-linked DV content",
+    "imports timing handoff risk while preserving clean CDC status"
+  ]
+}

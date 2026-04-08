@@ -46,6 +46,12 @@ Agents working in this repo should preserve that separation:
 
 Current implemented skills:
 
+- `skills/block-requirements-normalizer/`
+- `skills/microarchitecture-spec-author/`
+- `skills/rtl-designer/`
+- `skills/rtl-lint-auditor/`
+- `skills/rtl-rdc-auditor/`
+- `skills/block-rtl-package-assembler/`
 - `skills/rtl-cdc-linter/`
 - `skills/rtl-timing-path-analyzer/`
 - `skills/design-intent-to-dv-objectives/`
@@ -59,6 +65,12 @@ Current implemented rules:
 
 - `rules/common/evidence-grounding.md`
 - `rules/common/output-discipline.md`
+- `rules/arch/requirements-traceability.md`
+- `rules/arch/ppa-capture.md`
+- `rules/arch/diagram-selection.md`
+- `rules/rtl/synthesizable-systemverilog.md`
+- `rules/rtl/lint-severity.md`
+- `rules/rdc/classification.md`
 - `rules/cdc/classification.md`
 - `rules/timing/register-evidence.md`
 - `rules/dv/objective-traceability.md`
@@ -69,10 +81,17 @@ Current implemented rules:
 
 Current implemented flows:
 
+- `flows/block-level-rtl-plan/`
 - `flows/block-dv-plan/`
 
 Current implemented schemas:
 
+- `schemas/block-requirements.schema.json`
+- `schemas/microarchitecture-spec.schema.json`
+- `schemas/rtl-design.schema.json`
+- `schemas/rtl-lint-report.schema.json`
+- `schemas/rdc-report.schema.json`
+- `schemas/block-rtl-package.schema.json`
 - `schemas/cdc-report.schema.json`
 - `schemas/timing-report.schema.json`
 - `schemas/dv-objectives.schema.json`
@@ -84,9 +103,16 @@ Current implemented schemas:
 
 Current implemented smoke assets:
 
+- `datasets/fixtures/rtl-plan/`
 - `datasets/fixtures/cdc/`
 - `datasets/fixtures/timing/`
 - `datasets/fixtures/dv/`
+- `evals/smoke/block-requirements-normalizer/`
+- `evals/smoke/microarchitecture-spec-author/`
+- `evals/smoke/rtl-designer/`
+- `evals/smoke/rtl-lint-auditor/`
+- `evals/smoke/rtl-rdc-auditor/`
+- `evals/smoke/block-rtl-package-assembler/`
 - `evals/smoke/rtl-cdc-linter/`
 - `evals/smoke/rtl-timing-path-analyzer/`
 - `evals/smoke/design-intent-to-dv-objectives/`
@@ -106,6 +132,7 @@ Current supporting files:
 - `scripts/check_skill_contracts.py`
 - `scripts/check_flow_contracts.py`
 - `scripts/check_eval_smoke.py`
+- `scripts/report_validators.py`
 
 Important current limitation:
 
@@ -212,13 +239,21 @@ Avoid:
 Start here for most tasks:
 
 - `README.md`
+- `flows/block-level-rtl-plan/FLOW.md`
 - `flows/block-dv-plan/FLOW.md`
+- `skills/block-requirements-normalizer/SKILL.md`
+- `skills/microarchitecture-spec-author/SKILL.md`
+- `skills/rtl-designer/SKILL.md`
+- `skills/block-rtl-package-assembler/SKILL.md`
 - `skills/rtl-cdc-linter/SKILL.md`
 - `skills/rtl-timing-path-analyzer/SKILL.md`
 - `skills/design-intent-to-dv-objectives/SKILL.md`
 - `skills/dv-plan-assembler/SKILL.md`
 - `rules/common/evidence-grounding.md`
 - `rules/common/output-discipline.md`
+- `rules/arch/requirements-traceability.md`
+- `rules/rtl/synthesizable-systemverilog.md`
+- `rules/rdc/classification.md`
 - `rules/cdc/classification.md`
 - `rules/timing/register-evidence.md`
 - `rules/dv/objective-traceability.md`

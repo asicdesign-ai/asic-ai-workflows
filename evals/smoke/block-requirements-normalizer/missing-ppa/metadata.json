@@ -1,0 +1,14 @@
+{
+  "eval_name": "missing-ppa",
+  "skill": "block-requirements-normalizer",
+  "input_files": [
+    "datasets/fixtures/rtl-plan/missing_ppa_accumulator_brief.md"
+  ],
+  "expected_output": "evals/smoke/block-requirements-normalizer/missing-ppa/expected.yaml",
+  "schema": "schemas/block-requirements.schema.json",
+  "assertions": [
+    "extracts deterministic REQ-NNN requirement records from the brief",
+    "marks power, performance, and area as missing when they are not provided",
+    "emits blocking intake questions instead of inventing PPA targets"
+  ]
+}

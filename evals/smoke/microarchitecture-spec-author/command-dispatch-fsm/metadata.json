@@ -1,0 +1,15 @@
+{
+  "eval_name": "command-dispatch-fsm",
+  "skill": "microarchitecture-spec-author",
+  "input_files": [
+    "datasets/fixtures/rtl-plan/command_dispatch_fsm_brief.md",
+    "datasets/fixtures/rtl-plan/command_dispatch_fsm_spec.md"
+  ],
+  "expected_output": "evals/smoke/microarchitecture-spec-author/command-dispatch-fsm/expected.yaml",
+  "schema": "schemas/microarchitecture-spec.schema.json",
+  "assertions": [
+    "uses Mermaid for an FSM-heavy control block",
+    "traces requirements into state and transition sections",
+    "keeps unresolved items empty when the state behavior is explicit"
+  ]
+}

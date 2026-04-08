@@ -1,0 +1,68 @@
+{
+  "design": {
+    "top_module": "sensor_accumulator",
+    "brief_summary": "Accumulator for a sensor front end with enable and clear control."
+  },
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "title": "accumulate samples while enabled",
+      "category": "function",
+      "priority": "must",
+      "source": "user",
+      "description": "The block accumulates sample_i values while enable_i is high.",
+      "acceptance_criteria": "With enable_i asserted, each accepted sample_i value is added into sum_o on the next cycle."
+    },
+    {
+      "id": "REQ-002",
+      "title": "clear state on reset or clear_i",
+      "category": "clock_reset",
+      "priority": "must",
+      "source": "user",
+      "description": "Reset and clear_i return the accumulator state to zero.",
+      "acceptance_criteria": "After reset or clear_i, the stored sum returns to zero."
+    }
+  ],
+  "ppa_targets": {
+    "performance": {
+      "target": null,
+      "units": null,
+      "priority": "unspecified",
+      "status": "missing"
+    },
+    "power": {
+      "target": null,
+      "units": null,
+      "priority": "unspecified",
+      "status": "missing"
+    },
+    "area": {
+      "target": null,
+      "units": null,
+      "priority": "unspecified",
+      "status": "missing"
+    }
+  },
+  "open_questions": [
+    {
+      "topic": "performance target",
+      "question": "What operating frequency or cycle budget must the accumulator meet?",
+      "blocking": true
+    },
+    {
+      "topic": "power target",
+      "question": "What power budget or low-power priority constrains this block?",
+      "blocking": true
+    },
+    {
+      "topic": "area target",
+      "question": "What area budget or utilization constraint applies to this block?",
+      "blocking": true
+    }
+  ],
+  "summary": {
+    "total_requirements": 2,
+    "total_open_questions": 3,
+    "ppa_complete": false
+  }
+}

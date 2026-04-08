@@ -1,0 +1,20 @@
+{
+  "design": {
+    "top_module": "single_clock_controller",
+    "rtl_files": [
+      "datasets/fixtures/rtl-plan/single_clock_controller.sv"
+    ]
+  },
+  "findings": [],
+  "summary": {
+    "total_findings": 0,
+    "blocking_findings": 0,
+    "by_severity": {
+      "critical": 0,
+      "high": 0,
+      "medium": 0,
+      "low": 0,
+      "info": 0
+    }
+  }
+}

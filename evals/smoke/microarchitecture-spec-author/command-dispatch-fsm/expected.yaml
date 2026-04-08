@@ -1,0 +1,43 @@
+{
+  "design": {
+    "top_module": "command_dispatch_fsm",
+    "brief_summary": "Four-state command dispatcher with fault recovery."
+  },
+  "requirements_trace": [
+    {
+      "requirement_id": "REQ-001",
+      "spec_sections": [
+        "overview",
+        "state_definitions"
+      ],
+      "coverage": "full"
+    },
+    {
+      "requirement_id": "REQ-002",
+      "spec_sections": [
+        "transitions"
+      ],
+      "coverage": "full"
+    }
+  ],
+  "artifact": {
+    "path": "artifacts/microarchitecture/command_dispatch_fsm.md",
+    "format": "markdown"
+  },
+  "spec_markdown": "# Command Dispatch FSM\n\n## Overview\nA four-state controller sequences command load, execute, and error recovery.\n\n## Transitions\n`cmd_valid_i` drives `IDLE -> LOAD`; `fault_i` drives `LOAD/EXEC -> ERROR`; `clear_i` drives `ERROR -> IDLE`.",
+  "diagrams": [
+    {
+      "tool": "mermaid",
+      "title": "command dispatcher states",
+      "purpose": "state_machine",
+      "artifact_path": "artifacts/microarchitecture/diagrams/command_dispatch_fsm.mmd",
+      "content": "stateDiagram-v2\n    [*] --> IDLE\n    IDLE --> LOAD: cmd_valid_i\n    LOAD --> EXEC: load_done\n    LOAD --> ERROR: fault_i\n    EXEC --> ERROR: fault_i\n    ERROR --> IDLE: clear_i"
+    }
+  ],
+  "unresolved": [],
+  "summary": {
+    "total_traced_requirements": 2,
+    "total_diagrams": 1,
+    "total_unresolved": 0
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "design": {
+    "top_module": "warm_reset_status_bridge",
+    "rtl_files": [
+      "datasets/fixtures/rtl-plan/warm_reset_status_bridge.sv"
+    ]
+  },
+  "reset_domains": [
+    {
+      "name": "cfg_rst_n",
+      "active": "active_low",
+      "style": "async",
+      "line": 10
+    },
+    {
+      "name": "rst_n",
+      "active": "active_low",
+      "style": "async",
+      "line": 18
+    }
+  ],
+  "crossings": [
+    {
+      "id": "RDC-001",
+      "signal": "cfg_done_q",
+      "source_reset": "cfg_rst_n",
+      "dest_reset": "rst_n",
+      "line": 22,
+      "protected": false,
+      "severity": "high",
+      "description": "cfg_done_q is released by cfg_rst_n and sampled by logic released with rst_n without visible reset-domain protection.",
+      "fix": "Stage the control signal through explicit reset-bridge logic in the rst_n domain."
+    }
+  ],
+  "summary": {
+    "total_crossings": 1,
+    "violations": 1,
+    "by_severity": {
+      "critical": 0,
+      "high": 1,
+      "medium": 0,
+      "low": 0,
+      "info": 0
+    }
+  }
+}

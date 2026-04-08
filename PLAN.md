@@ -157,3 +157,28 @@ Suggested flow steps:
 This creates a practical "team of engineers" workflow while staying consistent
 with the repository's current emphasis on narrow skills, shared rules, and
 testable outputs.
+
+## Progress Update
+
+The repository now has a concrete front-end generative design flow in place:
+
+- `flows/block-level-rtl-plan/`
+- `skills/block-requirements-normalizer/`
+- `skills/microarchitecture-spec-author/`
+- `skills/rtl-designer/`
+- `skills/rtl-lint-auditor/`
+- `skills/rtl-rdc-auditor/`
+- `skills/block-rtl-package-assembler/`
+
+This change establishes a full block-level path from requirements and explicit
+PPA capture through microarchitecture specification, RTL generation, static
+front-end audits, and structured DV handoff.
+
+## Recommended Next Work
+
+1. Add a small flow runner or execution harness in `scripts/` for
+   `block-level-rtl-plan`.
+2. Extend the front-end audit layer with low-power intent and DFT-readiness
+   planning.
+3. Add broader end-to-end examples that chain `block-level-rtl-plan` into
+   `block-dv-plan` and future front-end review flows.

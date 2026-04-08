@@ -8,10 +8,16 @@ from pathlib import Path
 
 from report_validators import (
     ValidationError,
+    validate_block_requirements,
+    validate_block_rtl_package,
     validate_dv_coverage_plan,
     validate_dv_objectives,
     validate_dv_plan,
+    validate_microarchitecture_spec,
     validate_rtl_verification_surface,
+    validate_rdc_report,
+    validate_rtl_design,
+    validate_rtl_lint_report,
     validate_sva_plan,
     validate_uvm_test_plan,
     load_json_like_yaml,
@@ -107,6 +113,18 @@ def validate_case(metadata_path: Path, errors: list[str]) -> None:
             validate_dv_coverage_plan(expected)
         elif schema_name == "dv-plan.schema.json":
             validate_dv_plan(expected)
+        elif schema_name == "block-requirements.schema.json":
+            validate_block_requirements(expected)
+        elif schema_name == "microarchitecture-spec.schema.json":
+            validate_microarchitecture_spec(expected)
+        elif schema_name == "rtl-design.schema.json":
+            validate_rtl_design(expected)
+        elif schema_name == "rtl-lint-report.schema.json":
+            validate_rtl_lint_report(expected)
+        elif schema_name == "rdc-report.schema.json":
+            validate_rdc_report(expected)
+        elif schema_name == "block-rtl-package.schema.json":
+            validate_block_rtl_package(expected)
         else:
             errors.append(f"{rel} references unsupported schema for local validation: {schema_name}")
     except ValidationError as exc:

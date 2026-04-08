@@ -1,0 +1,56 @@
+{
+  "module": "single_clock_controller",
+  "file": "datasets/fixtures/rtl-plan/single_clock_controller.sv",
+  "config": "default",
+  "registers": [
+    {
+      "name": "count_q",
+      "width": 8,
+      "clock": "clk_i",
+      "source": "always_ff",
+      "line": 10
+    }
+  ],
+  "paths": [
+    {
+      "id": "PATH-001",
+      "from": "count_q",
+      "to": "count_q",
+      "depth": 6,
+      "difficulty": "moderate",
+      "stages": [
+        {
+          "op": "comparator",
+          "width": 8,
+          "depth": 4,
+          "line": 24
+        },
+        {
+          "op": "adder",
+          "width": 8,
+          "depth": 2,
+          "line": 28
+        }
+      ],
+      "crosses_module": false,
+      "description": "The feedback increment path compares count_q against threshold_i and conditionally increments the register."
+    }
+  ],
+  "unresolved": [],
+  "summary": {
+    "total_registers": 1,
+    "total_paths": 1,
+    "by_difficulty": {
+      "critical": 0,
+      "hard": 0,
+      "moderate": 1,
+      "easy": 0
+    },
+    "deepest_path": {
+      "id": "PATH-001",
+      "depth": 6,
+      "from": "count_q",
+      "to": "count_q"
+    }
+  }
+}

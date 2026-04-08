@@ -1,0 +1,16 @@
+{
+  "eval_name": "single-clock-controller-package",
+  "skill": "block-rtl-package-assembler",
+  "input_files": [
+    "datasets/fixtures/rtl-plan/single_clock_controller_brief.md",
+    "datasets/fixtures/rtl-plan/single_clock_controller_spec.md",
+    "datasets/fixtures/rtl-plan/single_clock_controller.sv"
+  ],
+  "expected_output": "evals/smoke/block-rtl-package-assembler/single-clock-controller-package/expected.yaml",
+  "schema": "schemas/block-rtl-package.schema.json",
+  "assertions": [
+    "preserves REQ-NNN traceability across requirements, spec, and RTL manifests",
+    "summarizes lint, CDC, RDC, and timing audit status in one handoff package",
+    "emits downstream handoff metadata suitable for block-dv-plan"
+  ]
+}

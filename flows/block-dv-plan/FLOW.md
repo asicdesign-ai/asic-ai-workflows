@@ -16,8 +16,33 @@ and optional CDC or timing risk reports.
 - `top_module`
 - `rtl_files[]`
 - `design_intent`
+- optional `block_rtl_package`
 - optional `cdc_report`
 - optional `timing_report`
+
+## Trigger Phrases
+
+Use this flow when the user asks for block-level DV planning with phrases such as:
+
+- `DV plan`
+- `verification plan`
+- `block-level DV`
+- `IP verification plan`
+- `UVM plan`
+- `UVM test plan`
+- `verification strategy`
+- `derive DV objectives`
+- `analyze RTL for verification`
+- `what should we verify`
+- `create assertions and coverage plan`
+- `act as a DV expert`
+
+Example requests:
+
+- "Create a block-level DV plan for this RTL."
+- "Build a UVM-centric verification plan from this IP and design intent."
+- "Analyze this block and propose tests, assertions, and functional coverage."
+- "Act as a DV expert and plan verification for this module."
 
 ## Rules
 
@@ -49,8 +74,12 @@ Run these skills in order:
 3. Plan the minimal greenfield UVM environment and prioritized tests.
 4. Plan assertion candidates grounded in visible block behavior.
 5. Plan functional coverage tied to the same objectives.
-6. Assemble the final plan and import optional CDC or timing reports only as risks.
-7. Emit unresolved items when intent, latency, or protocol detail is missing.
+6. When `block_rtl_package` is provided from `block-level-rtl-plan`, use its
+   requirement traceability, microarchitecture spec path, and audit summary as
+   additional planning context while keeping the final DV plan grounded in the
+   provided spec and RTL.
+7. Assemble the final plan and import optional CDC or timing reports only as risks.
+8. Emit unresolved items when intent, latency, or protocol detail is missing.
 
 ## Output Format
 

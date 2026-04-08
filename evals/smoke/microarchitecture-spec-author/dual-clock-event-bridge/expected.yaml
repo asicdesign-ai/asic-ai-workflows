@@ -1,0 +1,60 @@
+{
+  "design": {
+    "top_module": "dual_clock_event_bridge",
+    "brief_summary": "Dual-clock event bridge that transfers a source pulse into a destination clock domain."
+  },
+  "requirements_trace": [
+    {
+      "requirement_id": "REQ-001",
+      "spec_sections": [
+        "overview",
+        "timing_intent"
+      ],
+      "coverage": "full"
+    },
+    {
+      "requirement_id": "REQ-002",
+      "spec_sections": [
+        "interfaces",
+        "cdc_strategy"
+      ],
+      "coverage": "full"
+    }
+  ],
+  "artifact": {
+    "path": "artifacts/microarchitecture/dual_clock_event_bridge.md",
+    "format": "markdown"
+  },
+  "spec_markdown": "# Dual Clock Event Bridge\n\n## Overview\nTransfer a source-domain event into the destination domain with explicit CDC structure.\n\n## CDC Strategy\nUse a source toggle and destination edge detect implementation.",
+  "diagrams": [
+    {
+      "tool": "wavedrom",
+      "title": "source-to-destination event timing",
+      "purpose": "timing",
+      "artifact_path": "artifacts/microarchitecture/diagrams/dual_clock_event_bridge_timing.json",
+      "content": "{ signal: [{ name: 'src_clk_i', wave: 'p....' }, { name: 'src_event_i', wave: '0.1..' }, { name: 'dst_clk_i', wave: '..p..' }, { name: 'dst_event_o', wave: '0..10' }] }"
+    },
+    {
+      "tool": "blockdiag",
+      "title": "bridge partitioning",
+      "purpose": "block_diagram",
+      "artifact_path": "artifacts/microarchitecture/diagrams/dual_clock_event_bridge.diag",
+      "content": "blockdiag { src_if -> toggle_gen -> sync_stage -> pulse_gen -> dst_if; }"
+    }
+  ],
+  "unresolved": [
+    {
+      "item": "maximum back-to-back source pulse rate",
+      "reason": "The intake states a documented limit is required but does not quantify the minimum pulse spacing.",
+      "blocking": false,
+      "requirement_ids": [
+        "REQ-001"
+      ]
+    }
+  ],
+  "summary": {
+    "total_traced_requirements": 2,
+    "total_diagrams": 2,
+    "total_unresolved": 1
+  }
+}

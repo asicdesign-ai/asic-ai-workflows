@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Block RTL Package Report",
+  "type": "object",
+  "required": [
+    "design",
+    "requirements",
+    "ppa_targets",
+    "spec",
+    "rtl",
+    "audit_summary",
+    "unresolved",
+    "downstream_handoff",
+    "summary"
+  ],
+  "properties": {
+    "design": {
+      "type": "object"
+    },
+    "requirements": {
+      "type": "array"
+    },
+    "ppa_targets": {
+      "type": "object"
+    },
+    "spec": {
+      "type": "object"
+    },
+    "rtl": {
+      "type": "object"
+    },
+    "audit_summary": {
+      "type": "object"
+    },
+    "unresolved": {
+      "type": "array"
+    },
+    "downstream_handoff": {
+      "type": "object"
+    },
+    "summary": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

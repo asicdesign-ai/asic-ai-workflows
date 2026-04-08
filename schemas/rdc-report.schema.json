@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RDC Report",
+  "type": "object",
+  "required": [
+    "design",
+    "reset_domains",
+    "crossings",
+    "summary"
+  ],
+  "properties": {
+    "design": {
+      "type": "object"
+    },
+    "reset_domains": {
+      "type": "array"
+    },
+    "crossings": {
+      "type": "array"
+    },
+    "summary": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

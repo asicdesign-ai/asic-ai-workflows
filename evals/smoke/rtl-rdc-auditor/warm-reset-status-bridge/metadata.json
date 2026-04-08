@@ -1,0 +1,14 @@
+{
+  "eval_name": "warm-reset-status-bridge",
+  "skill": "rtl-rdc-auditor",
+  "input_files": [
+    "datasets/fixtures/rtl-plan/warm_reset_status_bridge.sv"
+  ],
+  "expected_output": "evals/smoke/rtl-rdc-auditor/warm-reset-status-bridge/expected.yaml",
+  "schema": "schemas/rdc-report.schema.json",
+  "assertions": [
+    "identifies distinct reset domains in one clock domain",
+    "reports an unsafe reset-domain crossing as a high-severity issue",
+    "suggests an explicit reset bridge fix"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Block Requirements Report",
+  "type": "object",
+  "required": [
+    "design",
+    "requirements",
+    "ppa_targets",
+    "open_questions",
+    "summary"
+  ],
+  "properties": {
+    "design": {
+      "type": "object"
+    },
+    "requirements": {
+      "type": "array"
+    },
+    "ppa_targets": {
+      "type": "object"
+    },
+    "open_questions": {
+      "type": "array"
+    },
+    "summary": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

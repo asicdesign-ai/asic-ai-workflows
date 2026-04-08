@@ -1,0 +1,296 @@
+{
+  "design": {
+    "top_module": "single_clock_controller",
+    "rtl_files": [
+      "datasets/fixtures/rtl-plan/single_clock_controller.sv"
+    ],
+    "intent_summary": "Single-clock threshold controller with busy and done status."
+  },
+  "objectives": [
+    {
+      "id": "OBJ-001",
+      "title": "reset returns the controller to idle state",
+      "priority": "must",
+      "source": "both",
+      "category": "reset",
+      "description": "Reset clears busy status, done pulse state, and the internal counter.",
+      "success_condition": "After reset, busy_o is low, done_o is low, and the controller count state is zero."
+    },
+    {
+      "id": "OBJ-002",
+      "title": "start initializes a new counting window",
+      "priority": "must",
+      "source": "both",
+      "category": "configuration",
+      "description": "A start_i event arms the controller and clears the active count before threshold tracking begins.",
+      "success_condition": "When start_i is asserted, busy_o goes high and the next counting window starts from zero."
+    },
+    {
+      "id": "OBJ-003",
+      "title": "busy controller counts tick events toward threshold",
+      "priority": "must",
+      "source": "both",
+      "category": "data_path",
+      "description": "While busy_o is high, each tick_i increments the stored count toward threshold_i.",
+      "success_condition": "Each qualified tick_i advances the counter by one until threshold_i is reached or stop_i clears busy_o."
+    },
+    {
+      "id": "OBJ-004",
+      "title": "threshold match emits a one-cycle done pulse and clears busy",
+      "priority": "must",
+      "source": "both",
+      "category": "status",
+      "description": "Threshold match deasserts busy_o and produces a one-cycle done_o pulse.",
+      "success_condition": "When the stored count reaches threshold_i, done_o pulses for one cycle and busy_o deasserts."
+    }
+  ],
+  "interfaces": [
+    {
+      "name": "clk_i",
+      "direction": "input",
+      "role": "clock",
+      "width": 1
+    },
+    {
+      "name": "rst_n",
+      "direction": "input",
+      "role": "reset",
+      "width": 1
+    },
+    {
+      "name": "start_i",
+      "direction": "input",
+      "role": "command",
+      "width": 1
+    },
+    {
+      "name": "stop_i",
+      "direction": "input",
+      "role": "command",
+      "width": 1
+    },
+    {
+      "name": "tick_i",
+      "direction": "input",
+      "role": "data",
+      "width": 1
+    },
+    {
+      "name": "threshold_i",
+      "direction": "input",
+      "role": "config",
+      "width": 8
+    },
+    {
+      "name": "busy_o",
+      "direction": "output",
+      "role": "status",
+      "width": 1
+    },
+    {
+      "name": "done_o",
+      "direction": "output",
+      "role": "status",
+      "width": 1
+    }
+  ],
+  "env": {
+    "bench_style": "greenfield_uvm",
+    "agents": [
+      {
+        "name": "control_agent",
+        "interface": "controller_inputs",
+        "mode": "active",
+        "justification": "The bench must drive start, stop, tick, and threshold programming to exercise every planned behavior."
+      }
+    ],
+    "monitors": [
+      {
+        "name": "status_monitor",
+        "interface": "controller_outputs",
+        "justification": "busy_o and done_o expose the visible completion and status semantics."
+      }
+    ],
+    "scoreboards": [
+      {
+        "name": "count_progress_scoreboard",
+        "compares": "Expected busy, count progress, and done pulse behavior against the observed outputs.",
+        "justification": "Threshold timing and completion semantics depend on ordered event sequences rather than single-signal legality."
+      }
+    ],
+    "reference_models": [
+      {
+        "name": "controller_reference_model",
+        "scope": "Golden model for start, stop, count progression, threshold match, and done pulse behavior."
+      }
+    ],
+    "virtual_sequences": [
+      {
+        "name": "start_count_stop_threshold_vseq",
+        "objective_ids": [
+          "OBJ-001",
+          "OBJ-002",
+          "OBJ-003",
+          "OBJ-004"
+        ],
+        "description": "Coordinates reset, start, threshold programming, tick bursts, and stop timing."
+      }
+    ]
+  },
+  "tests": [
+    {
+      "id": "TEST-001",
+      "title": "controller reset behavior",
+      "objective_ids": [
+        "OBJ-001"
+      ],
+      "stimulus": "directed",
+      "checkers": [
+        "status_monitor"
+      ],
+      "priority": "must",
+      "description": "Apply reset and verify the controller returns to idle outputs and cleared state."
+    },
+    {
+      "id": "TEST-002",
+      "title": "start arms a fresh counting window",
+      "objective_ids": [
+        "OBJ-002"
+      ],
+      "stimulus": "directed",
+      "checkers": [
+        "count_progress_scoreboard"
+      ],
+      "priority": "must",
+      "description": "Assert start_i and confirm busy_o rises while the count restarts from zero."
+    },
+    {
+      "id": "TEST-003",
+      "title": "busy controller counts tick events to threshold",
+      "objective_ids": [
+        "OBJ-003"
+      ],
+      "stimulus": "constrained_random",
+      "checkers": [
+        "count_progress_scoreboard"
+      ],
+      "priority": "must",
+      "description": "Drive varied tick patterns and thresholds and verify monotonic count progress while busy_o remains asserted."
+    },
+    {
+      "id": "TEST-004",
+      "title": "threshold match pulses done and clears busy",
+      "objective_ids": [
+        "OBJ-004"
+      ],
+      "stimulus": "virtual_sequence",
+      "checkers": [
+        "count_progress_scoreboard"
+      ],
+      "priority": "must",
+      "description": "Run the count to threshold_i and verify one-cycle done_o behavior with busy_o deassertion."
+    }
+  ],
+  "assertions": [
+    {
+      "id": "SVA-001",
+      "title": "reset clears visible status",
+      "objective_ids": [
+        "OBJ-001"
+      ],
+      "class": "reset",
+      "source": "both",
+      "bind_target": "single_clock_controller",
+      "description": "Reset clears busy_o and done_o to their idle values."
+    },
+    {
+      "id": "SVA-002",
+      "title": "start drives busy high on a new counting window",
+      "objective_ids": [
+        "OBJ-002"
+      ],
+      "class": "protocol",
+      "source": "both",
+      "bind_target": "single_clock_controller",
+      "description": "A valid start_i event raises busy_o and begins a fresh count sequence."
+    },
+    {
+      "id": "SVA-003",
+      "title": "threshold match produces one-cycle done pulse",
+      "objective_ids": [
+        "OBJ-004"
+      ],
+      "class": "data_integrity",
+      "source": "both",
+      "bind_target": "single_clock_controller",
+      "description": "Threshold match causes a single-cycle done_o pulse while busy_o deasserts."
+    }
+  ],
+  "coverage": {
+    "coverpoints": [
+      {
+        "id": "COV-001",
+        "objective_ids": [
+          "OBJ-001"
+        ],
+        "target": "rst_n",
+        "kind": "state",
+        "description": "Cover reset assertion and clean release."
+      },
+      {
+        "id": "COV-002",
+        "objective_ids": [
+          "OBJ-002"
+        ],
+        "target": "start_i",
+        "kind": "configuration",
+        "description": "Cover start-driven counting window entry."
+      },
+      {
+        "id": "COV-003",
+        "objective_ids": [
+          "OBJ-004"
+        ],
+        "target": "done_o",
+        "kind": "status",
+        "description": "Cover threshold-completion done pulse behavior."
+      }
+    ],
+    "crosses": [
+      {
+        "id": "COV-004",
+        "objective_ids": [
+          "OBJ-003",
+          "OBJ-004"
+        ],
+        "targets": [
+          "threshold_i",
+          "tick_i"
+        ],
+        "description": "Cross programmed threshold values with representative tick bursts that complete the count."
+      }
+    ],
+    "exclusions": []
+  },
+  "risks": [
+    {
+      "id": "RISK-001",
+      "source": "timing_report",
+      "severity": "low",
+      "objective_ids": [
+        "OBJ-003",
+        "OBJ-004"
+      ],
+      "description": "The compare-plus-increment feedback path should receive directed stress around threshold values even though the pre-synthesis timing estimate is only moderate."
+    }
+  ],
+  "unresolved": [],
+  "summary": {
+    "total_objectives": 4,
+    "total_tests": 4,
+    "total_assertions": 3,
+    "total_coverage_items": 4,
+    "total_risks": 1,
+    "total_unresolved": 0
+  }
+}

@@ -1,0 +1,196 @@
+{
+  "design": {
+    "top_module": "single_clock_controller",
+    "brief_summary": "Single-clock threshold controller with busy and done status.",
+    "rtl_files": [
+      "datasets/fixtures/rtl-plan/single_clock_controller.sv"
+    ]
+  },
+  "requirements": [
+    {
+      "id": "REQ-001",
+      "title": "count ticks while busy",
+      "category": "function",
+      "priority": "must",
+      "source": "user",
+      "description": "The controller counts tick_i events while busy_o is high.",
+      "acceptance_criteria": "With busy_o high, each asserted tick_i increments the internal count toward threshold_i."
+    },
+    {
+      "id": "REQ-002",
+      "title": "clear state on reset",
+      "category": "clock_reset",
+      "priority": "must",
+      "source": "user",
+      "description": "Reset returns the controller to idle state with zero count and no done pulse.",
+      "acceptance_criteria": "After reset, busy_o and done_o are low and count_q is zero."
+    },
+    {
+      "id": "REQ-003",
+      "title": "pulse done on threshold match",
+      "category": "function",
+      "priority": "must",
+      "source": "user",
+      "description": "The controller emits a one-cycle done pulse when the terminal count is reached.",
+      "acceptance_criteria": "done_o pulses high for one cycle when count_q reaches threshold_i and busy_o deasserts."
+    }
+  ],
+  "ppa_targets": {
+    "performance": {
+      "target": "500",
+      "units": "MHz",
+      "priority": "primary",
+      "status": "numeric"
+    },
+    "power": {
+      "target": "low dynamic power",
+      "units": null,
+      "priority": "secondary",
+      "status": "qualitative"
+    },
+    "area": {
+      "target": "compact control block",
+      "units": null,
+      "priority": "secondary",
+      "status": "qualitative"
+    }
+  },
+  "spec": {
+    "artifact_path": "datasets/fixtures/rtl-plan/single_clock_controller_spec.md",
+    "requirements_trace": [
+      {
+        "requirement_id": "REQ-001",
+        "spec_sections": [
+          "overview",
+          "behavior"
+        ],
+        "coverage": "full"
+      },
+      {
+        "requirement_id": "REQ-002",
+        "spec_sections": [
+          "state",
+          "behavior"
+        ],
+        "coverage": "full"
+      },
+      {
+        "requirement_id": "REQ-003",
+        "spec_sections": [
+          "behavior"
+        ],
+        "coverage": "full"
+      }
+    ],
+    "diagrams": [
+      {
+        "tool": "blockdiag",
+        "title": "controller partitioning",
+        "purpose": "block_diagram",
+        "artifact_path": "artifacts/microarchitecture/diagrams/single_clock_controller.diag",
+        "content": "blockdiag { control_if -> count_core -> status_logic; }"
+      }
+    ]
+  },
+  "rtl": {
+    "source_files": [
+      {
+        "path": "datasets/fixtures/rtl-plan/single_clock_controller.sv",
+        "module": "single_clock_controller",
+        "language": "systemverilog",
+        "content": "module single_clock_controller (input logic clk_i, input logic rst_n, input logic start_i, input logic stop_i, input logic tick_i, input logic [7:0] threshold_i, output logic busy_o, output logic done_o); endmodule"
+      }
+    ],
+    "rtl_modules": [
+      {
+        "name": "single_clock_controller",
+        "role": "top",
+        "clocks": [
+          "clk_i"
+        ],
+        "resets": [
+          "rst_n"
+        ],
+        "description": "Threshold-based single-clock controller."
+      }
+    ],
+    "traceability": [
+      {
+        "requirement_id": "REQ-001",
+        "spec_sections": [
+          "behavior"
+        ],
+        "rtl_files": [
+          "datasets/fixtures/rtl-plan/single_clock_controller.sv"
+        ],
+        "rtl_signals": [
+          "tick_i",
+          "busy_o",
+          "count_q"
+        ]
+      },
+      {
+        "requirement_id": "REQ-002",
+        "spec_sections": [
+          "behavior"
+        ],
+        "rtl_files": [
+          "datasets/fixtures/rtl-plan/single_clock_controller.sv"
+        ],
+        "rtl_signals": [
+          "rst_n",
+          "busy_o",
+          "done_o"
+        ]
+      },
+      {
+        "requirement_id": "REQ-003",
+        "spec_sections": [
+          "behavior"
+        ],
+        "rtl_files": [
+          "datasets/fixtures/rtl-plan/single_clock_controller.sv"
+        ],
+        "rtl_signals": [
+          "threshold_i",
+          "done_o"
+        ]
+      }
+    ]
+  },
+  "audit_summary": {
+    "lint": {
+      "total_findings": 0,
+      "blocking_findings": 0
+    },
+    "cdc": {
+      "violations": 0,
+      "highest_severity": "none"
+    },
+    "rdc": {
+      "violations": 0,
+      "highest_severity": "none"
+    },
+    "timing": {
+      "hard_or_worse_paths": 0,
+      "deepest_path_depth": 6
+    },
+    "ready_for_dv_handoff": true
+  },
+  "unresolved": [],
+  "downstream_handoff": {
+    "recommended_flow": "block-dv-plan",
+    "top_module": "single_clock_controller",
+    "rtl_files": [
+      "datasets/fixtures/rtl-plan/single_clock_controller.sv"
+    ],
+    "design_intent_markdown": "datasets/fixtures/rtl-plan/single_clock_controller_spec.md",
+    "notes": "Use the microarchitecture spec as the design-intent brief for the downstream DV planning flow."
+  },
+  "summary": {
+    "total_requirements": 3,
+    "total_rtl_files": 1,
+    "total_blocking_issues": 0,
+    "total_unresolved": 0
+  }
+}

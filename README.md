@@ -46,6 +46,12 @@ Each component has a clear responsibility and is designed to be composable.
 
 Current repository contents:
 
+- `skills/block-requirements-normalizer/` — Block-level requirements and PPA intake skill
+- `skills/microarchitecture-spec-author/` — Block-level microarchitecture specification skill
+- `skills/rtl-designer/` — Block-level RTL generation skill
+- `skills/rtl-lint-auditor/` — Front-end RTL lint audit skill
+- `skills/rtl-rdc-auditor/` — Pre-EDA RTL RDC audit skill
+- `skills/block-rtl-package-assembler/` — Front-end RTL handoff package assembly skill
 - `skills/rtl-cdc-linter/` — Pre-EDA RTL CDC lint skill  
 - `skills/rtl-timing-path-analyzer/` — Pre-synthesis RTL timing path analysis skill  
 - `skills/design-intent-to-dv-objectives/` — Block-level DV objective planning skill
@@ -56,13 +62,17 @@ Current repository contents:
 - `skills/dv-plan-assembler/` — Final DV plan assembly skill
 - `rules/common/evidence-grounding.md` — Shared anti-hallucination grounding rule  
 - `rules/common/output-discipline.md` — Shared structured-output rule  
+- `rules/arch/` — Block-level requirements, PPA, and diagram-selection rules
+- `rules/rtl/` — Synthesizable RTL and lint severity rules
+- `rules/rdc/classification.md` — RDC reset-domain proof and severity mapping
 - `rules/cdc/classification.md` — CDC synchronizer proof and severity mapping  
 - `rules/timing/register-evidence.md` — Timing register proof and unresolved-object handling  
 - `rules/dv/` — Block-level DV planning and traceability rules
+- `flows/block-level-rtl-plan/` — Block-level front-end RTL planning and handoff flow
 - `flows/block-dv-plan/` — Block-level, UVM-centric DV planning flow
 - `schemas/` — Report schemas for the currently implemented skills and DV flow artifacts  
-- `datasets/fixtures/` — RTL smoke fixtures for CDC, timing, and DV planning  
-- `evals/smoke/` — Smoke-eval metadata and golden outputs for current skills and DV plan artifacts  
+- `datasets/fixtures/` — RTL smoke fixtures for CDC, timing, DV planning, and RTL planning  
+- `evals/smoke/` — Smoke-eval metadata and golden outputs for current skills and flow artifacts  
 - `scripts/` — Local and CI validation scripts for repo structure and smoke assets  
 - `.github/workflows/ci.yml` — Bootstrap CI checks for repo lint, skill contracts, flow contracts, and smoke assets  
 
@@ -88,6 +98,12 @@ A **skill** is a reusable AI capability that solves a specific engineering task.
 
 Current skills:
 
+- Block Requirements Normalizer
+- Microarchitecture Spec Author
+- RTL Designer
+- RTL Lint Auditor
+- RTL RDC Auditor
+- Block RTL Package Assembler
 - RTL Timing Path Analyzer  
 - RTL CDC Linter  
 - Design Intent To DV Objectives
@@ -123,6 +139,12 @@ Current examples:
 
 - `rules/common/evidence-grounding.md` — require explicit RTL evidence for every claim
 - `rules/common/output-discipline.md` — enforce stable YAML shape and field usage
+- `rules/arch/requirements-traceability.md` — preserve `REQ-NNN` traceability through spec and RTL artifacts
+- `rules/arch/ppa-capture.md` — keep power, performance, and area explicit and separate
+- `rules/arch/diagram-selection.md` — choose WaveDrom, Mermaid, or BlockDiag only when structurally justified
+- `rules/rtl/synthesizable-systemverilog.md` — constrain generated RTL to synthesizable SystemVerilog
+- `rules/rtl/lint-severity.md` — keep lint severity deterministic and blocking-aware
+- `rules/rdc/classification.md` — define when a reset-domain crossing is protected or unsafe
 - `rules/cdc/classification.md` — define what counts as a proven CDC synchronizer
 - `rules/timing/register-evidence.md` — define when a timing object is trusted vs unresolved
 
@@ -158,6 +180,9 @@ Example: Timing Closure Flow
 
 Current implemented flow:
 
+- `block-level-rtl-plan` — capture requirements and PPA, author a Markdown
+  microarchitecture spec, generate RTL, run lint/CDC/RDC/timing audits, and
+  assemble one front-end handoff package for downstream DV planning
 - `block-dv-plan` — derive DV objectives, extract the verification surface, plan
   UVM tests/assertions/coverage, and assemble one final structured DV plan with
   optional CDC and timing risks

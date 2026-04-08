@@ -1,0 +1,15 @@
+{
+  "eval_name": "dual-clock-event-bridge",
+  "skill": "microarchitecture-spec-author",
+  "input_files": [
+    "datasets/fixtures/rtl-plan/dual_clock_event_bridge_brief.md",
+    "datasets/fixtures/rtl-plan/dual_clock_event_bridge_spec.md"
+  ],
+  "expected_output": "evals/smoke/microarchitecture-spec-author/dual-clock-event-bridge/expected.yaml",
+  "schema": "schemas/microarchitecture-spec.schema.json",
+  "assertions": [
+    "produces a Markdown microarchitecture artifact path",
+    "uses WaveDrom for timing intent and BlockDiag for structural partitioning",
+    "preserves requirement traceability into spec sections"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "eval_name": "single-clock-controller-clean",
+  "skill": "rtl-lint-auditor",
+  "input_files": [
+    "datasets/fixtures/rtl-plan/single_clock_controller.sv"
+  ],
+  "expected_output": "evals/smoke/rtl-lint-auditor/single-clock-controller-clean/expected.yaml",
+  "schema": "schemas/rtl-lint-report.schema.json",
+  "assertions": [
+    "emits an empty findings list for a clean single-clock controller",
+    "keeps severity counters deterministic",
+    "reports zero blocking findings"
+  ]
+}

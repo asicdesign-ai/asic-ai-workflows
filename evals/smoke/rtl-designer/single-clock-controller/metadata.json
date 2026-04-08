@@ -1,0 +1,14 @@
+{
+  "eval_name": "single-clock-controller",
+  "skill": "rtl-designer",
+  "input_files": [
+    "datasets/fixtures/rtl-plan/single_clock_controller_spec.md"
+  ],
+  "expected_output": "evals/smoke/rtl-designer/single-clock-controller/expected.yaml",
+  "schema": "schemas/rtl-design.schema.json",
+  "assertions": [
+    "emits synthesizable SystemVerilog source records",
+    "describes one single-clock top module",
+    "preserves REQ-NNN traceability into files and signals"
+  ]
+}
