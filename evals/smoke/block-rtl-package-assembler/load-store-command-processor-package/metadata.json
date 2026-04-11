@@ -4,7 +4,11 @@
   "input_files": [
     "datasets/fixtures/rtl-plan/load_store_command_processor_brief.md",
     "datasets/fixtures/rtl-plan/load_store_command_processor_spec.md",
-    "datasets/fixtures/rtl-plan/load_store_command_processor.sv"
+    "datasets/fixtures/rtl-plan/load_store_command_processor.sv",
+    "datasets/fixtures/rtl-plan/load_store_command_processor_lint_report.json",
+    "datasets/fixtures/rtl-plan/load_store_command_processor_cdc_report.json",
+    "datasets/fixtures/rtl-plan/load_store_command_processor_rdc_report.json",
+    "datasets/fixtures/rtl-plan/load_store_command_processor_timing_report.json"
   ],
   "expected_output": "evals/smoke/block-rtl-package-assembler/load-store-command-processor-package/expected.yaml",
   "schema": "schemas/block-rtl-package.schema.json",

@@ -1,0 +1,14 @@
+{
+  "eval_name": "load-store-command-processor-single-reset",
+  "skill": "rtl-rdc-auditor",
+  "input_files": [
+    "datasets/fixtures/rtl-plan/load_store_command_processor.sv"
+  ],
+  "expected_output": "evals/smoke/rtl-rdc-auditor/load-store-command-processor-single-reset/expected.yaml",
+  "schema": "schemas/rdc-report.schema.json",
+  "assertions": [
+    "reports one reset domain for the single-reset command processor",
+    "emits zero RDC violations when all sequential state shares one async reset style",
+    "supports flow-level RDC skip behavior through an empty crossings list"
+  ]
+}

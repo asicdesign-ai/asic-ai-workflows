@@ -1,0 +1,14 @@
+{
+  "eval_name": "load-store-command-processor-single-clock",
+  "skill": "rtl-cdc-linter",
+  "input_files": [
+    "datasets/fixtures/rtl-plan/load_store_command_processor.sv"
+  ],
+  "expected_output": "evals/smoke/rtl-cdc-linter/load-store-command-processor-single-clock/expected.yaml",
+  "schema": "schemas/cdc-report.schema.json",
+  "assertions": [
+    "reports one visible clock domain for the single-clock command processor",
+    "emits zero CDC violations when no inter-domain crossings exist",
+    "supports flow-level CDC skip behavior through an empty crossings list"
+  ]
+}

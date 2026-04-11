@@ -1,0 +1,14 @@
+{
+  "eval_name": "load-store-command-processor-clean",
+  "skill": "rtl-lint-auditor",
+  "input_files": [
+    "datasets/fixtures/rtl-plan/load_store_command_processor.sv"
+  ],
+  "expected_output": "evals/smoke/rtl-lint-auditor/load-store-command-processor-clean/expected.yaml",
+  "schema": "schemas/rtl-lint-report.schema.json",
+  "assertions": [
+    "emits an empty findings list for the load-store command processor",
+    "keeps lint severity counters deterministic for a clean block",
+    "reports zero blocking findings"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "eval_name": "load-store-command-processor",
+  "skill": "rtl-timing-path-analyzer",
+  "input_files": [
+    "datasets/fixtures/rtl-plan/load_store_command_processor.sv"
+  ],
+  "expected_output": "evals/smoke/rtl-timing-path-analyzer/load-store-command-processor/expected.yaml",
+  "schema": "schemas/timing-report.schema.json",
+  "assertions": [
+    "reports a moderate fixed-priority selection path into the WORK register",
+    "keeps timing analysis enabled even for a single-clock single-reset block",
+    "summarizes the deepest path deterministically"
+  ]
+}

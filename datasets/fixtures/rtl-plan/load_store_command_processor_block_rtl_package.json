@@ -239,7 +239,7 @@
     },
     "timing": {
       "hard_or_worse_paths": 0,
-      "deepest_path_depth": 4
+      "deepest_path_depth": 6
     },
     "ready_for_dv_handoff": true
   },

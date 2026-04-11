@@ -80,12 +80,19 @@ Run these skills in order:
 3. Draft the microarchitecture specification in Markdown and use WaveDrom,
    Mermaid, or BlockDiag only when they clarify timing, FSM, or block structure.
 4. Generate synthesizable SystemVerilog from the approved spec.
-5. Audit the emitted RTL with lint, CDC, RDC, and timing-risk analysis.
-6. Re-run `rtl-designer` after any `critical` or `high` lint, CDC, or RDC
+5. Audit the emitted RTL with lint, timing-risk analysis, and applicable CDC or
+   RDC review.
+6. Skip CDC when the visible RTL contains only one clock domain. In that case,
+   emit a zero-crossing CDC report rather than forcing a multi-clock audit.
+7. Skip RDC when all sequential state uses one reset signal with one consistent
+   reset style and polarity. If the same reset signal is mixed between
+   synchronous and asynchronous reset styles, still run RDC and treat those
+   style differences as distinct reset domains.
+8. Re-run `rtl-designer` after any `critical` or `high` lint, CDC, or RDC
    result until the issue is fixed or explicitly carried as unresolved.
-7. Treat timing as advisory unless the reported structure clearly forces a
+9. Treat timing as advisory unless the reported structure clearly forces a
    redesign.
-8. Assemble one final handoff package and mark whether it is ready for
+10. Assemble one final handoff package and mark whether it is ready for
    downstream `block-dv-plan` use.
 
 ## Output Format
