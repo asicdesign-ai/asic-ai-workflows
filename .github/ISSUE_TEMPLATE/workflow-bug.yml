@@ -1,0 +1,59 @@
+name: Workflow repo bug or contract mismatch
+description: Report a broken schema, fixture, validation path, CI issue, or docs/implementation mismatch.
+title: "[workflow-bug] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form when the repo's current behavior does not match its documented contracts or expected validation behavior.
+  - type: dropdown
+    id: problem_type
+    attributes:
+      label: Problem type
+      options:
+        - Broken fixture or smoke asset
+        - Schema or structured-output mismatch
+        - CI or validation script problem
+        - Docs do not match repo behavior
+        - Other reproducible repo bug
+    validations:
+      required: true
+  - type: input
+    id: impacted_paths
+    attributes:
+      label: Impacted files or directories
+      description: Point to the exact area if you can.
+      placeholder: scripts/check_flow_contracts.py, flows/block-dv-plan/, schemas/dv-plan.schema.json
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Current behavior
+      description: Include the mismatch, failure, or confusing behavior you observed.
+      placeholder: The schema rejects the documented output, CI fails on a valid fixture, or a flow references files that do not exist.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: Describe the contract or outcome that should hold instead.
+      placeholder: The fixture should validate, the docs should point to the right files, or the script should fail with an actionable message.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Add logs, failing commands, screenshots, or links to affected files when available.
+      placeholder: Paste the failing command output or link the exact file/section that is out of sync.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I included the affected path or command so maintainers can reproduce the issue.
+          required: true
+        - label: I checked whether this bug is already tracked in an open issue.
+          required: true

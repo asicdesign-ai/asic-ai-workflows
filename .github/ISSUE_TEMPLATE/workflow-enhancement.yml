@@ -1,0 +1,70 @@
+name: Workflow or skill enhancement
+description: Propose a new skill, rule, flow, fixture, execution harness, or documentation/example improvement.
+title: "[workflow] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form for new workflow capabilities, tighter examples, better fixtures, or deterministic tooling around the repo's skills, rules, and flows.
+
+        Before submitting, please read `CONTRIBUTING.md`, `README.md`, and check the open issues.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Skill
+        - Rule
+        - Flow
+        - Fixture or smoke coverage
+        - Script or execution harness
+        - Documentation or example
+    validations:
+      required: true
+  - type: input
+    id: target_paths
+    attributes:
+      label: Relevant paths
+      description: Point to the directory or files that this issue should touch.
+      placeholder: flows/block-level-rtl-plan/, skills/rtl-cdc-linter/, scripts/, datasets/fixtures/
+    validations:
+      required: true
+  - type: textarea
+    id: gap
+    attributes:
+      label: Current gap
+      description: Describe the real engineering or contributor gap, not just the implementation idea.
+      placeholder: The flow is only documented, the repo lacks a fixture-backed example, or a reusable rule is missing for a repeated constraint.
+    validations:
+      required: true
+  - type: textarea
+    id: proposed_change
+    attributes:
+      label: Proposed change
+      description: Explain the narrowest useful enhancement.
+      placeholder: Add a thin runner, introduce one low-power planning skill, or publish one end-to-end example chaining two flows.
+    validations:
+      required: true
+  - type: textarea
+    id: artifacts
+    attributes:
+      label: Expected artifacts
+      description: What should exist when this work is done?
+      placeholder: New skill contract, fixture files, schema updates, smoke eval coverage, or README/CONTRIBUTING updates.
+  - type: textarea
+    id: validation
+    attributes:
+      label: Suggested validation
+      description: Optional, but useful for keeping work deterministic.
+      placeholder: Update smoke fixtures, run CI scripts, verify schema shape, or document a reproducible command path.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I checked the open issues for an existing request.
+          required: true
+        - label: I understand this repo separates reusable skills, reusable rules, and multi-step flows.
+          required: true
+        - label: I scoped the request to a concrete engineering improvement instead of a vague persona prompt.
+          required: true

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Workflow contributor guide
+    url: https://github.com/asicdesign-ai/asic-ai-workflows/blob/main/CONTRIBUTING.md
+    about: Read the repo structure and validation expectations before opening an issue.
+  - name: asicdesign.ai contributor page
+    url: https://asicdesign.ai/contribute/
+    about: Start from the portal contributor guide if you want a curated path into workflow and quiz contributions.
