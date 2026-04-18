@@ -33,8 +33,9 @@ marketing copy or portal-only presentation work.
 
 `dataset`
 
-- Example inputs and fixtures used to exercise the current skills and flows.
-- Lives under `datasets/fixtures/`.
+- Example inputs and fixtures used to exercise the current skills and flows,
+  plus structured corpus records for publishable dataset work.
+- Lives under `datasets/fixtures/` and `datasets/corpora/`.
 
 `eval`
 
