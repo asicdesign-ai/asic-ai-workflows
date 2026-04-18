@@ -8,112 +8,96 @@
     {
       "type": "object",
       "properties": {
-        "task": {
+        "input": {
+          "$ref": "#/$defs/common_input"
+        }
+      }
+    },
+    {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "task",
+            "target"
+          ],
+          "properties": {
+            "task": {
+              "const": "clock_reset_extraction"
+            },
+            "target": {
+              "$ref": "#/$defs/clock_reset_target"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "task",
+            "target"
+          ],
+          "properties": {
+            "task": {
+              "const": "interface_extraction"
+            },
+            "target": {
+              "$ref": "#/$defs/interface_target"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "$defs": {
+    "common_input": {
+      "type": "object",
+      "required": [
+        "language",
+        "top_module",
+        "rtl_text",
+        "compile_unit"
+      ],
+      "properties": {
+        "language": {
           "type": "string",
           "enum": [
-            "clock_reset_extraction"
+            "verilog",
+            "systemverilog"
           ]
         },
-        "input": {
-          "type": "object",
-          "required": [
-            "language",
-            "top_module",
-            "rtl_text",
-            "compile_unit"
-          ],
-          "properties": {
-            "language": {
-              "type": "string",
-              "enum": [
-                "verilog",
-                "systemverilog"
-              ]
-            },
-            "top_module": {
-              "type": "string"
-            },
-            "rtl_text": {
-              "type": "string",
-              "minLength": 1
-            },
-            "compile_unit": {
-              "type": "object",
-              "required": [
-                "files",
-                "filelist"
-              ],
-              "properties": {
-                "files": {
-                  "type": "array",
-                  "minItems": 1,
-                  "items": {
-                    "type": "string"
-                  }
-                },
-                "filelist": {
-                  "type": [
-                    "string",
-                    "null"
-                  ]
-                }
-              },
-              "additionalProperties": false
-            }
-          },
-          "additionalProperties": false
+        "top_module": {
+          "type": "string"
         },
-        "target": {
+        "rtl_text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "compile_unit": {
           "type": "object",
           "required": [
-            "clocks",
-            "resets",
-            "summary"
+            "files",
+            "filelist"
           ],
           "properties": {
-            "clocks": {
+            "files": {
               "type": "array",
               "minItems": 1,
               "items": {
-                "$ref": "#/$defs/clock"
+                "type": "string"
               }
             },
-            "resets": {
-              "type": "array",
-              "items": {
-                "$ref": "#/$defs/reset"
-              }
-            },
-            "summary": {
-              "type": "object",
-              "required": [
-                "clock_count",
-                "reset_count",
-                "domain_count"
-              ],
-              "properties": {
-                "clock_count": {
-                  "type": "integer",
-                  "minimum": 0
-                },
-                "reset_count": {
-                  "type": "integer",
-                  "minimum": 0
-                },
-                "domain_count": {
-                  "type": "integer",
-                  "minimum": 0
-                }
-              },
-              "additionalProperties": false
+            "filelist": {
+              "type": [
+                "string",
+                "null"
+              ]
             }
           },
           "additionalProperties": false
         }
-      }
-    }
-  ],
-  "$defs": {
+      },
+      "additionalProperties": false
+    },
     "evidence_span": {
       "type": "object",
       "required": [
@@ -209,6 +193,138 @@
           "items": {
             "$ref": "#/$defs/evidence_span"
           }
+        }
+      },
+      "additionalProperties": false
+    },
+    "clock_reset_target": {
+      "type": "object",
+      "required": [
+        "clocks",
+        "resets",
+        "summary"
+      ],
+      "properties": {
+        "clocks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/clock"
+          }
+        },
+        "resets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/reset"
+          }
+        },
+        "summary": {
+          "type": "object",
+          "required": [
+            "clock_count",
+            "reset_count",
+            "domain_count"
+          ],
+          "properties": {
+            "clock_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "reset_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "domain_count": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "interface_port": {
+      "type": "object",
+      "required": [
+        "name",
+        "direction",
+        "data_type",
+        "packed_range",
+        "evidence"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "direction": {
+          "type": "string",
+          "enum": [
+            "input",
+            "output",
+            "inout"
+          ]
+        },
+        "data_type": {
+          "type": "string"
+        },
+        "packed_range": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/evidence_span"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "interface_target": {
+      "type": "object",
+      "required": [
+        "ports",
+        "summary"
+      ],
+      "properties": {
+        "ports": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/interface_port"
+          }
+        },
+        "summary": {
+          "type": "object",
+          "required": [
+            "input_count",
+            "output_count",
+            "inout_count",
+            "total_port_count"
+          ],
+          "properties": {
+            "input_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "output_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "inout_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "total_port_count": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false
         }
       },
       "additionalProperties": false

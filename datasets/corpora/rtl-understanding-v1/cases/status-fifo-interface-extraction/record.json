@@ -1,0 +1,188 @@
+{
+  "record_id": "rtl-understanding-status-fifo-interface-extraction-v1",
+  "schema_version": "1.0.0",
+  "task": "interface_extraction",
+  "input": {
+    "language": "systemverilog",
+    "top_module": "status_fifo",
+    "rtl_text": "module status_fifo (\n    input  logic        clk,\n    input  logic        rst_n,\n    input  logic        wr_en,\n    input  logic [7:0]  wr_data,\n    input  logic        rd_en,\n    output logic [7:0]  rd_data,\n    output logic        full,\n    output logic        empty,\n    output logic        overflow,\n    output logic        underflow,\n    output logic [2:0]  level\n);\n\nlogic [7:0] mem [0:3];\nlogic [1:0] wr_ptr_q;\nlogic [1:0] rd_ptr_q;\n\nalways_ff @(posedge clk or negedge rst_n) begin\n    if (!rst_n) begin\n        wr_ptr_q  <= 2'd0;\n        rd_ptr_q  <= 2'd0;\n        level     <= 3'd0;\n        rd_data   <= 8'h00;\n        overflow  <= 1'b0;\n        underflow <= 1'b0;\n    end else begin\n        overflow  <= 1'b0;\n        underflow <= 1'b0;\n\n        if (wr_en) begin\n            if (!full) begin\n                mem[wr_ptr_q] <= wr_data;\n                wr_ptr_q      <= wr_ptr_q + 2'd1;\n                level         <= level + 3'd1;\n            end else begin\n                overflow <= 1'b1;\n            end\n        end\n\n        if (rd_en) begin\n            if (!empty) begin\n                rd_data   <= mem[rd_ptr_q];\n                rd_ptr_q  <= rd_ptr_q + 2'd1;\n                level     <= level - 3'd1;\n            end else begin\n                underflow <= 1'b1;\n            end\n        end\n    end\nend\n\nassign full  = (level == 3'd4);\nassign empty = (level == 3'd0);\n\nendmodule\n",
+    "compile_unit": {
+      "files": [
+        "datasets/fixtures/dv/status_fifo.sv"
+      ],
+      "filelist": null
+    }
+  },
+  "target": {
+    "ports": [
+      {
+        "name": "clk",
+        "direction": "input",
+        "data_type": "logic",
+        "packed_range": null,
+        "evidence": [
+          {
+            "file": "datasets/fixtures/dv/status_fifo.sv",
+            "line_start": 2,
+            "line_end": 2
+          }
+        ]
+      },
+      {
+        "name": "rst_n",
+        "direction": "input",
+        "data_type": "logic",
+        "packed_range": null,
+        "evidence": [
+          {
+            "file": "datasets/fixtures/dv/status_fifo.sv",
+            "line_start": 3,
+            "line_end": 3
+          }
+        ]
+      },
+      {
+        "name": "wr_en",
+        "direction": "input",
+        "data_type": "logic",
+        "packed_range": null,
+        "evidence": [
+          {
+            "file": "datasets/fixtures/dv/status_fifo.sv",
+            "line_start": 4,
+            "line_end": 4
+          }
+        ]
+      },
+      {
+        "name": "wr_data",
+        "direction": "input",
+        "data_type": "logic",
+        "packed_range": "[7:0]",
+        "evidence": [
+          {
+            "file": "datasets/fixtures/dv/status_fifo.sv",
+            "line_start": 5,
+            "line_end": 5
+          }
+        ]
+      },
+      {
+        "name": "rd_en",
+        "direction": "input",
+        "data_type": "logic",
+        "packed_range": null,
+        "evidence": [
+          {
+            "file": "datasets/fixtures/dv/status_fifo.sv",
+            "line_start": 6,
+            "line_end": 6
+          }
+        ]
+      },
+      {
+        "name": "rd_data",
+        "direction": "output",
+        "data_type": "logic",
+        "packed_range": "[7:0]",
+        "evidence": [
+          {
+            "file": "datasets/fixtures/dv/status_fifo.sv",
+            "line_start": 7,
+            "line_end": 7
+          }
+        ]
+      },
+      {
+        "name": "full",
+        "direction": "output",
+        "data_type": "logic",
+        "packed_range": null,
+        "evidence": [
+          {
+            "file": "datasets/fixtures/dv/status_fifo.sv",
+            "line_start": 8,
+            "line_end": 8
+          }
+        ]
+      },
+      {
+        "name": "empty",
+        "direction": "output",
+        "data_type": "logic",
+        "packed_range": null,
+        "evidence": [
+          {
+            "file": "datasets/fixtures/dv/status_fifo.sv",
+            "line_start": 9,
+            "line_end": 9
+          }
+        ]
+      },
+      {
+        "name": "overflow",
+        "direction": "output",
+        "data_type": "logic",
+        "packed_range": null,
+        "evidence": [
+          {
+            "file": "datasets/fixtures/dv/status_fifo.sv",
+            "line_start": 10,
+            "line_end": 10
+          }
+        ]
+      },
+      {
+        "name": "underflow",
+        "direction": "output",
+        "data_type": "logic",
+        "packed_range": null,
+        "evidence": [
+          {
+            "file": "datasets/fixtures/dv/status_fifo.sv",
+            "line_start": 11,
+            "line_end": 11
+          }
+        ]
+      },
+      {
+        "name": "level",
+        "direction": "output",
+        "data_type": "logic",
+        "packed_range": "[2:0]",
+        "evidence": [
+          {
+            "file": "datasets/fixtures/dv/status_fifo.sv",
+            "line_start": 12,
+            "line_end": 12
+          }
+        ]
+      }
+    ],
+    "summary": {
+      "input_count": 5,
+      "output_count": 6,
+      "inout_count": 0,
+      "total_port_count": 11
+    }
+  },
+  "metadata": {
+    "source_type": "repo_fixture",
+    "source_group": "status_fifo",
+    "difficulty": "medium",
+    "domain_tags": [
+      "fifo"
+    ],
+    "lineage_root": "datasets/fixtures/dv/status_fifo.sv"
+  },
+  "provenance": {
+    "license": "MIT",
+    "origin_repo": "local:asic-ai-workflows",
+    "origin_commit": null,
+    "origin_path": "datasets/fixtures/dv/status_fifo.sv",
+    "generator": "manual_seed_v1",
+    "generator_version": "1.0.0",
+    "mutation_id": null,
+    "human_review_status": "reviewed"
+  }
+}

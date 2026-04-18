@@ -127,13 +127,22 @@ This is important: the record is not just labeled, it is **evidence-grounded**.
 
 ### 6. Expanded the seed corpus into a small canary dataset
 
-After the first canary record, I continued the same task and added four more
-records from existing repo fixtures:
+After the first canary record, I expanded the seed corpus in two steps.
+
+First, I added four more `clock_reset_extraction` records from existing repo
+fixtures:
 
 - `dual_clock_event_bridge`
 - `load_store_command_processor`
 - `warm_reset_status_bridge`
 - `status_fifo`
+
+Then I added a second deterministic task:
+
+- `interface_extraction`
+
+I added one `interface_extraction` record for each of the same five source
+modules.
 
 This gives the corpus a better starting shape:
 
@@ -141,6 +150,7 @@ This gives the corpus a better starting shape:
 - one multi-clock example
 - one mixed-reset-count example on a single clock
 - one FIFO-style datapath/control example
+- interface labels that are grounded in the same RTL headers
 
 I also added explicit split files:
 
@@ -161,6 +171,7 @@ What it checks:
 - compile-unit file existence
 - evidence line ranges
 - summary counts against the record content
+- task-specific checks for both `clock_reset_extraction` and `interface_extraction`
 - split coverage and duplicate split assignment
 
 This is not a full schema engine, but it is enough to make the seed corpus
@@ -331,7 +342,7 @@ The repo now has:
 - a corrected plan filename
 - an initial dataset schema area
 - an initial corpus area
-- five real canary records for one deterministic task
+- ten real canary records across two deterministic tasks
 - explicit `train`, `validation`, and `test` split files
 - a lightweight dataset corpus validation script
 - updated repo docs that acknowledge the new structure
@@ -340,7 +351,7 @@ What the repo does **not** have yet:
 
 - dataset build scripts
 - automatic schema-backed dataset validation beyond the current custom checker
-- broad task coverage beyond `clock_reset_extraction`
+- broad task coverage beyond `clock_reset_extraction` and `interface_extraction`
 - Hugging Face export automation
 
 So this is the **correct beginning**, not the finished system.
@@ -349,9 +360,9 @@ So this is the **correct beginning**, not the finished system.
 
 Recommended order:
 
-1. Add one more deterministic `rtl-understanding` task such as `interface_extraction`.
-2. Extend `scripts/check_dataset_corpora.py` to validate that new task too.
-3. Add a small export script that can emit one Hugging Face-ready JSONL snapshot.
+1. Add a small export script that can emit one Hugging Face-ready JSONL snapshot.
+2. Add one more deterministic `rtl-understanding` task such as `state_element_inventory`.
+3. Extend `scripts/check_dataset_corpora.py` to validate that new task too.
 4. Add more fixture families while keeping split-by-lineage discipline.
 5. Only after that, start `rtl-quality` mutation work.
 

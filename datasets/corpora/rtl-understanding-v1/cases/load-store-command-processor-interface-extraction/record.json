@@ -1,0 +1,149 @@
+{
+  "record_id": "rtl-understanding-load-store-command-processor-interface-extraction-v1",
+  "schema_version": "1.0.0",
+  "task": "interface_extraction",
+  "input": {
+    "language": "systemverilog",
+    "top_module": "load_store_command_processor",
+    "rtl_text": "module load_store_command_processor (\n    input  logic        clk_i,\n    input  logic        rst_n,\n    input  logic        store_valid_i,\n    input  logic [1:0]  store_addr_i,\n    input  logic [31:0] store_data_i,\n    input  logic        downstream_ready_i,\n    output logic [31:0] work_data_o,\n    output logic        work_valid_o\n);\n  logic [3:0][31:0] mem_q, mem_d;\n  logic [3:0]       mem_valid_q, mem_valid_d;\n  logic [31:0]      work_reg_q, work_reg_d;\n  logic             work_valid_q, work_valid_d;\n  logic [1:0]       load_addr;\n  logic             load_pending;\n  logic             load_fire;\n\n  // Deterministic load policy: choose the lowest-address occupied slot.\n  always_comb begin\n    load_pending = 1'b0;\n    load_addr    = 2'd0;\n\n    unique casez (mem_valid_q)\n      4'b???1: begin\n        load_pending = 1'b1;\n        load_addr    = 2'd0;\n      end\n      4'b??10: begin\n        load_pending = 1'b1;\n        load_addr    = 2'd1;\n      end\n      4'b?100: begin\n        load_pending = 1'b1;\n        load_addr    = 2'd2;\n      end\n      4'b1000: begin\n        load_pending = 1'b1;\n        load_addr    = 2'd3;\n      end\n      default: begin\n        load_pending = 1'b0;\n        load_addr    = 2'd0;\n      end\n    endcase\n  end\n\n  assign load_fire = load_pending && downstream_ready_i;\n\n  always_comb begin\n    mem_d       = mem_q;\n    mem_valid_d = mem_valid_q;\n    work_reg_d  = work_reg_q;\n    work_valid_d = work_valid_q;\n\n    if (work_valid_q && downstream_ready_i) begin\n      work_valid_d = 1'b0;\n    end\n\n    if (load_fire) begin\n      work_reg_d            = mem_q[load_addr];\n      work_valid_d          = 1'b1;\n      mem_valid_d[load_addr] = 1'b0;\n    end\n\n    if (store_valid_i) begin\n      mem_d[store_addr_i]       = store_data_i;\n      mem_valid_d[store_addr_i] = 1'b1;\n    end\n  end\n\n  always_ff @(posedge clk_i or negedge rst_n) begin\n    if (!rst_n) begin\n      mem_q       <= '0;\n      mem_valid_q <= '0;\n      work_reg_q  <= '0;\n      work_valid_q <= 1'b0;\n    end else begin\n      mem_q       <= mem_d;\n      mem_valid_q <= mem_valid_d;\n      work_reg_q  <= work_reg_d;\n      work_valid_q <= work_valid_d;\n    end\n  end\n\n  assign work_data_o  = work_reg_q;\n  assign work_valid_o = work_valid_q;\nendmodule\n",
+    "compile_unit": {
+      "files": [
+        "datasets/fixtures/rtl-plan/load_store_command_processor.sv"
+      ],
+      "filelist": null
+    }
+  },
+  "target": {
+    "ports": [
+      {
+        "name": "clk_i",
+        "direction": "input",
+        "data_type": "logic",
+        "packed_range": null,
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/load_store_command_processor.sv",
+            "line_start": 2,
+            "line_end": 2
+          }
+        ]
+      },
+      {
+        "name": "rst_n",
+        "direction": "input",
+        "data_type": "logic",
+        "packed_range": null,
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/load_store_command_processor.sv",
+            "line_start": 3,
+            "line_end": 3
+          }
+        ]
+      },
+      {
+        "name": "store_valid_i",
+        "direction": "input",
+        "data_type": "logic",
+        "packed_range": null,
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/load_store_command_processor.sv",
+            "line_start": 4,
+            "line_end": 4
+          }
+        ]
+      },
+      {
+        "name": "store_addr_i",
+        "direction": "input",
+        "data_type": "logic",
+        "packed_range": "[1:0]",
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/load_store_command_processor.sv",
+            "line_start": 5,
+            "line_end": 5
+          }
+        ]
+      },
+      {
+        "name": "store_data_i",
+        "direction": "input",
+        "data_type": "logic",
+        "packed_range": "[31:0]",
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/load_store_command_processor.sv",
+            "line_start": 6,
+            "line_end": 6
+          }
+        ]
+      },
+      {
+        "name": "downstream_ready_i",
+        "direction": "input",
+        "data_type": "logic",
+        "packed_range": null,
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/load_store_command_processor.sv",
+            "line_start": 7,
+            "line_end": 7
+          }
+        ]
+      },
+      {
+        "name": "work_data_o",
+        "direction": "output",
+        "data_type": "logic",
+        "packed_range": "[31:0]",
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/load_store_command_processor.sv",
+            "line_start": 8,
+            "line_end": 8
+          }
+        ]
+      },
+      {
+        "name": "work_valid_o",
+        "direction": "output",
+        "data_type": "logic",
+        "packed_range": null,
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/load_store_command_processor.sv",
+            "line_start": 9,
+            "line_end": 9
+          }
+        ]
+      }
+    ],
+    "summary": {
+      "input_count": 6,
+      "output_count": 2,
+      "inout_count": 0,
+      "total_port_count": 8
+    }
+  },
+  "metadata": {
+    "source_type": "repo_fixture",
+    "source_group": "load_store_command_processor",
+    "difficulty": "easy",
+    "domain_tags": [
+      "controller"
+    ],
+    "lineage_root": "datasets/fixtures/rtl-plan/load_store_command_processor.sv"
+  },
+  "provenance": {
+    "license": "MIT",
+    "origin_repo": "local:asic-ai-workflows",
+    "origin_commit": null,
+    "origin_path": "datasets/fixtures/rtl-plan/load_store_command_processor.sv",
+    "generator": "manual_seed_v1",
+    "generator_version": "1.0.0",
+    "mutation_id": null,
+    "human_review_status": "reviewed"
+  }
+}

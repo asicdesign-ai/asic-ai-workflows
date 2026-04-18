@@ -5,7 +5,7 @@ datasets.
 
 Current scope:
 
-- five canary `clock_reset_extraction` records
+- ten canary records across two deterministic tasks
 - five existing repo fixtures as canonical RTL sources
 - one provenance file per record
 - explicit `train`, `validation`, and `test` split files
@@ -22,6 +22,7 @@ Current schema:
 
 - `schemas/dataset/rtl-understanding.schema.json`
 
-Current task:
+Current tasks:
 
 - `clock_reset_extraction`
+- `interface_extraction`

@@ -1,0 +1,149 @@
+{
+  "record_id": "rtl-understanding-single-clock-controller-interface-extraction-v1",
+  "schema_version": "1.0.0",
+  "task": "interface_extraction",
+  "input": {
+    "language": "systemverilog",
+    "top_module": "single_clock_controller",
+    "rtl_text": "module single_clock_controller (\n    input  logic       clk_i,\n    input  logic       rst_n,\n    input  logic       start_i,\n    input  logic       stop_i,\n    input  logic       tick_i,\n    input  logic [7:0] threshold_i,\n    output logic       busy_o,\n    output logic       done_o\n);\n  logic [7:0] count_q;\n\n  always_ff @(posedge clk_i or negedge rst_n) begin\n    if (!rst_n) begin\n      busy_o  <= 1'b0;\n      done_o  <= 1'b0;\n      count_q <= '0;\n    end else begin\n      done_o <= 1'b0;\n\n      if (start_i) begin\n        busy_o  <= 1'b1;\n        count_q <= '0;\n      end else if (stop_i) begin\n        busy_o <= 1'b0;\n      end else if (busy_o && tick_i) begin\n        if (count_q == threshold_i) begin\n          busy_o <= 1'b0;\n          done_o <= 1'b1;\n        end else begin\n          count_q <= count_q + 8'd1;\n        end\n      end\n    end\n  end\nendmodule\n",
+    "compile_unit": {
+      "files": [
+        "datasets/fixtures/rtl-plan/single_clock_controller.sv"
+      ],
+      "filelist": null
+    }
+  },
+  "target": {
+    "ports": [
+      {
+        "name": "clk_i",
+        "direction": "input",
+        "data_type": "logic",
+        "packed_range": null,
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/single_clock_controller.sv",
+            "line_start": 2,
+            "line_end": 2
+          }
+        ]
+      },
+      {
+        "name": "rst_n",
+        "direction": "input",
+        "data_type": "logic",
+        "packed_range": null,
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/single_clock_controller.sv",
+            "line_start": 3,
+            "line_end": 3
+          }
+        ]
+      },
+      {
+        "name": "start_i",
+        "direction": "input",
+        "data_type": "logic",
+        "packed_range": null,
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/single_clock_controller.sv",
+            "line_start": 4,
+            "line_end": 4
+          }
+        ]
+      },
+      {
+        "name": "stop_i",
+        "direction": "input",
+        "data_type": "logic",
+        "packed_range": null,
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/single_clock_controller.sv",
+            "line_start": 5,
+            "line_end": 5
+          }
+        ]
+      },
+      {
+        "name": "tick_i",
+        "direction": "input",
+        "data_type": "logic",
+        "packed_range": null,
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/single_clock_controller.sv",
+            "line_start": 6,
+            "line_end": 6
+          }
+        ]
+      },
+      {
+        "name": "threshold_i",
+        "direction": "input",
+        "data_type": "logic",
+        "packed_range": "[7:0]",
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/single_clock_controller.sv",
+            "line_start": 7,
+            "line_end": 7
+          }
+        ]
+      },
+      {
+        "name": "busy_o",
+        "direction": "output",
+        "data_type": "logic",
+        "packed_range": null,
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/single_clock_controller.sv",
+            "line_start": 8,
+            "line_end": 8
+          }
+        ]
+      },
+      {
+        "name": "done_o",
+        "direction": "output",
+        "data_type": "logic",
+        "packed_range": null,
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/single_clock_controller.sv",
+            "line_start": 9,
+            "line_end": 9
+          }
+        ]
+      }
+    ],
+    "summary": {
+      "input_count": 6,
+      "output_count": 2,
+      "inout_count": 0,
+      "total_port_count": 8
+    }
+  },
+  "metadata": {
+    "source_type": "repo_fixture",
+    "source_group": "single_clock_controller",
+    "difficulty": "easy",
+    "domain_tags": [
+      "controller"
+    ],
+    "lineage_root": "datasets/fixtures/rtl-plan/single_clock_controller.sv"
+  },
+  "provenance": {
+    "license": "MIT",
+    "origin_repo": "local:asic-ai-workflows",
+    "origin_commit": null,
+    "origin_path": "datasets/fixtures/rtl-plan/single_clock_controller.sv",
+    "generator": "manual_seed_v1",
+    "generator_version": "1.0.0",
+    "mutation_id": null,
+    "human_review_status": "reviewed"
+  }
+}
