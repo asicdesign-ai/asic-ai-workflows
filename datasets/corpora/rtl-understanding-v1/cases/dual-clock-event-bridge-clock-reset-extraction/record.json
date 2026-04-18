@@ -1,0 +1,95 @@
+{
+  "record_id": "rtl-understanding-dual-clock-event-bridge-clock-reset-extraction-v1",
+  "schema_version": "1.0.0",
+  "task": "clock_reset_extraction",
+  "input": {
+    "language": "systemverilog",
+    "top_module": "dual_clock_event_bridge",
+    "rtl_text": "module dual_clock_event_bridge (\n    input  logic src_clk_i,\n    input  logic src_rst_n,\n    input  logic src_event_i,\n    input  logic dst_clk_i,\n    input  logic dst_rst_n,\n    output logic dst_event_o\n);\n  logic src_toggle_q;\n  logic dst_sample_q;\n\n  always_ff @(posedge src_clk_i or negedge src_rst_n) begin\n    if (!src_rst_n) begin\n      src_toggle_q <= 1'b0;\n    end else if (src_event_i) begin\n      src_toggle_q <= ~src_toggle_q;\n    end\n  end\n\n  always_ff @(posedge dst_clk_i or negedge dst_rst_n) begin\n    if (!dst_rst_n) begin\n      dst_sample_q <= 1'b0;\n      dst_event_o  <= 1'b0;\n    end else begin\n      dst_event_o  <= src_toggle_q ^ dst_sample_q;\n      dst_sample_q <= src_toggle_q;\n    end\n  end\nendmodule\n",
+    "compile_unit": {
+      "files": [
+        "datasets/fixtures/rtl-plan/dual_clock_event_bridge.sv"
+      ],
+      "filelist": null
+    }
+  },
+  "target": {
+    "clocks": [
+      {
+        "name": "src_clk_i",
+        "edge": "posedge",
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/dual_clock_event_bridge.sv",
+            "line_start": 12,
+            "line_end": 12
+          }
+        ]
+      },
+      {
+        "name": "dst_clk_i",
+        "edge": "posedge",
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/dual_clock_event_bridge.sv",
+            "line_start": 20,
+            "line_end": 20
+          }
+        ]
+      }
+    ],
+    "resets": [
+      {
+        "name": "src_rst_n",
+        "edge": "negedge",
+        "active_level": "low",
+        "style": "asynchronous",
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/dual_clock_event_bridge.sv",
+            "line_start": 12,
+            "line_end": 13
+          }
+        ]
+      },
+      {
+        "name": "dst_rst_n",
+        "edge": "negedge",
+        "active_level": "low",
+        "style": "asynchronous",
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/dual_clock_event_bridge.sv",
+            "line_start": 20,
+            "line_end": 21
+          }
+        ]
+      }
+    ],
+    "summary": {
+      "clock_count": 2,
+      "reset_count": 2,
+      "domain_count": 2
+    }
+  },
+  "metadata": {
+    "source_type": "repo_fixture",
+    "source_group": "dual_clock_event_bridge",
+    "difficulty": "medium",
+    "domain_tags": [
+      "bridge",
+      "cdc"
+    ],
+    "lineage_root": "datasets/fixtures/rtl-plan/dual_clock_event_bridge.sv"
+  },
+  "provenance": {
+    "license": "MIT",
+    "origin_repo": "local:asic-ai-workflows",
+    "origin_commit": null,
+    "origin_path": "datasets/fixtures/rtl-plan/dual_clock_event_bridge.sv",
+    "generator": "manual_seed_v1",
+    "generator_version": "1.0.0",
+    "mutation_id": null,
+    "human_review_status": "reviewed"
+  }
+}

@@ -5,14 +5,23 @@ datasets.
 
 Current scope:
 
-- one canary `clock_reset_extraction` record
-- one existing repo fixture as the canonical RTL source
-- one matching provenance record
+- five canary `clock_reset_extraction` records
+- five existing repo fixtures as canonical RTL sources
+- one provenance file per record
+- explicit `train`, `validation`, and `test` split files
 
-Current source module:
+Current source modules:
 
 - `datasets/fixtures/rtl-plan/single_clock_controller.sv`
+- `datasets/fixtures/rtl-plan/dual_clock_event_bridge.sv`
+- `datasets/fixtures/rtl-plan/load_store_command_processor.sv`
+- `datasets/fixtures/rtl-plan/warm_reset_status_bridge.sv`
+- `datasets/fixtures/dv/status_fifo.sv`
 
 Current schema:
 
 - `schemas/dataset/rtl-understanding.schema.json`
+
+Current task:
+
+- `clock_reset_extraction`

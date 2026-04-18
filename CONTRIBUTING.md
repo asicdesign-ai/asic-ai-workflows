@@ -76,6 +76,8 @@ Run the same checks the repo uses in CI:
 
 `python3 scripts/check_structured_files.py`
 
+`python3 scripts/check_dataset_corpora.py`
+
 `python3 scripts/check_skill_contracts.py`
 
 `python3 scripts/check_flow_contracts.py`

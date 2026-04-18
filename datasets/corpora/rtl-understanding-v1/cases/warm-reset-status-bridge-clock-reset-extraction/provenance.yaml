@@ -1,0 +1,14 @@
+source_type: repo_fixture
+source_group: warm_reset_status_bridge
+top_module: warm_reset_status_bridge
+origin_repo: local:asic-ai-workflows
+origin_commit: null
+origin_path: datasets/fixtures/rtl-plan/warm_reset_status_bridge.sv
+license: MIT
+generator: manual_seed_v1
+generator_version: 1.0.0
+mutation_id: null
+human_review_status: reviewed
+review_notes:
+  - Record captures one shared clock and two distinct active-low asynchronous reset signals.
+  - This case is useful for teaching that reset count and clock-domain count are not the same metric.

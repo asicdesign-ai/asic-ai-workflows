@@ -125,7 +125,48 @@ It also includes **evidence lines** pointing back to the actual RTL.
 
 This is important: the record is not just labeled, it is **evidence-grounded**.
 
-### 6. Updated repo documentation so the new dataset work is visible
+### 6. Expanded the seed corpus into a small canary dataset
+
+After the first canary record, I continued the same task and added four more
+records from existing repo fixtures:
+
+- `dual_clock_event_bridge`
+- `load_store_command_processor`
+- `warm_reset_status_bridge`
+- `status_fifo`
+
+This gives the corpus a better starting shape:
+
+- single-clock, single-reset examples
+- one multi-clock example
+- one mixed-reset-count example on a single clock
+- one FIFO-style datapath/control example
+
+I also added explicit split files:
+
+- `datasets/corpora/rtl-understanding-v1/splits/train.txt`
+- `datasets/corpora/rtl-understanding-v1/splits/validation.txt`
+- `datasets/corpora/rtl-understanding-v1/splits/test.txt`
+
+### 7. Added a lightweight dataset corpus validator
+
+New file:
+
+- `scripts/check_dataset_corpora.py`
+
+What it checks:
+
+- record JSON shape at a practical level
+- provenance file presence and key consistency
+- compile-unit file existence
+- evidence line ranges
+- summary counts against the record content
+- split coverage and duplicate split assignment
+
+This is not a full schema engine, but it is enough to make the seed corpus
+testable and CI-friendly.
+
+### 8. Updated repo documentation and CI so the new dataset work is visible
 
 I updated these files:
 
@@ -272,6 +313,7 @@ I ran the repo's lightweight checks after the edits:
 
 - `python3 scripts/repo_lint.py`
 - `python3 scripts/check_structured_files.py`
+- `python3 scripts/check_dataset_corpora.py`
 
 Both passed.
 
@@ -279,6 +321,7 @@ This means:
 
 - Markdown links were not broken by the doc changes
 - the new JSON and YAML files are syntactically valid
+- the seed corpus records, provenance files, and splits are internally consistent
 
 ## Current Repo State After This Session
 
@@ -288,15 +331,16 @@ The repo now has:
 - a corrected plan filename
 - an initial dataset schema area
 - an initial corpus area
-- one real canary record
+- five real canary records for one deterministic task
+- explicit `train`, `validation`, and `test` split files
+- a lightweight dataset corpus validation script
 - updated repo docs that acknowledge the new structure
 
 What the repo does **not** have yet:
 
 - dataset build scripts
-- dataset validation scripts beyond syntax checks
-- train/validation/test split files
-- multiple records for the same task
+- automatic schema-backed dataset validation beyond the current custom checker
+- broad task coverage beyond `clock_reset_extraction`
 - Hugging Face export automation
 
 So this is the **correct beginning**, not the finished system.
@@ -305,10 +349,10 @@ So this is the **correct beginning**, not the finished system.
 
 Recommended order:
 
-1. Add 2-4 more `clock_reset_extraction` records from existing RTL fixtures.
-2. Add split files for the canary corpus.
-3. Add a small dataset validator script for schema and required fields.
-4. Add one more deterministic `rtl-understanding` task such as `interface_extraction`.
+1. Add one more deterministic `rtl-understanding` task such as `interface_extraction`.
+2. Extend `scripts/check_dataset_corpora.py` to validate that new task too.
+3. Add a small export script that can emit one Hugging Face-ready JSONL snapshot.
+4. Add more fixture families while keeping split-by-lineage discipline.
 5. Only after that, start `rtl-quality` mutation work.
 
 ## Final Summary
