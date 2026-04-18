@@ -40,7 +40,7 @@ This repository targets real-world semiconductor workflows, including:
 - `rules/` — Static domain knowledge and constraints  
 - `flows/` — Multi-step engineering workflows  
 - `schemas/` — Standardized definitions for all artifacts  
-- `datasets/` — Example inputs for testing and validation  
+- `datasets/` — Example inputs, fixtures, and corpus assets for testing, validation, and publication work  
 
 Each component has a clear responsibility and is designed to be composable.
 
@@ -70,8 +70,9 @@ Current repository contents:
 - `rules/dv/` — Block-level DV planning and traceability rules
 - `flows/block-level-rtl-plan/` — Block-level front-end RTL planning and handoff flow
 - `flows/block-dv-plan/` — Block-level, UVM-centric DV planning flow
-- `schemas/` — Report schemas for the currently implemented skills and DV flow artifacts  
+- `schemas/` — Report schemas for the currently implemented skills and DV flow artifacts, plus initial dataset-record contracts under `schemas/dataset/`  
 - `datasets/fixtures/` — RTL smoke fixtures for CDC, timing, DV planning, and RTL planning  
+- `datasets/corpora/` — Initial structured corpus records for publishable RTL dataset work  
 - `evals/smoke/` — Smoke-eval metadata and golden outputs for current skills and flow artifacts  
 - `scripts/` — Local and CI validation scripts for repo structure and smoke assets  
 - `.github/workflows/ci.yml` — Bootstrap CI checks for repo lint, skill contracts, flow contracts, and smoke assets  

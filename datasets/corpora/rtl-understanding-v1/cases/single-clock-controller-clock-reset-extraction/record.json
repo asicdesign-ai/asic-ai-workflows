@@ -1,0 +1,71 @@
+{
+  "record_id": "rtl-understanding-single-clock-controller-clock-reset-extraction-v1",
+  "schema_version": "1.0.0",
+  "task": "clock_reset_extraction",
+  "input": {
+    "language": "systemverilog",
+    "top_module": "single_clock_controller",
+    "rtl_text": "module single_clock_controller (\n    input  logic       clk_i,\n    input  logic       rst_n,\n    input  logic       start_i,\n    input  logic       stop_i,\n    input  logic       tick_i,\n    input  logic [7:0] threshold_i,\n    output logic       busy_o,\n    output logic       done_o\n);\n  logic [7:0] count_q;\n\n  always_ff @(posedge clk_i or negedge rst_n) begin\n    if (!rst_n) begin\n      busy_o  <= 1'b0;\n      done_o  <= 1'b0;\n      count_q <= '0;\n    end else begin\n      done_o <= 1'b0;\n\n      if (start_i) begin\n        busy_o  <= 1'b1;\n        count_q <= '0;\n      end else if (stop_i) begin\n        busy_o <= 1'b0;\n      end else if (busy_o && tick_i) begin\n        if (count_q == threshold_i) begin\n          busy_o <= 1'b0;\n          done_o <= 1'b1;\n        end else begin\n          count_q <= count_q + 8'd1;\n        end\n      end\n    end\n  end\nendmodule\n",
+    "compile_unit": {
+      "files": [
+        "datasets/fixtures/rtl-plan/single_clock_controller.sv"
+      ],
+      "filelist": null
+    }
+  },
+  "target": {
+    "clocks": [
+      {
+        "name": "clk_i",
+        "edge": "posedge",
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/single_clock_controller.sv",
+            "line_start": 13,
+            "line_end": 13
+          }
+        ]
+      }
+    ],
+    "resets": [
+      {
+        "name": "rst_n",
+        "edge": "negedge",
+        "active_level": "low",
+        "style": "asynchronous",
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/single_clock_controller.sv",
+            "line_start": 13,
+            "line_end": 14
+          }
+        ]
+      }
+    ],
+    "summary": {
+      "clock_count": 1,
+      "reset_count": 1,
+      "domain_count": 1
+    }
+  },
+  "metadata": {
+    "source_type": "repo_fixture",
+    "source_group": "single_clock_controller",
+    "difficulty": "easy",
+    "domain_tags": [
+      "controller",
+      "counter"
+    ],
+    "lineage_root": "datasets/fixtures/rtl-plan/single_clock_controller.sv"
+  },
+  "provenance": {
+    "license": "MIT",
+    "origin_repo": "local:asic-ai-workflows",
+    "origin_commit": null,
+    "origin_path": "datasets/fixtures/rtl-plan/single_clock_controller.sv",
+    "generator": "manual_seed_v1",
+    "generator_version": "1.0.0",
+    "mutation_id": null,
+    "human_review_status": "reviewed"
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "record_id": "rtl-understanding-warm-reset-status-bridge-clock-reset-extraction-v1",
+  "schema_version": "1.0.0",
+  "task": "clock_reset_extraction",
+  "input": {
+    "language": "systemverilog",
+    "top_module": "warm_reset_status_bridge",
+    "rtl_text": "module warm_reset_status_bridge (\n    input  logic clk_i,\n    input  logic rst_n,\n    input  logic cfg_rst_n,\n    input  logic cfg_done_i,\n    output logic status_ready_o\n);\n  logic cfg_done_q;\n\n  always_ff @(posedge clk_i or negedge cfg_rst_n) begin\n    if (!cfg_rst_n) begin\n      cfg_done_q <= 1'b0;\n    end else begin\n      cfg_done_q <= cfg_done_i;\n    end\n  end\n\n  always_ff @(posedge clk_i or negedge rst_n) begin\n    if (!rst_n) begin\n      status_ready_o <= 1'b0;\n    end else begin\n      status_ready_o <= cfg_done_q;\n    end\n  end\nendmodule\n",
+    "compile_unit": {
+      "files": [
+        "datasets/fixtures/rtl-plan/warm_reset_status_bridge.sv"
+      ],
+      "filelist": null
+    }
+  },
+  "target": {
+    "clocks": [
+      {
+        "name": "clk_i",
+        "edge": "posedge",
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/warm_reset_status_bridge.sv",
+            "line_start": 10,
+            "line_end": 10
+          }
+        ]
+      }
+    ],
+    "resets": [
+      {
+        "name": "cfg_rst_n",
+        "edge": "negedge",
+        "active_level": "low",
+        "style": "asynchronous",
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/warm_reset_status_bridge.sv",
+            "line_start": 10,
+            "line_end": 11
+          }
+        ]
+      },
+      {
+        "name": "rst_n",
+        "edge": "negedge",
+        "active_level": "low",
+        "style": "asynchronous",
+        "evidence": [
+          {
+            "file": "datasets/fixtures/rtl-plan/warm_reset_status_bridge.sv",
+            "line_start": 18,
+            "line_end": 19
+          }
+        ]
+      }
+    ],
+    "summary": {
+      "clock_count": 1,
+      "reset_count": 2,
+      "domain_count": 1
+    }
+  },
+  "metadata": {
+    "source_type": "repo_fixture",
+    "source_group": "warm_reset_status_bridge",
+    "difficulty": "medium",
+    "domain_tags": [
+      "bridge",
+      "reset"
+    ],
+    "lineage_root": "datasets/fixtures/rtl-plan/warm_reset_status_bridge.sv"
+  },
+  "provenance": {
+    "license": "MIT",
+    "origin_repo": "local:asic-ai-workflows",
+    "origin_commit": null,
+    "origin_path": "datasets/fixtures/rtl-plan/warm_reset_status_bridge.sv",
+    "generator": "manual_seed_v1",
+    "generator_version": "1.0.0",
+    "mutation_id": null,
+    "human_review_status": "reviewed"
+  }
+}

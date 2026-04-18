@@ -1,0 +1,14 @@
+source_type: repo_fixture
+source_group: load_store_command_processor
+top_module: load_store_command_processor
+origin_repo: local:asic-ai-workflows
+origin_commit: null
+origin_path: datasets/fixtures/rtl-plan/load_store_command_processor.sv
+license: MIT
+generator: manual_seed_v1
+generator_version: 1.0.0
+mutation_id: null
+human_review_status: reviewed
+review_notes:
+  - Record uses the sequential state update block rather than the combinational control blocks.
+  - Reset classification is grounded in the `always_ff` sensitivity list and reset branch.

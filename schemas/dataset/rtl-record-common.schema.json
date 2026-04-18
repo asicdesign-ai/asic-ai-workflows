@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RTL Dataset Common Record",
+  "type": "object",
+  "required": [
+    "record_id",
+    "schema_version",
+    "task",
+    "input",
+    "target",
+    "metadata",
+    "provenance"
+  ],
+  "properties": {
+    "record_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "task": {
+      "type": "string"
+    },
+    "input": {
+      "type": "object"
+    },
+    "target": {
+      "type": "object"
+    },
+    "metadata": {
+      "type": "object",
+      "required": [
+        "source_type",
+        "source_group",
+        "difficulty"
+      ],
+      "properties": {
+        "source_type": {
+          "type": "string"
+        },
+        "source_group": {
+          "type": "string"
+        },
+        "difficulty": {
+          "type": "string",
+          "enum": [
+            "easy",
+            "medium",
+            "hard"
+          ]
+        },
+        "domain_tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "lineage_root": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "license",
+        "origin_repo",
+        "origin_path",
+        "generator",
+        "generator_version",
+        "human_review_status"
+      ],
+      "properties": {
+        "license": {
+          "type": "string"
+        },
+        "origin_repo": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "origin_commit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "origin_path": {
+          "type": "string"
+        },
+        "generator": {
+          "type": "string"
+        },
+        "generator_version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "mutation_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "human_review_status": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "reviewed"
+          ]
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

@@ -42,6 +42,23 @@ jobs:
       - name: Check JSON and YAML files
         run: python3 scripts/check_structured_files.py
 
+  dataset-corpora:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install YAML parser
+        run: python3 -m pip install PyYAML
+
+      - name: Validate dataset corpora
+        run: python3 scripts/check_dataset_corpora.py
+
   skill-contracts:
     runs-on: ubuntu-latest
     steps:

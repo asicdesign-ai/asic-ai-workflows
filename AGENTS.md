@@ -100,6 +100,12 @@ Current implemented schemas:
 - `schemas/sva-plan.schema.json`
 - `schemas/dv-coverage-plan.schema.json`
 - `schemas/dv-plan.schema.json`
+- `schemas/dataset/rtl-record-common.schema.json`
+- `schemas/dataset/rtl-understanding.schema.json`
+
+Current dataset corpus seeds:
+
+- `datasets/corpora/rtl-understanding-v1/`
 
 Current implemented smoke assets:
 
@@ -131,6 +137,7 @@ Current supporting files:
 - `scripts/check_structured_files.py`
 - `scripts/check_skill_contracts.py`
 - `scripts/check_flow_contracts.py`
+- `scripts/check_dataset_corpora.py`
 - `scripts/check_eval_smoke.py`
 - `scripts/check_rtl_compile.py`
 - `scripts/report_validators.py`
