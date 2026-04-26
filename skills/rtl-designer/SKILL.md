@@ -20,6 +20,7 @@ Apply these repo rules before analysis and output generation:
 
 - `../../rules/common/evidence-grounding.md`
 - `../../rules/common/output-discipline.md`
+- `../../rules/common/tool-evidence-provenance.md`
 - `../../rules/arch/requirements-traceability.md`
 - `../../rules/rtl/synthesizable-systemverilog.md`
 
@@ -27,14 +28,55 @@ Apply these repo rules before analysis and output generation:
 
 Read the approved microarchitecture specification and perform these steps:
 
-1. Partition the design into the minimal synthesizable SystemVerilog modules
+1. If project context is provided and HDL/EDA MCP tools are available, collect
+   read-only evidence before generation using the optional MCP-assisted context
+   rules below.
+2. Partition the design into the minimal synthesizable SystemVerilog modules
    required by the spec.
-2. Keep clocks, resets, interface semantics, and state updates explicit.
-3. Preserve traceability from each requirement into emitted RTL files and
+3. Keep clocks, resets, interface semantics, and state updates explicit.
+4. Preserve traceability from each requirement into emitted RTL files and
    signals.
-4. Emit unresolved items when the spec still leaves an implementation decision
+5. Emit unresolved items when the spec still leaves an implementation decision
    open.
-5. Keep generated code block-level and front-end scoped.
+6. Keep generated code block-level and front-end scoped.
+7. If generated `source_files` are materialized to disk by an execution harness,
+   optional read-only MCP diagnostics may be used as post-generation evidence.
+
+## Optional MCP-Assisted Context
+
+When MCP tools are available, use them only as evidence sources. Discover tools
+by declared capability and schema, not by vendor name. Prefer read-only HDL/EDA
+tools that can parse a project or filelist, report diagnostics, list design
+units, describe modules/interfaces/packages, inspect hierarchy, or find symbols.
+
+Use optional MCP context when the user provides a `project_root`, filelist,
+existing RTL files, package/interface files, or generated RTL already
+materialized on disk. Do not require MCP evidence for normal spec-to-RTL
+generation.
+
+`pyslang-mcp` is the baseline open semantic MCP for this skill. Useful calls
+include `pyslang_parse_filelist` or `pyslang_parse_files`,
+`pyslang_get_project_summary`, `pyslang_list_design_units`,
+`pyslang_describe_design_unit`, `pyslang_get_hierarchy`, and
+`pyslang_find_symbol`. After generated source files are materialized,
+`pyslang_get_diagnostics` can provide compiler-backed parse or semantic
+feedback. A clean `pyslang-mcp` diagnostic result is not synthesis, simulation,
+lint, CDC, timing, or signoff evidence.
+
+For vendor or internal EDA MCPs, use the same pattern only when the exposed tool
+schema clearly provides read-only parse, elaboration, context, hierarchy, symbol,
+or diagnostic queries. Do not assume Cadence, Synopsys, Siemens, Mentor, or other
+vendor tool names or capabilities.
+
+Do not call destructive or implementation-changing EDA tools from this skill. If
+a tool can synthesize, simulate, edit RTL, run CDC, run timing, or launch signoff
+flows, use it only when a downstream flow explicitly asks for that phase.
+
+If MCP evidence is unavailable, incomplete, or degraded, continue from the
+microarchitecture spec and record the limitation as `unresolved` when it affects
+the generated RTL. Emit `tool_evidence: []` when no MCP evidence was used.
+When tool evidence is present, each entry must contain `source`, `tools`,
+`purpose`, `status`, and `summary`.
 
 ## Output Format
 
@@ -87,6 +129,8 @@ traceability:
 
 unresolved: []
 
+tool_evidence: []
+
 summary:
   total_source_files: 1
   total_modules: 1
@@ -97,6 +141,6 @@ summary:
 ## Scope Limitations
 
 - **Can do**: emit synthesizable block-level SystemVerilog with requirement
-  traceability.
+  traceability and optional read-only tool evidence provenance.
 - **Cannot do**: claim lint cleanliness, CDC safety, or signoff completeness
   without downstream audit skills.

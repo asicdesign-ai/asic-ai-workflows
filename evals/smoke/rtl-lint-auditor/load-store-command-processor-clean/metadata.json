@@ -9,6 +9,18 @@
   "assertions": [
     "emits an empty findings list for the load-store command processor",
     "keeps lint severity counters deterministic for a clean block",
-    "reports zero blocking findings"
-  ]
+    "reports zero blocking findings",
+    "records no MCP tool evidence when no tool evidence is supplied"
+  ],
+  "mcp_evidence_note": {
+    "available_in_smoke": false,
+    "intended_sequence_when_filelist_backed": [
+      "pyslang_parse_filelist or pyslang_parse_files",
+      "pyslang_get_diagnostics",
+      "pyslang_list_design_units",
+      "pyslang_describe_design_unit",
+      "pyslang_get_hierarchy when findings depend on instantiation context",
+      "pyslang_find_symbol when findings depend on declarations or references"
+    ]
+  }
 }

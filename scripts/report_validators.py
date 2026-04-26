@@ -1016,11 +1016,25 @@ def validate_rtl_traceability(value: list, context: str) -> None:
         require_string_list(item["rtl_signals"], f"{item_context}.rtl_signals")
 
 
+def validate_tool_evidence(value: list, context: str) -> None:
+    require_type(value, list, context)
+    valid_status = {"used", "unavailable", "incomplete", "error"}
+    for index, item in enumerate(value, start=1):
+        item_context = f"{context}[{index}]"
+        require_type(item, dict, item_context)
+        require_keys(item, ["source", "tools", "purpose", "status", "summary"], item_context)
+        require_type(item["source"], str, f"{item_context}.source")
+        require_string_list(item["tools"], f"{item_context}.tools")
+        require_type(item["purpose"], str, f"{item_context}.purpose")
+        require_enum(item["status"], valid_status, f"{item_context}.status")
+        require_type(item["summary"], str, f"{item_context}.summary")
+
+
 def validate_rtl_design(data: dict) -> None:
     require_type(data, dict, "rtl design report")
     require_keys(
         data,
-        ["design", "source_files", "rtl_modules", "traceability", "unresolved", "summary"],
+        ["design", "source_files", "rtl_modules", "traceability", "unresolved", "tool_evidence", "summary"],
         "rtl design report",
     )
     validate_block_design_context(
@@ -1032,6 +1046,7 @@ def validate_rtl_design(data: dict) -> None:
     validate_rtl_modules(data["rtl_modules"], "rtl design report.rtl_modules")
     validate_rtl_traceability(data["traceability"], "rtl design report.traceability")
     validate_generic_unresolved(data["unresolved"], "rtl design report.unresolved")
+    validate_tool_evidence(data["tool_evidence"], "rtl design report.tool_evidence")
 
     summary = data["summary"]
     require_type(summary, dict, "rtl design report.summary")
@@ -1072,13 +1087,14 @@ def validate_lint_findings(value: list, context: str) -> None:
 
 def validate_rtl_lint_report(data: dict) -> None:
     require_type(data, dict, "rtl lint report")
-    require_keys(data, ["design", "findings", "summary"], "rtl lint report")
+    require_keys(data, ["design", "findings", "tool_evidence", "summary"], "rtl lint report")
     validate_block_design_context(
         data["design"],
         "rtl lint report.design",
         require_rtl_files=True,
     )
     validate_lint_findings(data["findings"], "rtl lint report.findings")
+    validate_tool_evidence(data["tool_evidence"], "rtl lint report.tool_evidence")
 
     summary = data["summary"]
     require_type(summary, dict, "rtl lint report.summary")

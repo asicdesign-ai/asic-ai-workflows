@@ -51,6 +51,7 @@ Apply these repo rules across the flow:
 
 - `../../rules/common/evidence-grounding.md`
 - `../../rules/common/output-discipline.md`
+- `../../rules/common/tool-evidence-provenance.md`
 - `../../rules/arch/requirements-traceability.md`
 - `../../rules/arch/ppa-capture.md`
 - `../../rules/arch/diagram-selection.md`
@@ -80,19 +81,23 @@ Run these skills in order:
 3. Draft the microarchitecture specification in Markdown and use WaveDrom,
    Mermaid, or BlockDiag only when they clarify timing, FSM, or block structure.
 4. Generate synthesizable SystemVerilog from the approved spec.
-5. Audit the emitted RTL with lint, timing-risk analysis, and applicable CDC or
+5. When read-only HDL/EDA MCP tools are available, use them only as optional
+   evidence sources for existing project context or compiler-backed diagnostics.
+   Post-generation diagnostics require a runner or harness to materialize
+   `rtl.source_files[].content` to disk before tool execution.
+6. Audit the emitted RTL with lint, timing-risk analysis, and applicable CDC or
    RDC review.
-6. Skip CDC when the visible RTL contains only one clock domain. In that case,
+7. Skip CDC when the visible RTL contains only one clock domain. In that case,
    emit a zero-crossing CDC report rather than forcing a multi-clock audit.
-7. Skip RDC when all sequential state uses one reset signal with one consistent
+8. Skip RDC when all sequential state uses one reset signal with one consistent
    reset style and polarity. If the same reset signal is mixed between
    synchronous and asynchronous reset styles, still run RDC and treat those
    style differences as distinct reset domains.
-8. Re-run `rtl-designer` after any `critical` or `high` lint, CDC, or RDC
+9. Re-run `rtl-designer` after any `critical` or `high` lint, CDC, or RDC
    result until the issue is fixed or explicitly carried as unresolved.
-9. Treat timing as advisory unless the reported structure clearly forces a
+10. Treat timing as advisory unless the reported structure clearly forces a
    redesign.
-10. Assemble one final handoff package and mark whether it is ready for
+11. Assemble one final handoff package and mark whether it is ready for
    downstream `block-dv-plan` use.
 
 ## Output Format
