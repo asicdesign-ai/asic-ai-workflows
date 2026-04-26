@@ -65,6 +65,7 @@ Current implemented rules:
 
 - `rules/common/evidence-grounding.md`
 - `rules/common/output-discipline.md`
+- `rules/common/tool-evidence-provenance.md`
 - `rules/arch/requirements-traceability.md`
 - `rules/arch/ppa-capture.md`
 - `rules/arch/diagram-selection.md`
@@ -260,6 +261,7 @@ Start here for most tasks:
 - `skills/dv-plan-assembler/SKILL.md`
 - `rules/common/evidence-grounding.md`
 - `rules/common/output-discipline.md`
+- `rules/common/tool-evidence-provenance.md`
 - `rules/arch/requirements-traceability.md`
 - `rules/rtl/synthesizable-systemverilog.md`
 - `rules/rdc/classification.md`

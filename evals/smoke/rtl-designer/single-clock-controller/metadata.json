@@ -9,6 +9,19 @@
   "assertions": [
     "emits synthesizable SystemVerilog source records",
     "describes one single-clock top module",
-    "preserves REQ-NNN traceability into files and signals"
-  ]
+    "preserves REQ-NNN traceability into files and signals",
+    "records no MCP tool evidence when no tool evidence is supplied"
+  ],
+  "mcp_evidence_note": {
+    "available_in_smoke": false,
+    "intended_sequence_when_filelist_backed": [
+      "pyslang_parse_filelist or pyslang_parse_files",
+      "pyslang_get_project_summary",
+      "pyslang_list_design_units",
+      "pyslang_describe_design_unit",
+      "pyslang_get_hierarchy when hierarchy context is required",
+      "pyslang_find_symbol when declaration or reference context is required",
+      "pyslang_get_diagnostics after generated source files are materialized"
+    ]
+  }
 }

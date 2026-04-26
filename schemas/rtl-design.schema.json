@@ -8,6 +8,7 @@
     "rtl_modules",
     "traceability",
     "unresolved",
+    "tool_evidence",
     "summary"
   ],
   "properties": {
@@ -26,8 +27,53 @@
     "unresolved": {
       "type": "array"
     },
+    "tool_evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/toolEvidence"
+      }
+    },
     "summary": {
       "type": "object"
+    }
+  },
+  "$defs": {
+    "toolEvidence": {
+      "type": "object",
+      "required": [
+        "source",
+        "tools",
+        "purpose",
+        "status",
+        "summary"
+      ],
+      "properties": {
+        "source": {
+          "type": "string"
+        },
+        "tools": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "purpose": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "used",
+            "unavailable",
+            "incomplete",
+            "error"
+          ]
+        },
+        "summary": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
     }
   },
   "additionalProperties": true

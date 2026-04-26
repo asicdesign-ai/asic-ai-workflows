@@ -62,6 +62,7 @@ Current repository contents:
 - `skills/dv-plan-assembler/` — Final DV plan assembly skill
 - `rules/common/evidence-grounding.md` — Shared anti-hallucination grounding rule  
 - `rules/common/output-discipline.md` — Shared structured-output rule  
+- `rules/common/tool-evidence-provenance.md` — Shared MCP and tool evidence provenance rule
 - `rules/arch/` — Block-level requirements, PPA, and diagram-selection rules
 - `rules/rtl/` — Synthesizable RTL and lint severity rules
 - `rules/rdc/classification.md` — RDC reset-domain proof and severity mapping
@@ -139,6 +140,7 @@ Current examples:
 
 - `rules/common/evidence-grounding.md` — require explicit RTL evidence for every claim
 - `rules/common/output-discipline.md` — enforce stable YAML shape and field usage
+- `rules/common/tool-evidence-provenance.md` — record MCP and tool provenance without overclaiming
 - `rules/arch/requirements-traceability.md` — preserve `REQ-NNN` traceability through spec and RTL artifacts
 - `rules/arch/ppa-capture.md` — keep power, performance, and area explicit and separate
 - `rules/arch/diagram-selection.md` — choose WaveDrom, Mermaid, or BlockDiag only when structurally justified
