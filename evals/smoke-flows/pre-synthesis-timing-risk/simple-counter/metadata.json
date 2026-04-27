@@ -1,0 +1,26 @@
+{
+  "eval_name": "simple-counter",
+  "flow": "pre-synthesis-timing-risk",
+  "input_files": [
+    "datasets/fixtures/hdl-design-view/simple_counter.sv"
+  ],
+  "intermediate_outputs": [
+    {
+      "name": "design_view",
+      "path": "evals/smoke/hdl-design-view-extractor/simple-counter/expected.yaml",
+      "schema": "schemas/hdl-design-view.schema.json"
+    },
+    {
+      "name": "timing_report",
+      "path": "evals/smoke-flows/pre-synthesis-timing-risk/simple-counter/simple_counter_timing_report.yaml",
+      "schema": "schemas/timing-report.schema.json"
+    }
+  ],
+  "expected_output": "evals/smoke-flows/pre-synthesis-timing-risk/simple-counter/expected.yaml",
+  "schema": "schemas/pre-synthesis-timing-risk.schema.json",
+  "assertions": [
+    "chains RTL source through design-view extraction and timing-risk handoff",
+    "records both intermediate design-view and timing-report artifacts",
+    "reports the counter feedback path without claiming STA or synthesis timing"
+  ]
+}

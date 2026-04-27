@@ -218,6 +218,113 @@ def validate_hdl_design_view(data: dict) -> None:
         require_type(value, int, f"hdl design view.summary.{key}")
 
 
+def validate_pre_synthesis_timing_risk(data: dict) -> None:
+    require_type(data, dict, "pre-synthesis timing risk flow report")
+    require_keys(
+        data,
+        [
+            "flow",
+            "design_view",
+            "timing",
+            "ranked_risks",
+            "recommended_actions",
+            "unresolved",
+            "summary",
+        ],
+        "pre-synthesis timing risk flow report",
+    )
+
+    valid_languages = {"systemverilog", "verilog", "vhdl", "proprietary", "unknown"}
+    valid_view_formats = {"uhdm_text", "ast_json", "tool_design_graph", "model_derived"}
+    valid_confidence = {"high", "medium", "low"}
+    valid_sources = {"design_view", "timing_report", "flow_unresolved"}
+    valid_severities = {"critical", "hard", "moderate", "easy", "unresolved"}
+
+    flow = data["flow"]
+    require_type(flow, dict, "pre-synthesis timing risk.flow")
+    require_keys(flow, ["name", "top_unit", "source_language"], "pre-synthesis timing risk.flow")
+    require_enum(flow["name"], {"pre-synthesis-timing-risk"}, "pre-synthesis timing risk.flow.name")
+    require_type(flow["top_unit"], str, "pre-synthesis timing risk.flow.top_unit")
+    require_enum(flow["source_language"], valid_languages, "pre-synthesis timing risk.flow.source_language")
+
+    design_view = data["design_view"]
+    require_type(design_view, dict, "pre-synthesis timing risk.design_view")
+    require_keys(
+        design_view,
+        [
+            "artifact",
+            "view_format",
+            "confidence",
+            "sequential_elements",
+            "combinational_nodes",
+            "unresolved",
+        ],
+        "pre-synthesis timing risk.design_view",
+    )
+    require_type(design_view["artifact"], str, "pre-synthesis timing risk.design_view.artifact")
+    require_enum(design_view["view_format"], valid_view_formats, "pre-synthesis timing risk.design_view.view_format")
+    require_enum(design_view["confidence"], valid_confidence, "pre-synthesis timing risk.design_view.confidence")
+    require_type(design_view["sequential_elements"], int, "pre-synthesis timing risk.design_view.sequential_elements")
+    require_type(design_view["combinational_nodes"], int, "pre-synthesis timing risk.design_view.combinational_nodes")
+    require_type(design_view["unresolved"], int, "pre-synthesis timing risk.design_view.unresolved")
+
+    timing = data["timing"]
+    require_type(timing, dict, "pre-synthesis timing risk.timing")
+    require_keys(
+        timing,
+        ["report", "total_paths", "hard_or_worse_paths", "deepest_path"],
+        "pre-synthesis timing risk.timing",
+    )
+    require_type(timing["report"], str, "pre-synthesis timing risk.timing.report")
+    require_type(timing["total_paths"], int, "pre-synthesis timing risk.timing.total_paths")
+    require_type(timing["hard_or_worse_paths"], int, "pre-synthesis timing risk.timing.hard_or_worse_paths")
+    deepest = timing["deepest_path"]
+    require_type(deepest, dict, "pre-synthesis timing risk.timing.deepest_path")
+    require_keys(deepest, ["id", "depth", "from", "to"], "pre-synthesis timing risk.timing.deepest_path")
+    if not PATH_ID_RE.match(deepest["id"]):
+        raise ValidationError("pre-synthesis timing risk.timing.deepest_path.id must match PATH-NNN")
+    require_type(deepest["depth"], int, "pre-synthesis timing risk.timing.deepest_path.depth")
+    require_type(deepest["from"], str, "pre-synthesis timing risk.timing.deepest_path.from")
+    require_type(deepest["to"], str, "pre-synthesis timing risk.timing.deepest_path.to")
+
+    require_type(data["ranked_risks"], list, "pre-synthesis timing risk.ranked_risks")
+    for index, item in enumerate(data["ranked_risks"], start=1):
+        context = f"pre-synthesis timing risk.ranked_risks[{index}]"
+        require_type(item, dict, context)
+        require_keys(item, ["id", "source", "severity", "description", "evidence"], context)
+        if not RISK_ID_RE.match(item["id"]):
+            raise ValidationError(f"{context}.id must match RISK-NNN")
+        require_enum(item["source"], valid_sources, f"{context}.source")
+        require_enum(item["severity"], valid_severities, f"{context}.severity")
+        require_type(item["description"], str, f"{context}.description")
+        require_type(item["evidence"], dict, f"{context}.evidence")
+        require_keys(item["evidence"], ["design_view_node", "timing_path"], f"{context}.evidence")
+        require_type(item["evidence"]["design_view_node"], str, f"{context}.evidence.design_view_node")
+        require_type(item["evidence"]["timing_path"], str, f"{context}.evidence.timing_path")
+
+    require_string_list(data["recommended_actions"], "pre-synthesis timing risk.recommended_actions")
+
+    require_type(data["unresolved"], list, "pre-synthesis timing risk.unresolved")
+    for index, item in enumerate(data["unresolved"], start=1):
+        context = f"pre-synthesis timing risk.unresolved[{index}]"
+        require_type(item, dict, context)
+        require_keys(item, ["name", "reason"], context)
+        require_type(item["name"], str, f"{context}.name")
+        require_type(item["reason"], str, f"{context}.reason")
+
+    summary = data["summary"]
+    require_type(summary, dict, "pre-synthesis timing risk.summary")
+    require_keys(
+        summary,
+        ["design_view_ready", "timing_report_ready", "requires_synthesis_or_sta", "total_unresolved"],
+        "pre-synthesis timing risk.summary",
+    )
+    require_type(summary["design_view_ready"], bool, "pre-synthesis timing risk.summary.design_view_ready")
+    require_type(summary["timing_report_ready"], bool, "pre-synthesis timing risk.summary.timing_report_ready")
+    require_type(summary["requires_synthesis_or_sta"], bool, "pre-synthesis timing risk.summary.requires_synthesis_or_sta")
+    require_type(summary["total_unresolved"], int, "pre-synthesis timing risk.summary.total_unresolved")
+
+
 def validate_objective_ids(value, context: str) -> None:
     require_string_list(value, context, allow_empty=False)
     for item in value:

@@ -67,6 +67,9 @@ Implemented artifacts:
 - `datasets/fixtures/hdl-design-view/`
 - `evals/smoke/hdl-design-view-extractor/`
 - `evals/smoke/rtl-timing-analyzer/`
+- `evals/smoke-flows/pre-synthesis-timing-risk/`
+- `schemas/pre-synthesis-timing-risk.schema.json`
+- `scripts/check_flow_smoke.py`
 
 The old `rtl-timing-path-analyzer` slug has been replaced by
 `rtl-timing-analyzer` across repo references.
@@ -78,6 +81,8 @@ The split is working when:
 - design-view extraction has its own isolated fixtures and smoke cases
 - timing analysis remains focused on analyzing existing structure
 - the full flow composes extraction plus timing analysis
+- a flow smoke case validates RTL input, intermediate design-view and timing
+  artifacts, and a final timing-risk handoff
 - SystemVerilog/Verilog can use source, UHDM text, or AST JSON views
 - VHDL and proprietary languages can use textual MCP/tool views or
   confidence-limited model-derived views

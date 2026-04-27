@@ -127,6 +127,8 @@ Bootstrap checks for step 1:
 - every metadata file points to existing fixtures, schemas, and expected outputs
 - every schema file is valid JSON
 - every expected output conforms to the current structural validator for that skill
+- every flow smoke case points to input fixtures, intermediate skill outputs, and
+  a final schema-backed flow handoff
 
 Future expansion after step 1:
 
@@ -159,6 +161,13 @@ The smoke suite should cover at least:
 - simple reg-to-reg hard path
 - unresolved FF-like macro or cell
 - cross-module timing path when all modules are provided
+
+### Pre-Synthesis Timing Risk Flow
+
+The flow smoke suite should cover at least:
+
+- a simple RTL source moving through design-view extraction into a final timing
+  risk handoff
 
 ## Unit-Test Strategy For This Repository
 

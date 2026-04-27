@@ -1,0 +1,57 @@
+{
+  "module": "simple_counter",
+  "file": "evals/smoke/hdl-design-view-extractor/simple-counter/expected.yaml",
+  "config": "default",
+  "registers": [
+    {
+      "name": "count_q",
+      "width": 8,
+      "clock": "clk",
+      "source": "always_ff",
+      "line": 10
+    }
+  ],
+  "paths": [
+    {
+      "id": "PATH-001",
+      "from": "count_q",
+      "to": "count_q",
+      "depth": 12,
+      "difficulty": "hard",
+      "stages": [
+        {
+          "op": "adder",
+          "width": 8,
+          "depth": 10,
+          "line": 18
+        },
+        {
+          "op": "ternary",
+          "width": 8,
+          "depth": 2,
+          "line": 18
+        }
+      ],
+      "crosses_module": false,
+      "description": "The count_q feedback path increments count_q and selects between the incremented and held value before the next count_q load.",
+      "suggestion": "For a tighter clock target, register the increment result or split the enable mux and increment across cycles if the latency change is acceptable."
+    }
+  ],
+  "unresolved": [],
+  "summary": {
+    "total_registers": 1,
+    "total_paths": 1,
+    "by_difficulty": {
+      "critical": 0,
+      "hard": 1,
+      "moderate": 0,
+      "easy": 0
+    },
+    "deepest_path": {
+      "id": "PATH-001",
+      "depth": 12,
+      "from": "count_q",
+      "to": "count_q"
+    }
+  }
+}

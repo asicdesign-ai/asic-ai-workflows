@@ -1,0 +1,58 @@
+<mxfile host="app.diagrams.net" modified="2026-04-27T00:00:00.000Z" agent="Codex" version="24.7.17">
+  <diagram id="rtl-timing-risk-evaluation-flow" name="RTL Timing Risk Evaluation Flow">
+    <mxGraphModel dx="1280" dy="720" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="source" value="HDL Source&#xa;SV / Verilog / VHDL / proprietary" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#334155;fontColor=#0f172a;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="120" width="190" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="tool" value="Optional Tool Evidence&#xa;UHDM text / AST JSON / MCP/tool-provided textual design graph" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#eef2ff;strokeColor=#3730a3;fontColor=#111827;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="260" width="190" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="extractor" value="hdl-design-view-extractor&#xa;source-grounded textual design view" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ecfeff;strokeColor=#0e7490;fontColor=#0f172a;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="330" y="170" width="240" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="view" value="HDL Design View&#xa;ports, signals, sequential elements, comb nodes, unresolved" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f0fdf4;strokeColor=#15803d;fontColor=#0f172a;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="660" y="170" width="250" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="timing" value="rtl-timing-analyzer&#xa;endpoint tracing + depth model" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff7ed;strokeColor=#c2410c;fontColor=#0f172a;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="170" width="230" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="report" value="Timing Report&#xa;ranked paths, depth, difficulty, suggestions" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fefce8;strokeColor=#a16207;fontColor=#0f172a;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="350" width="230" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="handoff" value="Flow Handoff&#xa;risks, actions, unresolved, limits" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fdf2f8;strokeColor=#be185d;fontColor=#0f172a;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="660" y="350" width="250" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="limits" value="Guardrails&#xa;no slack, no STA, no invented hierarchy" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#475569;fontColor=#0f172a;" vertex="1" parent="1">
+          <mxGeometry x="330" y="380" width="240" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="source" target="extractor" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#334155;endArrow=block;endFill=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="tool" target="extractor" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#3730a3;endArrow=block;endFill=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="extractor" target="view" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#0e7490;endArrow=block;endFill=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="view" target="timing" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#15803d;endArrow=block;endFill=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="timing" target="report" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#c2410c;endArrow=block;endFill=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="report" target="handoff" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#a16207;endArrow=block;endFill=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="limits" target="extractor" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;endArrow=block;endFill=1;dashed=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="limits" target="timing" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#475569;endArrow=block;endFill=1;dashed=1;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

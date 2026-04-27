@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RTL Timing Risk Evaluation Flow</title>
+  <style>
+    :root {
+      --ink: #111827;
+      --muted: #5b6472;
+      --paper: #f8fafc;
+      --line: #c9d2df;
+      --steel: #263241;
+      --cyan: #0e7490;
+      --green: #15803d;
+      --amber: #b45309;
+      --red: #b91c1c;
+      --blue: #1d4ed8;
+      --panel: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(38, 50, 65, 0.035) 1px, transparent 1px),
+        linear-gradient(rgba(38, 50, 65, 0.035) 1px, transparent 1px),
+        var(--paper);
+      background-size: 28px 28px;
+      font-family: "Aptos", "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+
+    .shell {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 36px 24px 64px;
+    }
+
+    header {
+      border-top: 6px solid var(--steel);
+      border-bottom: 1px solid var(--line);
+      padding: 28px 0 24px;
+      margin-bottom: 28px;
+      background: rgba(248, 250, 252, 0.82);
+    }
+
+    .eyebrow {
+      color: var(--cyan);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 8px 0 10px;
+      font-family: "Georgia", "Times New Roman", serif;
+      font-size: clamp(34px, 5vw, 64px);
+      line-height: 0.98;
+      letter-spacing: 0;
+      max-width: 980px;
+    }
+
+    .lede {
+      max-width: 900px;
+      color: #263241;
+      font-size: 18px;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      margin: 26px 0;
+    }
+
+    .meta {
+      background: var(--panel);
+      padding: 16px;
+      min-height: 92px;
+    }
+
+    .meta strong {
+      display: block;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .meta span {
+      font-family: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+      font-size: 14px;
+      color: var(--ink);
+    }
+
+    section {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--line);
+      margin: 22px 0;
+      padding: 24px;
+    }
+
+    h2 {
+      margin: 0 0 14px;
+      font-size: 22px;
+      letter-spacing: 0;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
+    }
+
+    h3 {
+      margin: 20px 0 8px;
+      font-size: 16px;
+    }
+
+    p { max-width: 920px; }
+
+    a { color: var(--blue); text-decoration-thickness: 1px; }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    .callout {
+      border-left: 5px solid var(--amber);
+      background: #fffbeb;
+      padding: 14px 16px;
+      color: #4b3520;
+    }
+
+    .diagram-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      padding: 16px;
+    }
+
+    .drawio-map {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(150px, 1fr));
+      gap: 14px;
+      align-items: center;
+      margin: 14px 0 6px;
+    }
+
+    .node {
+      min-height: 86px;
+      border: 2px solid var(--steel);
+      padding: 12px;
+      background: #fff;
+      position: relative;
+    }
+
+    .node b { display: block; margin-bottom: 6px; }
+    .node small { color: var(--muted); }
+    .node.source { border-color: #334155; }
+    .node.extract { border-color: var(--cyan); background: #ecfeff; }
+    .node.view { border-color: var(--green); background: #f0fdf4; }
+    .node.timing { border-color: var(--amber); background: #fff7ed; }
+    .node.report { border-color: #a16207; background: #fefce8; }
+    .node.handoff { border-color: #be185d; background: #fdf2f8; }
+
+    .arrow {
+      text-align: center;
+      font-family: "Cascadia Mono", Consolas, monospace;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 14px;
+    }
+
+    th, td {
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #e9eef5;
+      color: #1f2937;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    code, pre {
+      font-family: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+    }
+
+    pre {
+      overflow-x: auto;
+      background: #0f172a;
+      color: #dbeafe;
+      border: 1px solid #1e293b;
+      padding: 16px;
+      font-size: 13px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0;
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 6px 10px;
+      font-family: "Cascadia Mono", Consolas, monospace;
+      font-size: 12px;
+    }
+
+    .risk-hard {
+      color: #7c2d12;
+      background: #ffedd5;
+      border-color: #fed7aa;
+      font-weight: 800;
+    }
+
+    .footer {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 28px;
+    }
+
+    @media (max-width: 860px) {
+      .meta-grid, .two-col, .drawio-map { grid-template-columns: 1fr; }
+      h1 { font-size: 38px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="eyebrow">ASIC AI Workflows / Engineering Report</div>
+      <h1>RTL Timing Risk Evaluation Flow</h1>
+      <p class="lede">An AI-orchestrated pre-synthesis flow that converts HDL source or textual design views into source-grounded structural timing-risk feedback without claiming STA or signoff timing.</p>
+    </header>
+
+    <div class="meta-grid">
+      <div class="meta"><strong>Flow</strong><span>pre-synthesis-timing-risk</span></div>
+      <div class="meta"><strong>Extractor</strong><span>hdl-design-view-extractor</span></div>
+      <div class="meta"><strong>Analyzer</strong><span>rtl-timing-analyzer</span></div>
+      <div class="meta"><strong>Smoke Case</strong><span>simple_counter</span></div>
+    </div>
+
+    <section>
+      <h2>Executive Summary</h2>
+      <p>The flow performs early timing triage from RTL or AI-readable design views. It identifies structural reg-to-reg timing risks, records evidence, preserves unresolved hierarchy, and emits a final engineering handoff. It is intentionally pre-synthesis: the output is risk and confidence, not slack.</p>
+      <div class="callout"><strong>Boundary:</strong> the flow can prioritize RTL paths before synthesis, but it cannot replace synthesis, SDC review, gate-level timing, clock-tree analysis, placement, routing, PrimeTime, or Tempus.</div>
+    </section>
+
+    <section>
+      <h2>System Context</h2>
+      <div class="diagram-wrap">
+        <pre class="mermaid">flowchart LR
+  source["HDL source&lt;br/&gt;SV / Verilog / VHDL / proprietary"]
+  tool["Optional tool evidence&lt;br/&gt;UHDM text / AST JSON / MCP/tool-provided textual design graph"]
+  extract["hdl-design-view-extractor&lt;br/&gt;source-grounded design view"]
+  view["HDL design view&lt;br/&gt;ports, registers, comb nodes, unresolved"]
+  timing["rtl-timing-analyzer&lt;br/&gt;path tracing + depth model"]
+  report["Timing report&lt;br/&gt;ranked paths, depth, suggestions"]
+  handoff["Flow handoff&lt;br/&gt;risks, actions, residual limits"]
+
+  source --&gt; extract
+  tool --&gt; extract
+  extract --&gt; view
+  view --&gt; timing
+  timing --&gt; report
+  report --&gt; handoff</pre>
+      </div>
+    </section>
+
+    <section>
+      <h2>Draw.io Architecture View</h2>
+      <p>The editable Draw.io source is stored at <a href="diagrams/rtl-timing-risk-evaluation-flow.drawio">docs/diagrams/rtl-timing-risk-evaluation-flow.drawio</a>. The rendered engineering map is summarized below.</p>
+      <div class="drawio-map">
+        <div class="node source"><b>HDL Source</b><small>SV, Verilog, VHDL, proprietary HDL</small></div>
+        <div class="node extract"><b>Extractor</b><small>source-grounded textual design view</small></div>
+        <div class="node view"><b>Design View</b><small>ports, signals, sequential and combinational nodes</small></div>
+        <div class="node timing"><b>Timing Analyzer</b><small>path tracing and structural depth model</small></div>
+        <div class="node report"><b>Timing Report</b><small>ranked paths and suggestions</small></div>
+        <div class="node handoff"><b>Flow Handoff</b><small>risk register, actions, unresolved items, limits</small></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Design View Output Model</h2>
+      <p>The extractor emits a textual design view with stable, validation-friendly sections. This diagram shows the shape of the output that feeds timing-risk evaluation.</p>
+      <div class="diagram-wrap">
+        <pre class="mermaid">flowchart TB
+  design["design<br/>view metadata + source files + language"]
+  extraction["extraction<br/>view_format + source_kind + tool provenance + confidence"]
+  ports["ports<br/>direction + width + role + line"]
+  signals["signals<br/>registers, wires, memories, ports"]
+  seq["sequential_elements<br/>flip-flops, latches, memories"]
+  comb["combinational_nodes<br/>adder, mux, compare, shift, reduction"]
+  inst["instances<br/>hierarchy and submodule bindings"]
+  unresolved["unresolved<br/>missing language constructs, cells, submodules"]
+  summary["summary<br/>counts for units, ports, sequential, comb, unresolved"]
+
+  design --> extraction
+  extraction --> ports
+  extraction --> signals
+  extraction --> seq
+  extraction --> comb
+  extraction --> inst
+  extraction --> unresolved
+  ports --> summary
+  signals --> summary
+  seq --> summary
+  comb --> summary
+  inst --> summary
+  unresolved --> summary</pre>
+      </div>
+    </section>
+
+    <section class="two-col">
+      <div>
+        <h2>End-to-End Smoke Evidence</h2>
+        <p>The current smoke-flow case validates a complete artifact chain from RTL input through intermediate artifacts into a final flow handoff.</p>
+        <table>
+          <tr><th>Stage</th><th>Artifact</th></tr>
+          <tr><td>Input RTL</td><td><code>datasets/fixtures/hdl-design-view/simple_counter.sv</code></td></tr>
+          <tr><td>Design view</td><td><code>evals/smoke/hdl-design-view-extractor/simple-counter/expected.yaml</code></td></tr>
+          <tr><td>Timing report</td><td><code>evals/smoke-flows/pre-synthesis-timing-risk/simple-counter/simple_counter_timing_report.yaml</code></td></tr>
+          <tr><td>Final handoff</td><td><code>evals/smoke-flows/pre-synthesis-timing-risk/simple-counter/expected.yaml</code></td></tr>
+        </table>
+      </div>
+      <div>
+        <h2>Observed Result</h2>
+        <div class="pill-row">
+          <span class="pill">PATH-001</span>
+          <span class="pill risk-hard">hard</span>
+          <span class="pill">depth 12</span>
+          <span class="pill">count_q to count_q</span>
+        </div>
+        <p>The simple counter feedback path contains an 8-bit increment and enable mux before loading <code>count_q</code>. The suggested action is to review the feedback path before synthesis if the target clock is aggressive.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Data Contracts</h2>
+      <table>
+        <tr><th>Artifact</th><th>Producer</th><th>Consumer</th><th>Contract</th></tr>
+        <tr><td>HDL source or tool output</td><td>User, fixture, MCP, parser</td><td>Flow</td><td>Flow input contract</td></tr>
+        <tr><td>HDL design view</td><td>hdl-design-view-extractor</td><td>rtl-timing-analyzer</td><td>hdl-design-view schema</td></tr>
+        <tr><td>Timing report</td><td>rtl-timing-analyzer</td><td>Flow</td><td>timing-report schema</td></tr>
+        <tr><td>Final flow handoff</td><td>pre-synthesis-timing-risk</td><td>User / downstream flow</td><td>pre-synthesis-timing-risk schema</td></tr>
+      </table>
+    </section>
+
+    <section>
+      <h2>Guardrails</h2>
+      <ul>
+        <li>No real slack or signoff timing claims.</li>
+        <li>No tracing through missing hierarchy or unknown cells as if known.</li>
+        <li>No false-path or multicycle inference without constraints.</li>
+        <li>No claim that synthesis will preserve the same critical path ordering.</li>
+        <li>Model-derived proprietary-language views must carry explicit confidence and unresolved entries.</li>
+      </ul>
+    </section>
+
+    <p class="footer">Generated for the asic-ai-workflows repository. This HTML is a static engineering report; Mermaid rendering uses browser-side libraries when available.</p>
+  </div>
+
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: "base",
+      themeVariables: {
+        fontFamily: "Aptos, Segoe UI, sans-serif",
+        primaryColor: "#ecfeff",
+        primaryBorderColor: "#0e7490",
+        primaryTextColor: "#111827",
+        lineColor: "#475569",
+        secondaryColor: "#f0fdf4",
+        tertiaryColor: "#fff7ed"
+      }
+    });
+  </script>
+</body>
+</html>

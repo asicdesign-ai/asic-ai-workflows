@@ -72,10 +72,11 @@ Current repository contents:
 - `rules/dv/` — Block-level DV planning and traceability rules
 - `flows/block-level-rtl-plan/` — Block-level front-end RTL planning and handoff flow
 - `flows/block-dv-plan/` — Block-level, UVM-centric DV planning flow
-- `flows/pre-synthesis-timing-risk/` — Agentic HDL design-view extraction and timing-risk analysis flow
+- `flows/pre-synthesis-timing-risk/` — Agentic HDL design-view extraction and timing-risk evaluation flow
 - `schemas/` — Report schemas for the currently implemented skills and DV flow artifacts  
 - `datasets/fixtures/` — RTL and design-view smoke fixtures for CDC, timing, DV planning, and RTL planning
 - `evals/smoke/` — Smoke-eval metadata and golden outputs for current skills and flow artifacts  
+- `evals/smoke-flows/` — End-to-end flow smoke metadata and expected handoff outputs
 - `scripts/` — Local and CI validation scripts for repo structure and smoke assets  
 - `.github/workflows/ci.yml` — Bootstrap CI checks for repo lint, skill contracts, flow contracts, and smoke assets  
 
@@ -165,6 +166,7 @@ Current validation approach:
 - skill contract checks
 - flow contract checks
 - schema-backed smoke-eval asset validation
+- schema-backed flow smoke asset validation
 - Verilator compilation of every Verilog and SystemVerilog file in the repo
 - `slang` frontend diagnostics across the same RTL compile units, with CI failing
   only on errors and logging warnings without failing

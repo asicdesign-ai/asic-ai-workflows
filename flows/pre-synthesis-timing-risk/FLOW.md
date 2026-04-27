@@ -1,14 +1,14 @@
 ---
 name: pre-synthesis-timing-risk
 description: >
-  Orchestrate pre-synthesis timing-risk analysis from HDL source or existing
+  Orchestrate pre-synthesis timing-risk evaluation from HDL source or existing
   textual design views. Use this flow when the user wants agentic handling of
   Verilog, SystemVerilog, VHDL, or proprietary HDL before synthesis: choose or
   request an AI-readable design view, extract timing-relevant structure, run the
   RTL timing analyzer, and assemble a source-grounded timing-risk handoff.
 ---
 
-# Pre-Synthesis Timing Risk Flow
+# Pre-Synthesis Timing Risk Evaluation Flow
 
 Convert HDL source or parser output into an AI-readable design view, analyze
 structural timing risk, and report actionable pre-synthesis feedback without
@@ -111,7 +111,7 @@ summary:
 
 ## Scope Limitations
 
-- Can do: orchestrate extraction and structural timing-risk analysis before
+- Can do: orchestrate extraction and structural timing-risk evaluation before
   synthesis.
 - Cannot do: produce real slack, run signoff STA, infer false paths or
   multicycle paths without constraints, or guarantee that synthesis will preserve

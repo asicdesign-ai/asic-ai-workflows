@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Pre-Synthesis Timing Risk Evaluation Flow Report",
+  "type": "object",
+  "required": [
+    "flow",
+    "design_view",
+    "timing",
+    "ranked_risks",
+    "recommended_actions",
+    "unresolved",
+    "summary"
+  ],
+  "properties": {
+    "flow": {
+      "type": "object"
+    },
+    "design_view": {
+      "type": "object"
+    },
+    "timing": {
+      "type": "object"
+    },
+    "ranked_risks": {
+      "type": "array"
+    },
+    "recommended_actions": {
+      "type": "array"
+    },
+    "unresolved": {
+      "type": "array"
+    },
+    "summary": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

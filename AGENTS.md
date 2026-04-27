@@ -127,6 +127,7 @@ Current implemented smoke assets:
 - `evals/smoke/sva-candidate-planner/`
 - `evals/smoke/functional-coverage-planner/`
 - `evals/smoke/dv-plan-assembler/`
+- `evals/smoke-flows/pre-synthesis-timing-risk/`
 
 Current supporting files:
 
@@ -138,6 +139,7 @@ Current supporting files:
 - `scripts/check_skill_contracts.py`
 - `scripts/check_flow_contracts.py`
 - `scripts/check_eval_smoke.py`
+- `scripts/check_flow_smoke.py`
 - `scripts/check_rtl_compile.py`
 - `scripts/report_validators.py`
 

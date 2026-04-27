@@ -1,0 +1,49 @@
+{
+  "flow": {
+    "name": "pre-synthesis-timing-risk",
+    "top_unit": "simple_counter",
+    "source_language": "systemverilog"
+  },
+  "design_view": {
+    "artifact": "evals/smoke/hdl-design-view-extractor/simple-counter/expected.yaml",
+    "view_format": "model_derived",
+    "confidence": "high",
+    "sequential_elements": 1,
+    "combinational_nodes": 2,
+    "unresolved": 0
+  },
+  "timing": {
+    "report": "evals/smoke-flows/pre-synthesis-timing-risk/simple-counter/simple_counter_timing_report.yaml",
+    "total_paths": 1,
+    "hard_or_worse_paths": 1,
+    "deepest_path": {
+      "id": "PATH-001",
+      "depth": 12,
+      "from": "count_q",
+      "to": "count_q"
+    }
+  },
+  "ranked_risks": [
+    {
+      "id": "RISK-001",
+      "source": "timing_report",
+      "severity": "hard",
+      "description": "The counter feedback path contains an 8-bit increment and enable mux before count_q.",
+      "evidence": {
+        "design_view_node": "COMB-001",
+        "timing_path": "PATH-001"
+      }
+    }
+  ],
+  "recommended_actions": [
+    "Review the count_q feedback path before synthesis if the target clock is aggressive.",
+    "Consider registering the increment result or accepting an extra cycle of latency before changing the RTL."
+  ],
+  "unresolved": [],
+  "summary": {
+    "design_view_ready": true,
+    "timing_report_ready": true,
+    "requires_synthesis_or_sta": false,
+    "total_unresolved": 0
+  }
+}
