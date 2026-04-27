@@ -9,7 +9,7 @@ STA run.
 The skill should provide real-world timing feedback from RTL alone. It should
 remain EDA-tool agnostic, work primarily on SystemVerilog and Verilog, and be
 designed so other RTL-like or proprietary languages can be analyzed through a
-language-neutral intermediate representation (IR).
+textual intermediate representation (IR) view of the design.
 
 This plan follows the `skill-creator` guidance:
 
@@ -84,7 +84,8 @@ The existing timing skill already provides:
 
 The main gaps are:
 
-- no language-neutral IR
+- no standard textual design-view strategy based on UHDM, AST JSON, or another
+  source-backed representation
 - no deterministic parser or analyzer scripts
 - permissive schema validation
 - limited path classes
@@ -95,30 +96,49 @@ The main gaps are:
 
 ## Architecture
 
-Use a two-stage architecture:
+Use a three-stage architecture:
 
-1. Source adapter
-2. Timing IR analyzer
+1. Source reader
+2. Textual design-view generator
+3. Timing graph analyzer
 
-The source adapter converts source artifacts into a normalized timing IR. The
-analyzer consumes only that IR and emits the timing report.
+The source reader can be an MCP tool, local parser, or model-only reasoning pass.
+It reads the original HDL and produces a textual design view that preserves
+source evidence. The timing graph analyzer consumes that textual view and emits
+the timing report.
 
-This keeps the timing analysis language agnostic. SystemVerilog and Verilog get
-a built-in adapter. Unknown or proprietary languages can be analyzed when the
-user or a project-specific tool provides equivalent IR.
+This keeps the timing analysis language agnostic while avoiding a new
+repository-specific HDL IR as the primary exchange format.
 
-## Timing Intermediate Representation
-
-Add a schema:
-
-- `schemas/timing-ir.schema.json`
+## Textual Design View Strategy
 
 IR is a common compiler and EDA-adjacent abbreviation for intermediate
-representation. In this plan, timing IR means a structured, language-neutral
-model of the timing-relevant design semantics extracted from source RTL or
-provided by a language adapter.
+representation. In this plan, a design IR view means a textual, source-grounded
+representation of the design semantics that an LLM and deterministic scripts can
+inspect.
 
-The IR should model:
+Prefer existing or tool-native textual formats in this order:
+
+1. **UHDM textual view**: use UHDM as the preferred semantic design view when a
+   language frontend can produce it. For SystemVerilog and Verilog, this means a
+   Surelog/UHDM path where available, with text dumps or other text-readable
+   projections used as the AI-facing artifact.
+2. **AST JSON**: use parser-provided AST JSON when UHDM is unavailable or too
+   heavy. For SystemVerilog, slang or pyslang AST/CST JSON with source locations
+   is the preferred second option.
+3. **Tool-provided textual AST or design graph**: for VHDL or proprietary
+   languages, prefer an MCP/tool-provided textual AST, elaborated design tree, or
+   graph dump before asking the model to infer structure from raw source alone.
+4. **Model-generated design view**: when no parser or MCP tool is available, the
+   model may generate a textual design view from the source text, but every
+   register, operation, connection, width, and hierarchy claim must include
+   evidence and confidence.
+
+The timing analyzer may derive a smaller internal timing graph from these
+textual views. That timing graph is an analysis view, not a new public HDL
+standard.
+
+The textual design view should expose:
 
 - source files and language identifiers
 - modules or design units
@@ -132,8 +152,8 @@ The IR should model:
 - unresolved modules, cells, macros, functions, and language constructs
 - source locations for all evidence-backed objects
 
-The IR should not require SystemVerilog-specific concepts. It should express the
-semantic structures needed for timing:
+The timing graph extracted from the design view should express only the semantic
+structures needed for timing:
 
 - flip-flop or latch-like sequential storage
 - combinational logic
@@ -152,6 +172,8 @@ Add a reference:
 The adapter contract should define the minimum information needed to analyze any
 language:
 
+- which textual design-view format is produced, such as UHDM dump, AST JSON, or
+  a tool-specific JSON tree
 - how registers or sequential elements are proven
 - how combinational assignments are represented
 - how widths are determined or marked unknown
@@ -163,9 +185,10 @@ language:
 For proprietary or unknown languages, the skill should not pretend to understand
 syntax. It should request either:
 
-- a timing IR file following the schema
+- a UHDM-compatible textual view if the project has a frontend for that language
+- an AST JSON or design graph dump from an MCP/tool adapter
 - a small adapter description that maps the language's sequential and
-  combinational constructs into the IR
+  combinational constructs into a source-backed textual design view
 - manually extracted register, operation, and connectivity data
 
 ## Skill Structure
@@ -184,7 +207,8 @@ Recommended responsibility split:
 - `SKILL.md`: trigger description, inputs, workflow, output contract, hard limits
 - `timing-analysis-model.md`: path construction, endpoint classes, confidence
   rules, hierarchy handling
-- `language-adapter-contract.md`: IR contract for SV/V and other languages
+- `language-adapter-contract.md`: textual design-view contract for SV/V, VHDL,
+  and proprietary languages
 - `operation-depth-model.md`: configurable operation-depth formulas and
   calibration guidance
 - `optimization-guidance.md`: RTL-level mitigation patterns and when they apply
@@ -193,15 +217,15 @@ Recommended responsibility split:
 
 Add scripts under the skill:
 
-- `skills/rtl-timing-analyzer/scripts/extract_sv_timing_ir.py`
-- `skills/rtl-timing-analyzer/scripts/analyze_timing_ir.py`
+- `skills/rtl-timing-analyzer/scripts/extract_sv_design_view.py`
+- `skills/rtl-timing-analyzer/scripts/analyze_timing_view.py`
 
 The extractor should be conservative and best effort. It should prefer emitting
 unresolved objects over inventing behavior.
 
 The analyzer should:
 
-- consume timing IR JSON or YAML
+- consume UHDM text dumps, AST JSON, or another supported textual design view
 - build path graphs
 - identify timing endpoints
 - rank paths
@@ -216,10 +240,13 @@ keeps complex graph traversal outside `SKILL.md`.
 
 The upgraded skill should perform these steps:
 
-1. Load source RTL files, filelists, or timing IR.
-2. If source is SystemVerilog or Verilog, run the SV/V adapter where possible.
-3. If source is another language, require a timing IR or adapter mapping before
-   claiming analysis coverage.
+1. Load source RTL files, filelists, UHDM text dumps, AST JSON, or another
+   textual design view.
+2. If source is SystemVerilog or Verilog, prefer UHDM when available and use
+   slang or pyslang AST JSON as the second option.
+3. If source is VHDL or proprietary, prefer an MCP/tool-provided textual AST or
+   design graph. If none exists, generate a model-derived textual design view
+   with explicit evidence and confidence.
 4. Identify all sequential endpoints with explicit evidence.
 5. Build combinational fanin and fanout graphs between endpoints.
 6. Classify paths by endpoint type.
@@ -381,11 +408,12 @@ Expand timing fixtures to cover:
 - cross-clock register path
 - input-to-reg boundary path
 - reg-to-output boundary path
-- timing IR for a proprietary or unknown language
+- UHDM text, AST JSON, or model-generated textual design view for a proprietary
+  or unknown language
 
 Each smoke case should include:
 
-- source or IR input
+- source, UHDM text, AST JSON, or another textual design-view input
 - expected timing report
 - metadata assertions
 - schema validation
@@ -448,7 +476,7 @@ analyze these RTL files and emit the timing report.
 
 The validation should inspect:
 
-- whether the skill asks for IR when the language is unknown
+- whether the skill asks for a textual design view when the language is unknown
 - whether unresolved hierarchy stays unresolved
 - whether reg-to-reg paths are ranked correctly
 - whether suggestions are useful and do not invent synthesis behavior
@@ -456,14 +484,14 @@ The validation should inspect:
 
 ## Rollout Order
 
-1. Add timing IR schema and language adapter contract.
+1. Add UHDM/AST JSON design-view support and language adapter contract.
 2. Rename the skill folder and slug to `rtl-timing-analyzer` with `git mv`.
 3. Update repo-wide references to the new skill name.
 4. Tighten the timing report schema while preserving compatibility where needed.
 5. Add the timing risk classification rule.
 6. Refactor `SKILL.md` and add references.
 7. Extend `default_config.yaml`.
-8. Add deterministic IR analyzer script.
+8. Add deterministic textual design-view analyzer script.
 9. Add SV/V extraction script or staged extractor scaffolding.
 10. Expand fixtures and smoke expected outputs.
 11. Strengthen validators.
@@ -476,7 +504,8 @@ The validation should inspect:
 The upgraded skill is ready when it can:
 
 - analyze SystemVerilog and Verilog RTL without vendor EDA tools
-- consume timing IR for other or proprietary languages
+- consume UHDM text, AST JSON, or source-grounded textual design views for other
+  or proprietary languages
 - emit deterministic YAML matching a strict schema
 - rank register-to-register paths by structural timing risk
 - explain every path with source-level evidence
