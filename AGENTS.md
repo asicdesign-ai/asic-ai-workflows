@@ -53,7 +53,8 @@ Current implemented skills:
 - `skills/rtl-rdc-auditor/`
 - `skills/block-rtl-package-assembler/`
 - `skills/rtl-cdc-linter/`
-- `skills/rtl-timing-path-analyzer/`
+- `skills/hdl-design-view-extractor/`
+- `skills/rtl-timing-analyzer/`
 - `skills/design-intent-to-dv-objectives/`
 - `skills/rtl-verification-surface-extractor/`
 - `skills/uvm-test-matrix-planner/`
@@ -84,9 +85,11 @@ Current implemented flows:
 
 - `flows/block-level-rtl-plan/`
 - `flows/block-dv-plan/`
+- `flows/pre-synthesis-timing-risk/`
 
 Current implemented schemas:
 
+- `schemas/hdl-design-view.schema.json`
 - `schemas/block-requirements.schema.json`
 - `schemas/microarchitecture-spec.schema.json`
 - `schemas/rtl-design.schema.json`
@@ -104,6 +107,7 @@ Current implemented schemas:
 
 Current implemented smoke assets:
 
+- `datasets/fixtures/hdl-design-view/`
 - `datasets/fixtures/rtl-plan/`
 - `datasets/fixtures/cdc/`
 - `datasets/fixtures/timing/`
@@ -115,7 +119,8 @@ Current implemented smoke assets:
 - `evals/smoke/rtl-rdc-auditor/`
 - `evals/smoke/block-rtl-package-assembler/`
 - `evals/smoke/rtl-cdc-linter/`
-- `evals/smoke/rtl-timing-path-analyzer/`
+- `evals/smoke/hdl-design-view-extractor/`
+- `evals/smoke/rtl-timing-analyzer/`
 - `evals/smoke/design-intent-to-dv-objectives/`
 - `evals/smoke/rtl-verification-surface-extractor/`
 - `evals/smoke/uvm-test-matrix-planner/`
@@ -125,7 +130,7 @@ Current implemented smoke assets:
 
 Current supporting files:
 
-- `skills/rtl-timing-path-analyzer/default_config.yaml`
+- `skills/rtl-timing-analyzer/default_config.yaml`
 - `.github/workflows/ci.yml`
 - `.github/pull_request_template.md`
 - `scripts/repo_lint.py`
@@ -251,12 +256,14 @@ Start here for most tasks:
 - `README.md`
 - `flows/block-level-rtl-plan/FLOW.md`
 - `flows/block-dv-plan/FLOW.md`
+- `flows/pre-synthesis-timing-risk/FLOW.md`
 - `skills/block-requirements-normalizer/SKILL.md`
 - `skills/microarchitecture-spec-author/SKILL.md`
 - `skills/rtl-designer/SKILL.md`
 - `skills/block-rtl-package-assembler/SKILL.md`
 - `skills/rtl-cdc-linter/SKILL.md`
-- `skills/rtl-timing-path-analyzer/SKILL.md`
+- `skills/hdl-design-view-extractor/SKILL.md`
+- `skills/rtl-timing-analyzer/SKILL.md`
 - `skills/design-intent-to-dv-objectives/SKILL.md`
 - `skills/dv-plan-assembler/SKILL.md`
 - `rules/common/evidence-grounding.md`

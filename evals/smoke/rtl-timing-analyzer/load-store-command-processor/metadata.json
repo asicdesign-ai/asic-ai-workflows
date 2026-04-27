@@ -1,10 +1,10 @@
 {
   "eval_name": "load-store-command-processor",
-  "skill": "rtl-timing-path-analyzer",
+  "skill": "rtl-timing-analyzer",
   "input_files": [
     "datasets/fixtures/rtl-plan/load_store_command_processor.sv"
   ],
-  "expected_output": "evals/smoke/rtl-timing-path-analyzer/load-store-command-processor/expected.yaml",
+  "expected_output": "evals/smoke/rtl-timing-analyzer/load-store-command-processor/expected.yaml",
   "schema": "schemas/timing-report.schema.json",
   "assertions": [
     "reports a moderate fixed-priority selection path into the WORK register",

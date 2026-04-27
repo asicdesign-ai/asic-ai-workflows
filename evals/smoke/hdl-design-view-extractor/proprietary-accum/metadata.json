@@ -1,0 +1,14 @@
+{
+  "eval_name": "proprietary-accum",
+  "skill": "hdl-design-view-extractor",
+  "input_files": [
+    "datasets/fixtures/hdl-design-view/proprietary_accum.hdl"
+  ],
+  "expected_output": "evals/smoke/hdl-design-view-extractor/proprietary-accum/expected.yaml",
+  "schema": "schemas/hdl-design-view.schema.json",
+  "assertions": [
+    "handles a proprietary HDL-like source as a model-derived design view",
+    "keeps confidence medium rather than pretending full language support",
+    "extracts visible sequential and combinational timing-relevant structure"
+  ]
+}

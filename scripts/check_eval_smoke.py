@@ -13,6 +13,7 @@ from report_validators import (
     validate_dv_coverage_plan,
     validate_dv_objectives,
     validate_dv_plan,
+    validate_hdl_design_view,
     validate_microarchitecture_spec,
     validate_rtl_verification_surface,
     validate_rdc_report,
@@ -99,6 +100,8 @@ def validate_case(metadata_path: Path, errors: list[str]) -> None:
     try:
         if schema_name == "cdc-report.schema.json":
             validate_cdc_report(expected)
+        elif schema_name == "hdl-design-view.schema.json":
+            validate_hdl_design_view(expected)
         elif schema_name == "timing-report.schema.json":
             validate_timing_report(expected)
         elif schema_name == "dv-objectives.schema.json":

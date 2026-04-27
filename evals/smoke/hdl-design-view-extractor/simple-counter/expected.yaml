@@ -1,0 +1,116 @@
+{
+  "design": {
+    "view_id": "VIEW-001",
+    "top_units": [
+      "simple_counter"
+    ],
+    "source_language": "systemverilog",
+    "source_files": [
+      "datasets/fixtures/hdl-design-view/simple_counter.sv"
+    ]
+  },
+  "extraction": {
+    "view_format": "model_derived",
+    "source_kind": "rtl_source",
+    "tool": {
+      "name": "none",
+      "version": null,
+      "evidence": "model-derived from visible source"
+    },
+    "confidence": "high"
+  },
+  "ports": [
+    {
+      "name": "clk",
+      "direction": "input",
+      "width": 1,
+      "role": "clock",
+      "line": 2
+    },
+    {
+      "name": "rst_n",
+      "direction": "input",
+      "width": 1,
+      "role": "reset",
+      "line": 3
+    },
+    {
+      "name": "enable",
+      "direction": "input",
+      "width": 1,
+      "role": "control",
+      "line": 4
+    },
+    {
+      "name": "count",
+      "direction": "output",
+      "width": 8,
+      "role": "data",
+      "line": 5
+    }
+  ],
+  "signals": [
+    {
+      "name": "count_q",
+      "width": 8,
+      "kind": "register",
+      "line": 7
+    },
+    {
+      "name": "count_d",
+      "width": 8,
+      "kind": "wire",
+      "line": 8
+    }
+  ],
+  "sequential_elements": [
+    {
+      "id": "SEQ-001",
+      "name": "count_q",
+      "kind": "flip_flop",
+      "width": 8,
+      "clock": "clk",
+      "reset": "rst_n",
+      "evidence": "count_q is assigned inside always_ff @(posedge clk or negedge rst_n).",
+      "line": 10,
+      "confidence": "high"
+    }
+  ],
+  "combinational_nodes": [
+    {
+      "id": "COMB-001",
+      "op": "adder",
+      "output": "count_q_plus_1",
+      "inputs": [
+        "count_q",
+        "8'h01"
+      ],
+      "width": 8,
+      "line": 18,
+      "confidence": "high"
+    },
+    {
+      "id": "COMB-002",
+      "op": "mux",
+      "output": "count_d",
+      "inputs": [
+        "enable",
+        "count_q_plus_1",
+        "count_q"
+      ],
+      "width": 8,
+      "line": 18,
+      "confidence": "high"
+    }
+  ],
+  "instances": [],
+  "unresolved": [],
+  "summary": {
+    "total_design_units": 1,
+    "total_ports": 4,
+    "total_sequential_elements": 1,
+    "total_combinational_nodes": 2,
+    "total_instances": 0,
+    "total_unresolved": 0
+  }
+}

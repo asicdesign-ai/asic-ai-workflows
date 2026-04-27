@@ -1,0 +1,115 @@
+{
+  "design": {
+    "view_id": "VIEW-001",
+    "top_units": [
+      "accum8"
+    ],
+    "source_language": "proprietary",
+    "source_files": [
+      "datasets/fixtures/hdl-design-view/proprietary_accum.hdl"
+    ]
+  },
+  "extraction": {
+    "view_format": "model_derived",
+    "source_kind": "rtl_source",
+    "tool": {
+      "name": "none",
+      "version": null,
+      "evidence": "model-derived from visible proprietary HDL-like source"
+    },
+    "confidence": "medium"
+  },
+  "ports": [
+    {
+      "name": "enable",
+      "direction": "input",
+      "width": 1,
+      "role": "control",
+      "line": 5
+    },
+    {
+      "name": "data_i",
+      "direction": "input",
+      "width": 8,
+      "role": "data",
+      "line": 6
+    },
+    {
+      "name": "total_o",
+      "direction": "output",
+      "width": 8,
+      "role": "data",
+      "line": 7
+    }
+  ],
+  "signals": [
+    {
+      "name": "total_q",
+      "width": 8,
+      "kind": "register",
+      "line": 9
+    },
+    {
+      "name": "next_total",
+      "width": 8,
+      "kind": "wire",
+      "line": 10
+    }
+  ],
+  "sequential_elements": [
+    {
+      "id": "SEQ-001",
+      "name": "total_q",
+      "kind": "flip_flop",
+      "width": 8,
+      "clock": "main_clk",
+      "reset": "clear_n",
+      "evidence": "state total_q declares rising(main_clk) and reset clear_n.",
+      "line": 9,
+      "confidence": "medium"
+    }
+  ],
+  "combinational_nodes": [
+    {
+      "id": "COMB-001",
+      "op": "adder",
+      "output": "total_q_plus_data_i",
+      "inputs": [
+        "total_q",
+        "data_i"
+      ],
+      "width": 8,
+      "line": 12,
+      "confidence": "medium"
+    },
+    {
+      "id": "COMB-002",
+      "op": "mux",
+      "output": "next_total",
+      "inputs": [
+        "enable",
+        "total_q_plus_data_i",
+        "total_q"
+      ],
+      "width": 8,
+      "line": 12,
+      "confidence": "medium"
+    }
+  ],
+  "instances": [],
+  "unresolved": [
+    {
+      "name": "proprietary_language_semantics",
+      "line": 1,
+      "reason": "language grammar not provided; design view is model-derived from visible syntax"
+    }
+  ],
+  "summary": {
+    "total_design_units": 1,
+    "total_ports": 3,
+    "total_sequential_elements": 1,
+    "total_combinational_nodes": 2,
+    "total_instances": 0,
+    "total_unresolved": 1
+  }
+}

@@ -65,7 +65,7 @@ def check_h1(skill_path: Path, body: str, errors: list[str]) -> None:
 
 
 def check_default_config(errors: list[str]) -> None:
-    config_path = SKILLS_DIR / "rtl-timing-path-analyzer" / "default_config.yaml"
+    config_path = SKILLS_DIR / "rtl-timing-analyzer" / "default_config.yaml"
     rel = config_path.relative_to(ROOT)
     if not config_path.exists():
         errors.append(f"missing timing default config: {rel}")

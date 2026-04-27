@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "RTL Timing Path Analyzer Report",
+  "title": "RTL Timing Analyzer Report",
   "type": "object",
   "required": [
     "module",

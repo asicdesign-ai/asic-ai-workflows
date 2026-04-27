@@ -53,7 +53,8 @@ Current repository contents:
 - `skills/rtl-rdc-auditor/` — Pre-EDA RTL RDC audit skill
 - `skills/block-rtl-package-assembler/` — Front-end RTL handoff package assembly skill
 - `skills/rtl-cdc-linter/` — Pre-EDA RTL CDC lint skill  
-- `skills/rtl-timing-path-analyzer/` — Pre-synthesis RTL timing path analysis skill  
+- `skills/hdl-design-view-extractor/` — Source-grounded textual HDL design-view extraction skill
+- `skills/rtl-timing-analyzer/` — Focused pre-synthesis RTL timing analysis skill
 - `skills/design-intent-to-dv-objectives/` — Block-level DV objective planning skill
 - `skills/rtl-verification-surface-extractor/` — Block-level verification surface extraction skill
 - `skills/uvm-test-matrix-planner/` — UVM-centric DV test planning skill
@@ -71,8 +72,9 @@ Current repository contents:
 - `rules/dv/` — Block-level DV planning and traceability rules
 - `flows/block-level-rtl-plan/` — Block-level front-end RTL planning and handoff flow
 - `flows/block-dv-plan/` — Block-level, UVM-centric DV planning flow
+- `flows/pre-synthesis-timing-risk/` — Agentic HDL design-view extraction and timing-risk analysis flow
 - `schemas/` — Report schemas for the currently implemented skills and DV flow artifacts  
-- `datasets/fixtures/` — RTL smoke fixtures for CDC, timing, DV planning, and RTL planning  
+- `datasets/fixtures/` — RTL and design-view smoke fixtures for CDC, timing, DV planning, and RTL planning
 - `evals/smoke/` — Smoke-eval metadata and golden outputs for current skills and flow artifacts  
 - `scripts/` — Local and CI validation scripts for repo structure and smoke assets  
 - `.github/workflows/ci.yml` — Bootstrap CI checks for repo lint, skill contracts, flow contracts, and smoke assets  
@@ -105,7 +107,8 @@ Current skills:
 - RTL Lint Auditor
 - RTL RDC Auditor
 - Block RTL Package Assembler
-- RTL Timing Path Analyzer  
+- HDL Design View Extractor
+- RTL Timing Analyzer
 - RTL CDC Linter  
 - Design Intent To DV Objectives
 - RTL Verification Surface Extractor
@@ -178,13 +181,13 @@ not yet execute live LLM runs against the corpus.
 
 A **flow** is a multi-step workflow that combines skills and rules.
 
-Example: Timing Closure Flow
+Example: Pre-Synthesis Timing Risk Flow
 
-1. Run STA  
-2. Extract worst paths  
-3. Classify violations  
-4. Suggest fixes  
-5. Re-run timing  
+1. Extract or receive a textual HDL design view
+2. Identify register and combinational timing structure
+3. Estimate structural reg-to-reg path depth
+4. Classify timing risk and unresolved hierarchy
+5. Suggest RTL-level fixes before synthesis
 
 Current implemented flow:
 
@@ -194,6 +197,9 @@ Current implemented flow:
 - `block-dv-plan` — derive DV objectives, extract the verification surface, plan
   UVM tests/assertions/coverage, and assemble one final structured DV plan with
   optional CDC and timing risks
+- `pre-synthesis-timing-risk` — convert HDL source or existing textual design
+  views into source-grounded design structure, run focused RTL timing analysis,
+  and assemble a pre-synthesis timing-risk handoff without claiming STA
 
 ---
 

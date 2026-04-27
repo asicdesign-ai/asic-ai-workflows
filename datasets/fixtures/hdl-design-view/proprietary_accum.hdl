@@ -1,0 +1,15 @@
+unit accum8 {
+  clock main_clk;
+  reset clear_n active_low async;
+
+  input enable : bit;
+  input data_i : bits[8];
+  output total_o : bits[8];
+
+  state total_q : bits[8] on rising(main_clk) reset clear_n to 0;
+  wire next_total : bits[8];
+
+  next_total = enable ? total_q + data_i : total_q;
+  total_q <= next_total;
+  total_o = total_q;
+}

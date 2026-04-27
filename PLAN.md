@@ -30,7 +30,8 @@ Use skills for specific engineering tasks with deterministic structured outputs.
 Examples:
 
 - `rtl-cdc-linter`
-- `rtl-timing-path-analyzer`
+- `hdl-design-view-extractor`
+- `rtl-timing-analyzer`
 - `rtl-reset-rdc-auditor`
 - `rtl-dft-scanability-auditor`
 - `scan-insertion-planner`
@@ -182,3 +183,14 @@ front-end audits, and structured DV handoff.
    planning.
 3. Add broader end-to-end examples that chain `block-level-rtl-plan` into
    `block-dv-plan` and future front-end review flows.
+
+## Timing Flow Decomposition
+
+Pre-synthesis timing risk is now split into narrow reusable pieces:
+
+- `skills/hdl-design-view-extractor/` extracts source-grounded textual design
+  views from HDL or tool output.
+- `skills/rtl-timing-analyzer/` analyzes an existing design view or small visible
+  RTL block for structural timing risk.
+- `flows/pre-synthesis-timing-risk/` orchestrates extraction, timing analysis,
+  unresolved-object handling, and final timing-risk handoff.

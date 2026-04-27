@@ -1,0 +1,14 @@
+{
+  "eval_name": "simple-counter",
+  "skill": "hdl-design-view-extractor",
+  "input_files": [
+    "datasets/fixtures/hdl-design-view/simple_counter.sv"
+  ],
+  "expected_output": "evals/smoke/hdl-design-view-extractor/simple-counter/expected.yaml",
+  "schema": "schemas/hdl-design-view.schema.json",
+  "assertions": [
+    "extracts a source-grounded model-derived design view without running timing analysis",
+    "identifies the count_q sequential element and count_d combinational update",
+    "preserves line evidence for ports, state, and combinational nodes"
+  ]
+}

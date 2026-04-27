@@ -1,11 +1,11 @@
 {
   "eval_name": "cross-module-path",
-  "skill": "rtl-timing-path-analyzer",
+  "skill": "rtl-timing-analyzer",
   "input_files": [
     "datasets/fixtures/timing/cross_module_path_top.sv",
     "datasets/fixtures/timing/cross_module_path_add8.sv"
   ],
-  "expected_output": "evals/smoke/rtl-timing-path-analyzer/cross-module-path/expected.yaml",
+  "expected_output": "evals/smoke/rtl-timing-analyzer/cross-module-path/expected.yaml",
   "schema": "schemas/timing-report.schema.json",
   "assertions": [
     "marks the path as cross-module when the submodule logic is available",

@@ -19,6 +19,9 @@ RISK_ID_RE = re.compile(r"^RISK-\d{3}$")
 LINT_ID_RE = re.compile(r"^LINT-\d{3}$")
 RDC_ID_RE = re.compile(r"^RDC-\d{3}$")
 UNR_ID_RE = re.compile(r"^UNR-\d{3}$")
+VIEW_ID_RE = re.compile(r"^VIEW-\d{3}$")
+SEQ_ID_RE = re.compile(r"^SEQ-\d{3}$")
+COMB_ID_RE = re.compile(r"^COMB-\d{3}$")
 
 
 class ValidationError(Exception):
@@ -86,6 +89,133 @@ def validate_design_context(
     if require_intent_summary:
         require_keys(design, ["intent_summary"], context)
         require_type(design["intent_summary"], str, f"{context}.intent_summary")
+
+
+def validate_hdl_design_view(data: dict) -> None:
+    require_type(data, dict, "hdl design view")
+    require_keys(
+        data,
+        [
+            "design",
+            "extraction",
+            "ports",
+            "signals",
+            "sequential_elements",
+            "combinational_nodes",
+            "instances",
+            "unresolved",
+            "summary",
+        ],
+        "hdl design view",
+    )
+
+    valid_languages = {"systemverilog", "verilog", "vhdl", "proprietary", "unknown"}
+    valid_view_formats = {"uhdm_text", "ast_json", "tool_design_graph", "model_derived"}
+    valid_source_kinds = {"rtl_source", "uhdm_dump", "ast_json", "tool_output", "manual"}
+    valid_confidence = {"high", "medium", "low"}
+
+    design = data["design"]
+    require_type(design, dict, "hdl design view.design")
+    require_keys(design, ["view_id", "top_units", "source_language", "source_files"], "hdl design view.design")
+    if not VIEW_ID_RE.match(design["view_id"]):
+        raise ValidationError("hdl design view.design.view_id must match VIEW-NNN")
+    require_string_list(design["top_units"], "hdl design view.design.top_units", allow_empty=False)
+    require_enum(design["source_language"], valid_languages, "hdl design view.design.source_language")
+    require_string_list(design["source_files"], "hdl design view.design.source_files", allow_empty=False)
+
+    extraction = data["extraction"]
+    require_type(extraction, dict, "hdl design view.extraction")
+    require_keys(extraction, ["view_format", "source_kind", "tool", "confidence"], "hdl design view.extraction")
+    require_enum(extraction["view_format"], valid_view_formats, "hdl design view.extraction.view_format")
+    require_enum(extraction["source_kind"], valid_source_kinds, "hdl design view.extraction.source_kind")
+    require_enum(extraction["confidence"], valid_confidence, "hdl design view.extraction.confidence")
+    require_type(extraction["tool"], dict, "hdl design view.extraction.tool")
+    require_keys(extraction["tool"], ["name", "version", "evidence"], "hdl design view.extraction.tool")
+    require_type(extraction["tool"]["name"], str, "hdl design view.extraction.tool.name")
+    require_optional_type(extraction["tool"]["version"], str, "hdl design view.extraction.tool.version")
+    require_type(extraction["tool"]["evidence"], str, "hdl design view.extraction.tool.evidence")
+
+    valid_directions = {"input", "output", "inout"}
+    valid_roles = {"clock", "reset", "control", "data", "status", "interrupt", "handshake", "unknown"}
+    require_type(data["ports"], list, "hdl design view.ports")
+    for index, item in enumerate(data["ports"], start=1):
+        context = f"hdl design view.ports[{index}]"
+        require_type(item, dict, context)
+        require_keys(item, ["name", "direction", "width", "role", "line"], context)
+        require_type(item["name"], str, f"{context}.name")
+        require_enum(item["direction"], valid_directions, f"{context}.direction")
+        require_type(item["width"], int, f"{context}.width")
+        require_enum(item["role"], valid_roles, f"{context}.role")
+        require_type(item["line"], int, f"{context}.line")
+
+    valid_signal_kinds = {"register", "wire", "memory", "port", "unknown"}
+    require_type(data["signals"], list, "hdl design view.signals")
+    for index, item in enumerate(data["signals"], start=1):
+        context = f"hdl design view.signals[{index}]"
+        require_type(item, dict, context)
+        require_keys(item, ["name", "width", "kind", "line"], context)
+        require_type(item["name"], str, f"{context}.name")
+        require_type(item["width"], int, f"{context}.width")
+        require_enum(item["kind"], valid_signal_kinds, f"{context}.kind")
+        require_type(item["line"], int, f"{context}.line")
+
+    valid_seq_kinds = {"flip_flop", "latch", "memory", "unknown"}
+    require_type(data["sequential_elements"], list, "hdl design view.sequential_elements")
+    for index, item in enumerate(data["sequential_elements"], start=1):
+        context = f"hdl design view.sequential_elements[{index}]"
+        require_type(item, dict, context)
+        require_keys(item, ["id", "name", "kind", "width", "clock", "reset", "evidence", "line", "confidence"], context)
+        if not SEQ_ID_RE.match(item["id"]):
+            raise ValidationError(f"{context}.id must match SEQ-NNN")
+        require_type(item["name"], str, f"{context}.name")
+        require_enum(item["kind"], valid_seq_kinds, f"{context}.kind")
+        require_type(item["width"], int, f"{context}.width")
+        require_type(item["clock"], str, f"{context}.clock")
+        require_optional_type(item["reset"], str, f"{context}.reset")
+        require_type(item["evidence"], str, f"{context}.evidence")
+        require_type(item["line"], int, f"{context}.line")
+        require_enum(item["confidence"], valid_confidence, f"{context}.confidence")
+
+    require_type(data["combinational_nodes"], list, "hdl design view.combinational_nodes")
+    for index, item in enumerate(data["combinational_nodes"], start=1):
+        context = f"hdl design view.combinational_nodes[{index}]"
+        require_type(item, dict, context)
+        require_keys(item, ["id", "op", "output", "inputs", "width", "line", "confidence"], context)
+        if not COMB_ID_RE.match(item["id"]):
+            raise ValidationError(f"{context}.id must match COMB-NNN")
+        require_type(item["op"], str, f"{context}.op")
+        require_type(item["output"], str, f"{context}.output")
+        require_string_list(item["inputs"], f"{context}.inputs", allow_empty=False)
+        require_type(item["width"], int, f"{context}.width")
+        require_type(item["line"], int, f"{context}.line")
+        require_enum(item["confidence"], valid_confidence, f"{context}.confidence")
+
+    require_type(data["instances"], list, "hdl design view.instances")
+    require_type(data["unresolved"], list, "hdl design view.unresolved")
+    for index, item in enumerate(data["unresolved"], start=1):
+        context = f"hdl design view.unresolved[{index}]"
+        require_type(item, dict, context)
+        require_keys(item, ["name", "line", "reason"], context)
+        require_type(item["name"], str, f"{context}.name")
+        require_type(item["line"], int, f"{context}.line")
+        require_type(item["reason"], str, f"{context}.reason")
+
+    summary = data["summary"]
+    require_type(summary, dict, "hdl design view.summary")
+    require_keys(
+        summary,
+        [
+            "total_design_units",
+            "total_ports",
+            "total_sequential_elements",
+            "total_combinational_nodes",
+            "total_instances",
+            "total_unresolved",
+        ],
+        "hdl design view.summary",
+    )
+    for key, value in summary.items():
+        require_type(value, int, f"hdl design view.summary.{key}")
 
 
 def validate_objective_ids(value, context: str) -> None:

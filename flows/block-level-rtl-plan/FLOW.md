@@ -69,7 +69,7 @@ Run these skills in order:
 4. `../../skills/rtl-lint-auditor/SKILL.md`
 5. `../../skills/rtl-cdc-linter/SKILL.md`
 6. `../../skills/rtl-rdc-auditor/SKILL.md`
-7. `../../skills/rtl-timing-path-analyzer/SKILL.md`
+7. `../../skills/rtl-timing-analyzer/SKILL.md`
 8. `../../skills/block-rtl-package-assembler/SKILL.md`
 
 ## Execution

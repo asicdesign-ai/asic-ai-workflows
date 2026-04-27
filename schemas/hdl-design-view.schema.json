@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HDL Design View",
+  "type": "object",
+  "required": [
+    "design",
+    "extraction",
+    "ports",
+    "signals",
+    "sequential_elements",
+    "combinational_nodes",
+    "instances",
+    "unresolved",
+    "summary"
+  ],
+  "properties": {
+    "design": {
+      "type": "object"
+    },
+    "extraction": {
+      "type": "object"
+    },
+    "ports": {
+      "type": "array"
+    },
+    "signals": {
+      "type": "array"
+    },
+    "sequential_elements": {
+      "type": "array"
+    },
+    "combinational_nodes": {
+      "type": "array"
+    },
+    "instances": {
+      "type": "array"
+    },
+    "unresolved": {
+      "type": "array"
+    },
+    "summary": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

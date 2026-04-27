@@ -145,7 +145,14 @@ The smoke suite should cover at least:
 - naming-only synchronizer trap
 - deduplicated multi-consumer crossing
 
-### RTL Timing Path Analyzer
+### HDL Design View Extractor
+
+The smoke suite should cover at least:
+
+- SystemVerilog source converted into a model-derived design view
+- proprietary HDL-like source converted into a confidence-limited design view
+
+### RTL Timing Analyzer
 
 The smoke suite should cover at least:
 
