@@ -46,16 +46,28 @@ The current repository skill is named:
 - `skills/rtl-timing-path-analyzer/`
 
 The user-facing name `rtl-timing-analyzer` is clearer for the upgraded scope.
-There are two acceptable paths:
+The upgrade should include a real folder and slug migration rather than leaving
+the old name in place indefinitely.
 
-1. Keep the folder and slug as `rtl-timing-path-analyzer` to avoid repo-wide
-   reference churn.
-2. Rename to `rtl-timing-analyzer` and update all references in `README.md`,
-   flows, eval metadata, schemas, validators, and smoke assets.
+Rename:
 
-Recommended first step: keep the existing slug and update the description to make
-the broader capability clear. Rename later only if the repository adopts a
-formal naming cleanup.
+- from `skills/rtl-timing-path-analyzer/`
+- to `skills/rtl-timing-analyzer/`
+
+The rename should update all references in:
+
+- `README.md`
+- `AGENTS.md`
+- flows
+- eval metadata
+- schemas and validators
+- smoke assets
+- docs
+- any future skill references or forward-test prompts
+
+The migration should preserve git history with `git mv` and should land with the
+first implementation slice unless doing so would block validation. If temporary
+compatibility is needed, keep it explicit and short-lived.
 
 ## Current Repository Baseline
 
@@ -130,7 +142,7 @@ semantic structures needed for timing:
 
 Add a reference:
 
-- `skills/rtl-timing-path-analyzer/references/language-adapter-contract.md`
+- `skills/rtl-timing-analyzer/references/language-adapter-contract.md`
 
 The adapter contract should define the minimum information needed to analyze any
 language:
@@ -176,8 +188,8 @@ Recommended responsibility split:
 
 Add scripts under the skill:
 
-- `skills/rtl-timing-path-analyzer/scripts/extract_sv_timing_ir.py`
-- `skills/rtl-timing-path-analyzer/scripts/analyze_timing_ir.py`
+- `skills/rtl-timing-analyzer/scripts/extract_sv_timing_ir.py`
+- `skills/rtl-timing-analyzer/scripts/analyze_timing_ir.py`
 
 The extractor should be conservative and best effort. It should prefer emitting
 unresolved objects over inventing behavior.
@@ -425,7 +437,7 @@ answers.
 Forward-test prompts should look like:
 
 ```text
-Use the rtl-timing-path-analyzer skill at skills/rtl-timing-path-analyzer to
+Use the rtl-timing-analyzer skill at skills/rtl-timing-analyzer to
 analyze these RTL files and emit the timing report.
 ```
 
@@ -440,17 +452,19 @@ The validation should inspect:
 ## Rollout Order
 
 1. Add timing IR schema and language adapter contract.
-2. Tighten the timing report schema while preserving compatibility where needed.
-3. Add the timing risk classification rule.
-4. Refactor `SKILL.md` and add references.
-5. Extend `default_config.yaml`.
-6. Add deterministic IR analyzer script.
-7. Add SV/V extraction script or staged extractor scaffolding.
-8. Expand fixtures and smoke expected outputs.
-9. Strengthen validators.
-10. Update flow and handoff package summaries.
-11. Run repo checks and smoke validation.
-12. Forward-test the skill on fresh tasks and iterate.
+2. Rename the skill folder and slug to `rtl-timing-analyzer` with `git mv`.
+3. Update repo-wide references to the new skill name.
+4. Tighten the timing report schema while preserving compatibility where needed.
+5. Add the timing risk classification rule.
+6. Refactor `SKILL.md` and add references.
+7. Extend `default_config.yaml`.
+8. Add deterministic IR analyzer script.
+9. Add SV/V extraction script or staged extractor scaffolding.
+10. Expand fixtures and smoke expected outputs.
+11. Strengthen validators.
+12. Update flow and handoff package summaries.
+13. Run repo checks and smoke validation.
+14. Forward-test the skill on fresh tasks and iterate.
 
 ## Acceptance Criteria
 
