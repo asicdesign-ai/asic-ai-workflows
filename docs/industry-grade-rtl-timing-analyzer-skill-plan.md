@@ -9,7 +9,7 @@ STA run.
 The skill should provide real-world timing feedback from RTL alone. It should
 remain EDA-tool agnostic, work primarily on SystemVerilog and Verilog, and be
 designed so other RTL-like or proprietary languages can be analyzed through a
-language-neutral intermediate representation.
+language-neutral intermediate representation (IR).
 
 This plan follows the `skill-creator` guidance:
 
@@ -107,11 +107,16 @@ This keeps the timing analysis language agnostic. SystemVerilog and Verilog get
 a built-in adapter. Unknown or proprietary languages can be analyzed when the
 user or a project-specific tool provides equivalent IR.
 
-## Timing IR
+## Timing Intermediate Representation
 
 Add a schema:
 
 - `schemas/timing-ir.schema.json`
+
+IR is a common compiler and EDA-adjacent abbreviation for intermediate
+representation. In this plan, timing IR means a structured, language-neutral
+model of the timing-relevant design semantics extracted from source RTL or
+provided by a language adapter.
 
 The IR should model:
 
